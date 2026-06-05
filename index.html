@@ -1,434 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whorton Estate</title>
-    <style>
-        :root {
-            --bg-color: #faf9f6; /* Soft linen/parchment white */
-            --panel-bg: #ffffff;
-            --text-color: #1c1a17; /* Charcoal black */
-            --text-muted: #706e6a; /* Warm grey */
-            --line-color: #eceae4; /* Low-contrast architectural lines */
-            --font-serif: "Baskerville", "Georgia", "Times New Roman", serif;
-            --font-sans: "Helvetica Neue", Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whorton Estate</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+:root {
+    --bg: #f6f5f2;
+    --panel: #ffffff;
+    --text: #1c1a17;
+    --muted: #6f6c66;
+    --line: #e7e4dd;
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-serif);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            padding: 0 3rem;
-            background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-            background-size: 120px 120px;
-            background-attachment: fixed;
-        }
+    --serif: "Baskerville", Georgia, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+}
 
-        /* Master Container */
-        .grid-container {
-            max-width: 1300px;
-            margin: 3rem auto;
-            border: 1px solid var(--line-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--panel-bg);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.02);
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Ultra-Slim Navigation Bar */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem 3rem; /* Drastically shortened height */
-            border-bottom: 1px solid var(--line-color);
-        }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    line-height: 1.7;
+}
 
-        .brand-title {
-            font-size: 1rem;
-            font-weight: 400;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: var(--text-color);
-        }
+/* CONTAINER */
+.container {
+    max-width: 1280px;
+    margin: 2rem auto;
+    background: var(--panel);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.04);
+}
 
-        .coordinates {
-            font-family: var(--font-sans);
-            font-size: 0.6rem;
-            color: var(--text-muted);
-            letter-spacing: 0.12em;
-        }
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2.5rem;
-        }
+    padding: clamp(1rem, 2vw, 1.5rem) clamp(1rem, 4vw, 2.5rem);
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+}
 
-        nav a {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            text-decoration: none;
-            color: var(--text-color);
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            position: relative;
-        }
+.brand {
+    font-size: 1rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+}
 
-        nav a span {
-            color: var(--text-muted);
-            margin-right: 0.4rem;
-            font-style: italic;
-            font-family: var(--font-serif);
-        }
+.meta {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+}
 
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            bottom: -2px;
-            left: 0;
-            background-color: var(--text-muted);
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.3s ease;
-        }
+nav ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
 
-        nav a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
+nav a {
+    text-decoration: none;
+    color: var(--text);
+    opacity: 0.85;
+}
 
-        /* Master Hero Visual Container */
-        .hero {
-            height: 480px;
-            width: 100%;
-            border-bottom: 1px solid var(--line-color);
-            overflow: hidden;
-            background-color: var(--bg-color);
-            padding: 2rem;
-        }
+/* HERO */
+.hero {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--line);
+}
 
-        .hero-inner {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            border: 1px solid var(--line-color);
-        }
+.hero img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-        .hero-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            filter: none !important; /* Forces completely clean image presentation */
-        }
+/* SECTIONS (CRITICAL FIX) */
+.section {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1px solid var(--line);
+}
 
-        /* Pillars Section */
-        .pillar {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-bottom: 1px solid var(--line-color);
-        }
+/* desktop enhancement */
+@media (min-width: 900px) {
+    .section {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+    }
+}
 
-        .pillar-meta {
-            padding: 4.5rem 5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-right: 1px solid var(--line-color);
-        }
+.content {
+    padding: clamp(2rem, 5vw, 4.5rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
 
-        .pillar:nth-child(even) .pillar-meta {
-            order: 2;
-            border-right: none;
-            border-left: 1px solid var(--line-color);
-        }
+.kicker {
+    font-family: var(--sans);
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
 
-        .pillar-index {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            margin-bottom: 1.25rem;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
+h2 {
+    font-size: clamp(1.4rem, 2.2vw, 1.8rem);
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
 
-        .pillar-title {
-            font-size: 1.8rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 1.25rem;
-            color: var(--text-color);
-        }
+p {
+    max-width: 520px;
+    font-size: 1.05rem;
+    margin-bottom: 2rem;
+}
 
-        .pillar-description {
-            font-size: 1.05rem;
-            max-width: 450px;
-            color: var(--text-color);
-            margin-bottom: 3.5rem;
-        }
+.link {
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+}
 
-        .pillar-link {
-            font-family: var(--font-serif);
-            font-size: 0.9rem;
-            font-style: italic;
-            color: var(--text-color);
-            text-decoration: none;
-            display: inline-block;
-        }
+.link:hover {
+    border-bottom: 1px solid var(--text);
+}
 
-        .pillar-link:hover {
-            color: var(--text-muted);
-        }
+/* VISUAL (CENTRING FIX) */
+.visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(1rem, 3vw, 3rem);
+}
 
-        /* Landscape 16:9 Aspect Ratio Alignment */
-        .pillar-visual {
-            padding: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--bg-color);
-        }
+.frame {
+    width: 100%;
+    max-width: 640px;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+}
 
-        .technical-blueprint {
-            width: 100%;
-            aspect-ratio: 16 / 9; /* Matches native 1920x1080 resolution perfectly */
-            position: relative;
-            background: #ffffff;
-            overflow: hidden;
-            box-shadow: 0 12px 35px rgba(0,0,0,0.02);
-            border: 1px solid var(--line-color);
-        }
+.frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
-        .blueprint-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: none !important; /* Zero tints or filters applied */
-        }
+/* MANIFESTO */
+.manifesto {
+    padding: clamp(4rem, 8vw, 7rem) 2rem;
+    text-align: center;
+}
 
-        .blueprint-label {
-            position: absolute;
-            bottom: 1.25rem;
-            right: 1.25rem;
-            font-family: var(--font-sans);
-            font-size: 0.55rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0.3rem 0.6rem;
-            border: 1px solid var(--line-color);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+.manifesto p {
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    max-width: 800px;
+    margin: 0 auto;
+    font-style: italic;
+}
 
-        /* Large, Readable Philosophy Inscription */
-        .manifesto {
-            padding: 10rem 3rem;
-            text-align: center;
-            border-bottom: 1px solid var(--line-color);
-            background-color: var(--panel-bg);
-        }
+/* FOOTER */
+footer {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
 
-        .manifesto-container {
-            max-width: 800px; /* Widened slightly to balance larger font size */
-            margin: 0 auto;
-        }
+    padding: 2rem;
+    border-top: 1px solid var(--line);
+    font-family: var(--sans);
+    font-size: 0.7rem;
+    color: var(--muted);
 
-        .manifesto .label {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.25em;
-            display: block;
-            margin-bottom: 3rem;
-        }
+    flex-wrap: wrap;
+}
 
-        .manifesto p {
-            font-size: 1.8rem; /* Upgraded to meet criteria for prominent readability */
-            line-height: 1.8;
-            color: var(--text-color);
-            font-style: italic;
-        }
+footer ul {
+    display: flex;
+    gap: 1.5rem;
+    list-style: none;
+    flex-wrap: wrap;
+}
 
-        /* Compact Mirror Footer System */
-        footer {
-            padding: 2.5rem 3rem; /* Closely mirrors the scaled-down navigation bar */
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: var(--panel-bg);
-            border-top: 1px solid var(--line-color);
-        }
+footer a {
+    text-decoration: none;
+    color: var(--muted);
+}
 
-        .footer-content-block {
-            max-width: 450px;
-            text-align: left;
-        }
+/* MOBILE ALIGNMENT FIX */
+@media (max-width: 600px) {
+    .content {
+        align-items: center;
+        text-align: center;
+    }
 
-        footer h4 {
-            color: var(--text-color);
-            font-family: var(--font-serif);
-            font-size: 1rem;
-            font-weight: 400;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-        }
-
-        footer p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
-            line-height: 1.6;
-        }
-
-        .footer-links-row {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-
-        .footer-links-row a {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.12em;
-        }
-
-        .footer-links-row a:hover {
-            color: var(--text-color);
-        }
-
-        /* Responsive Breakpoints */
-        @media (max-width: 1024px) {
-            body { padding: 0; background-image: none; }
-            .grid-container { border: none; margin: 0; }
-            header { padding: 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
-            .hero { height: 320px; padding: 1rem; }
-            .pillar { grid-template-columns: 1fr; }
-            .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 3.5rem 1.5rem; }
-            .pillar-visual { padding: 2rem 1.5rem; }
-            .manifesto { padding: 6rem 1.5rem; }
-            .manifesto p { font-size: 1.4rem; }
-            footer { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-            .footer-links-row { flex-direction: column; gap: 1rem; }
-        }
-    </style>
+    p {
+        text-align: center;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="grid-container">
-        
-        <header>
-            <a href="#" class="brand-title">Whorton Estate</a>
-            <div class="coordinates">52.1307° N, 0.4628° W</div>
-            <nav>
-                <ul>
-                    <li><a href="#"><span>I.</span> Design &amp; Eng.</a></li>
-                    <li><a href="#"><span>II.</span> Automotive</a></li>
-                    <li><a href="#"><span>III.</span> Equine Clinical</a></li>
-                </ul>
-            </nav>
-        </header>
+<div class="container">
 
-        <section class="hero">
-            <div class="hero-inner">
-                <img src="Images/hero.png" alt="Whorton Estate Heritage Visual" class="hero-img">
-            </div>
-        </section>
+<header>
+    <div class="brand">Whorton Estate</div>
+    <div class="meta">52.1307° N / 0.4628° W</div>
+    <nav>
+        <ul>
+            <li><a href="#">Design</a></li>
+            <li><a href="#">Automotive</a></li>
+            <li><a href="#">Clinical</a></li>
+        </ul>
+    </nav>
+</header>
 
-        <section class="pillars-list">
-            
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber I // Design &amp; Development</div>
-                        <h2 class="pillar-title">Engineering &amp; Design</h2>
-                        <p class="pillar-description">A personal portfolio and repository of technical brain bites from a classically trained mechanical engineer. Backed by over a decade of manufacturing and engineering experience, my background spans directing CAD pipelines and product design at a bespoke firm, to leading large engineering teams within a billion-dollar German industrial company.</p>
-                    </div>
-                    <a href="#" class="pillar-link">Examine the Project Repository &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/design.png" alt="Bespoke dash panel assembly rendering" class="blueprint-image">
-                        <span class="blueprint-label">Folio 1.1 // Assembled Variant Studies</span>
-                    </div>
-                </div>
-            </div>
+<section class="hero">
+    <img src="Images/hero.png" alt="">
+</section>
 
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber II // Preservation Work</div>
-                        <h2 class="pillar-title">Whorton Automotive</h2>
-                        <p class="pillar-description">A dedicated workshop space focused on the bespoke restoration and mechanical preservation of historically significant vehicles. Current documentation focuses on the component-by-component commission of our 1934 Standard Nine.</p>
-                    </div>
-                    <a href="#" class="pillar-link">View Workshop Logbooks &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/automotive.png" alt="1934 Standard Nine restoration" class="blueprint-image">
-                        <span class="blueprint-label">Folio 2.1 // 1934 Standard Nine Archive</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber III // Medical Practice</div>
-                        <h2 class="pillar-title">Equine Clinical</h2>
-                        <p class="pillar-description">Clinical observations and case studies from qualified veterinary practice. This section compiles active diagnostic case histories, animal pathology profiles, and field evaluations dedicated to advanced equine care.</p>
-                    </div>
-                    <a href="#" class="pillar-link">Read Clinical Journals &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/equine.png" alt="Equine clinical care" class="blueprint-image">
-                        <span class="blueprint-label">Folio 3.1 // Diagnostic Records</span>
-                    </div>
-                </div>
-            </div>
-
-        </section>
-
-        <section class="manifesto">
-            <div class="manifesto-container">
-                <span class="label">Our Philosophy</span>
-                <p>"We work strictly from first principles. Whether resolving mechanical tolerances, analyzing pre-war chassis geometry, or interpreting complex clinical data, our method is simple: Let the work speak for itself."</p>
-            </div>
-        </section>
-
-        <footer>
-            <div class="footer-content-block">
-                <h4>Whorton Estate Registry</h4>
-                <p>A private family directory and professional archive. Technical histories, medical registries, and workshop ledgers are preserved here for documentation and ongoing study.</p>
-            </div>
-            
-            <ul class="footer-links-row">
-                <li><a href="#">Engineering Indices</a></li>
-                <li><a href="#">Clinical Diagnostics</a></li>
-                <li><a href="#">Workshop Logs</a></li>
-            </ul>
-        </footer>
-
+<section class="section">
+    <div class="content">
+        <div class="kicker">Engineering Archive</div>
+        <h2>Design & Development</h2>
+        <p>Technical documentation covering engineering workflows, CAD systems, and production architecture.</p>
+        <a class="link" href="#">View Archive →</a>
     </div>
+
+    <div class="visual">
+        <div class="frame">
+            <img src="Images/design.png" alt="">
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="content">
+        <div class="kicker">Workshop Log</div>
+        <h2>Automotive Restoration</h2>
+        <p>Component-level restoration records of historically significant mechanical systems.</p>
+        <a class="link" href="#">View Records →</a>
+    </div>
+
+    <div class="visual">
+        <div class="frame">
+            <img src="Images/automotive.png" alt="">
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="content">
+        <div class="kicker">Clinical Archive</div>
+        <h2>Equine Practice</h2>
+        <p>Field-based veterinary diagnostics and observational records.</p>
+        <a class="link" href="#">View Journals →</a>
+    </div>
+
+    <div class="visual">
+        <div class="frame">
+            <img src="Images/equine.png" alt="">
+        </div>
+    </div>
+</section>
+
+<section class="manifesto">
+    <p>Work is governed by constraint, not expression. Structure defines outcome.</p>
+</section>
+
+<footer>
+    <div>Whorton Estate Archive</div>
+    <ul>
+        <li><a href="#">Engineering</a></li>
+        <li><a href="#">Workshop</a></li>
+        <li><a href="#">Clinical</a></li>
+    </ul>
+</footer>
+
+</div>
 
 </body>
 </html>
