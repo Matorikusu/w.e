@@ -1,439 +1,463 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Whorton Estate</title>
-    <style>
-        :root {
-            /* Swapped sterile white for a soft, historic linen/parchment tone */
-            --bg-color: #faf9f6; 
-            --panel-bg: #ffffff;
-            --text-color: #1c1a17; /* Soft charcoal-black */
-            --text-muted: #706e6a; /* Warm grey */
-            --line-color: #eceae4; /* Softer, low-contrast grid lines */
-            --font-serif: "Baskerville", "Georgia", "Times New Roman", serif;
-            --font-sans: "Helvetica Neue", Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whorton Estate</title>
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+:root {
+    --bg-color: #fcfcfa;
+    --text-color: #1a1a1a;
+    --text-muted: #8c8c8c;
+    --line-color: #e6e6e6;
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-serif);
-            line-height: 1.7;
-            -webkit-font-smoothing: antialiased;
-            padding: 0 3rem;
-            background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-            background-size: 120px 120px;
-            background-attachment: fixed;
-        }
+    --font-serif: "Times New Roman", Times, Baskerville, Georgia, serif;
+    --font-mono: "Courier New", Courier, Monaco, monospace;
+}
 
-        /* Master Blueprint Framework */
-        .grid-container {
-            max-width: 1300px;
-            margin: 4rem auto;
-            border: 1px solid var(--line-color);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            background-color: var(--panel-bg);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.03);
-        }
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        /* Elegant, Spaced Header */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 3rem;
-            border-bottom: 1px solid var(--line-color);
-        }
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-serif);
+    line-height: 1.65;
 
-        .brand-title {
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            text-decoration: none;
-            color: var(--text-color);
-        }
+    -webkit-font-smoothing: antialiased;
 
-        .coordinates {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            letter-spacing: 0.15em;
-        }
+    background-image:
+        linear-gradient(var(--line-color) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
+    background-size: 100px 100px;
+    background-attachment: fixed;
+}
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 3rem;
-        }
+/* FRAME */
+.grid-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    min-height: 100vh;
 
-        nav a {
-            font-family: var(--font-sans);
-            font-size: 0.7rem;
-            text-decoration: none;
-            color: var(--text-color);
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            position: relative;
-            padding-bottom: 0.2rem;
-        }
+    border-left: 1px solid var(--line-color);
+    border-right: 1px solid var(--line-color);
 
-        nav a span {
-            color: var(--text-muted);
-            margin-right: 0.5rem;
-            font-style: italic;
-            font-family: var(--font-serif);
-        }
+    display: flex;
+    flex-direction: column;
 
-        nav a::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 1px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--text-muted);
-            transform: scaleX(0);
-            transform-origin: bottom right;
-            transition: transform 0.3s ease;
-        }
+    background: var(--bg-color);
+}
 
-        nav a:hover::after {
-            transform: scaleX(1);
-            transform-origin: bottom left;
-        }
+/* HEADER */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
 
-        /* Framed Hero Visual */
-        .hero {
-            height: 550px;
-            width: 100%;
-            border-bottom: 1px solid var(--line-color);
-            overflow: hidden;
-            background-color: var(--bg-color);
-            padding: 2rem; /* Creates a gallery mat frame effect */
-        }
+    padding: 1.5rem 3rem;
+    border-bottom: 1px solid var(--line-color);
+}
 
-        .hero-inner {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            border: 1px solid var(--line-color);
-        }
+.brand-title {
+    font-size: 1.05rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--text-color);
+}
 
-        .hero-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%) sepia(10%) contrast(95%);
-            display: block;
-            transition: transform 0.8s ease;
-        }
+.coordinates {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
 
-        /* Pillars Section */
-        .pillar {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            border-bottom: 1px solid var(--line-color);
-        }
+/* SYSTEM INDEX NAV */
+nav ul {
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 
-        .pillar-meta {
-            padding: 5rem;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            border-right: 1px solid var(--line-color);
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
 
-        .pillar:nth-child(even) .pillar-meta {
-            order: 2;
-            border-right: none;
-            border-left: 1px solid var(--line-color);
-        }
+nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    opacity: 0.85;
+}
 
-        .pillar-index {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
+nav a span {
+    color: var(--text-muted);
+    margin-right: 0.4rem;
+}
 
-        .pillar-title {
-            font-size: 2rem;
-            font-weight: 400;
-            letter-spacing: 0.02em;
-            margin-bottom: 1.5rem;
-            color: var(--text-color);
-        }
+/* HERO */
+.hero {
+    height: min(70vh, 700px);
+    border-bottom: 1px solid var(--line-color);
+    overflow: hidden;
+    background: #f6f6f6;
+}
 
-        .pillar-description {
-            font-size: 1.05rem;
-            max-width: 460px;
-            color: var(--text-color);
-            margin-bottom: 4rem;
-            font-style: normal;
-        }
+.hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(105%) brightness(0.98);
+}
 
-        .pillar-link {
-            font-family: var(--font-serif);
-            font-size: 0.9rem;
-            font-style: italic;
-            color: var(--text-color);
-            text-decoration: none;
-            display: inline-block;
-        }
+/* PILLARS */
+.pillar {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    border-bottom: 1px solid var(--line-color);
+}
 
-        .pillar-link:hover {
-            color: var(--text-muted);
-        }
+.pillar-meta {
+    padding: 4.5rem 4rem;
+    border-right: 1px solid var(--line-color);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
 
-        /* Elegant Visual Content Boxes */
-        .pillar-visual {
-            padding: 4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: var(--bg-color);
-        }
+.pillar:nth-child(even) .pillar-meta {
+    order: 2;
+    border-left: 1px solid var(--line-color);
+    border-right: none;
+}
 
-        .technical-blueprint {
-            width: 100%;
-            aspect-ratio: 4 / 3; /* More classic, portrait-leaning ratio than harsh 16:9 */
-            position: relative;
-            background: #ffffff;
-            overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.02);
-            border: 1px solid var(--line-color);
-        }
+/* ARCHIVE META */
+.record-meta {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    margin-bottom: 1.5rem;
 
-        .blueprint-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: grayscale(100%) sepia(15%) contrast(95%);
-        }
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
 
-        .blueprint-label {
-            position: absolute;
-            bottom: 1.5rem;
-            right: 1.5rem;
-            font-family: var(--font-sans);
-            font-size: 0.55rem;
-            color: var(--text-muted);
-            background: rgba(255, 255, 255, 0.95);
-            padding: 0.3rem 0.6rem;
-            border: 1px solid var(--line-color);
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-        }
+.pillar-index {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    margin-bottom: 2rem;
+}
 
-        /* Manifesto Section */
-        .manifesto {
-            padding: 10rem 3rem;
-            text-align: center;
-            border-bottom: 1px solid var(--line-color);
-            background-color: var(--panel-bg);
-        }
+.pillar-title {
+    font-size: clamp(1.2rem, 2vw, 1.8rem);
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+}
 
-        .manifesto-container {
-            max-width: 680px;
-            margin: 0 auto;
-        }
+.pillar-description {
+    max-width: 520px;
+    margin-bottom: 3rem;
+}
 
-        .manifesto .label {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.3em;
-            display: block;
-            margin-bottom: 3rem;
-        }
+/* VISUAL */
+.pillar-visual {
+    padding: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-        .manifesto p {
-            font-size: 1.4rem;
-            line-height: 1.9;
-            color: var(--text-color);
-            font-style: italic;
-        }
+.technical-blueprint {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border: 1px solid rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+}
 
-        /* Footer System */
-        footer {
-            padding: 6rem 3rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 4rem;
-            background-color: var(--panel-bg);
-            border-top: 1px solid var(--line-color);
-        }
+.blueprint-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(100%) contrast(105%);
+}
 
-        .footer-content-block {
-            max-width: 520px;
-        }
+/* IMAGE OVERLAY METADATA */
+.overlay-data {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    color: var(--text-muted);
+    background: rgba(255,255,255,0.85);
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--line-color);
+}
 
-        footer h4 {
-            color: var(--text-color);
-            font-family: var(--font-serif);
-            font-size: 1.1rem;
-            font-weight: 400;
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
-        }
+.blueprint-label {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    background: rgba(255,255,255,0.9);
+    padding: 0.25rem 0.4rem;
+    border: 1px solid var(--line-color);
+}
 
-        footer p {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
+/* MANIFESTO */
+.manifesto {
+    padding: 7rem 3rem;
+    text-align: center;
+    border-bottom: 1px solid var(--line-color);
+}
 
-        .footer-links-row {
-            display: flex;
-            gap: 3rem;
-            list-style: none;
-        }
+.manifesto-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
 
-        .footer-links-row a {
-            font-family: var(--font-sans);
-            font-size: 0.65rem;
-            color: var(--text-muted);
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-        }
+.manifesto .label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-bottom: 2.5rem;
+    display: block;
+}
 
-        .footer-links-row a:hover {
-            color: var(--text-color);
-        }
+.manifesto p {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    text-align: justify;
+}
 
-        /* Responsive Breakpoints */
-        @media (max-width: 1024px) {
-            body { padding: 0; background-image: none; }
-            .grid-container { border: none; margin: 0; }
-            header { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-            .hero { height: 350px; padding: 1rem; }
-            .pillar { grid-template-columns: 1fr; }
-            .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 4rem 1.5rem; }
-            .pillar-visual { padding: 2rem 1.5rem; }
-            .manifesto { padding: 6rem 1.5rem; }
-            footer { padding: 5rem 1.5rem; }
-            .footer-links-row { flex-direction: column; gap: 1.5rem; }
-        }
-    </style>
+/* SYSTEM STATUS */
+.system-status {
+    margin-top: 3rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    display: grid;
+    gap: 0.4rem;
+}
+
+/* FOOTER */
+footer {
+    padding: 5rem 3rem;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.footer-links-row {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    list-style: none;
+}
+
+.footer-links-row a {
+    text-decoration: none;
+    color: var(--text-muted);
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+    body { background-image: none; }
+
+    header {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .pillar {
+        grid-template-columns: 1fr;
+    }
+
+    .pillar-meta {
+        border: none;
+        border-bottom: 1px solid var(--line-color);
+        padding: 3rem 1.5rem;
+    }
+
+    .pillar:nth-child(even) .pillar-meta {
+        order: 0;
+    }
+}
+</style>
 </head>
+
 <body>
 
-    <div class="grid-container">
-        
-        <header>
-            <a href="#" class="brand-title">Whorton Estate</a>
-            <div class="coordinates">52.1307° N, 0.4628° W</div>
-            <nav>
-                <ul>
-                    <li><a href="#"><span>I.</span> Design &amp; Eng.</a></li>
-                    <li><a href="#"><span>II.</span> Automotive</a></li>
-                    <li><a href="#"><span>III.</span> Equine Clinical</a></li>
-                </ul>
-            </nav>
-        </header>
+<div class="grid-container">
 
-        <section class="hero">
-            <div class="hero-inner">
-                <img src="Images/hero.png" alt="Whorton Estate Heritage Visual" class="hero-img">
-            </div>
-        </section>
+<header>
+    <a href="#" class="brand-title">Whorton Estate</a>
+    <div class="coordinates">52.1307° N, 0.4628° W</div>
 
-        <section class="pillars-list">
-            
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber I // Design &amp; Development</div>
-                        <h2 class="pillar-title">Engineering &amp; Design</h2>
-                        <p class="pillar-description">A multigenerational practice bridging industrial design and computational precision. This archive chronicles a decade of industrial design leadership for premier European firms, detailing projects from foundational software architecture to final structural assemblies.</p>
-                    </div>
-                    <a href="#" class="pillar-link">Examine the Project Repository &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/design.png" alt="Bespoke dash panel assembly rendering" class="blueprint-image">
-                        <span class="blueprint-label">Folio 1.1 // Assembled Variant Studies</span>
-                    </div>
-                </div>
+    <nav>
+        <ul>
+            <li><a href="#"><span>01</span>ENG ARCHIVE</a></li>
+            <li><a href="#"><span>02</span>AUTO WORKS</a></li>
+            <li><a href="#"><span>03</span>CLINICAL LOG</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="hero">
+    <img src="Images/hero.png" class="hero-img" alt="">
+</section>
+
+<section class="pillars-list">
+
+<div class="pillar">
+    <div class="pillar-meta">
+
+        <div>
+            <div class="record-meta">
+                <span>ARCHIVE ID: ENG-441A</span>
+                <span>STATUS: ACTIVE</span>
+                <span>REVISION: 06.26</span>
             </div>
 
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber II // Preservation Work</div>
-                        <h2 class="pillar-title">Whorton Automotive</h2>
-                        <p class="pillar-description">A dedicated workshop space focused on the bespoke restoration and mechanical preservation of historically significant vehicles. Current documentation focuses on the component-by-component commission of our 1934 Standard Nine.</p>
-                    </div>
-                    <a href="#" class="pillar-link">View Workshop Logbooks &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/automotive.png" alt="1934 Standard Nine restoration" class="blueprint-image">
-                        <span class="blueprint-label">Folio 2.1 // 1934 Standard Nine Archive</span>
-                    </div>
-                </div>
+            <div class="pillar-index">LOG SYSTEM [ 01 ]</div>
+            <h2 class="pillar-title">Engineering & Design</h2>
+
+            <p class="pillar-description">
+                Engineering documentation covering CAD pipelines, system architecture, and production workflows.
+            </p>
+        </div>
+
+        <div class="system-status">
+            <div>ENG SYSTEM // ONLINE</div>
+            <div>CAD PIPELINE // ACTIVE</div>
+        </div>
+    </div>
+
+    <div class="pillar-visual">
+        <div class="technical-blueprint">
+            <div class="overlay-data">IMG REF: ENG/DSN/01A • 06/26/2026</div>
+            <img src="Images/design.png" class="blueprint-image" alt="">
+            <span class="blueprint-label">MODEL WORKROOM</span>
+        </div>
+    </div>
+</div>
+
+<div class="pillar">
+    <div class="pillar-meta">
+
+        <div>
+            <div class="record-meta">
+                <span>ARCHIVE ID: AUTO-1934</span>
+                <span>STATUS: RESTORATION</span>
+                <span>VEHICLE: STANDARD NINE</span>
             </div>
 
-            <div class="pillar">
-                <div class="pillar-meta">
-                    <div>
-                        <div class="pillar-index">Chamber III // Medical Practice</div>
-                        <h2 class="pillar-title">Equine Clinical</h2>
-                        <p class="pillar-description">Clinical observations and case studies from qualified veterinary practice. This section compiles active diagnostic case histories, animal pathology profiles, and field evaluations dedicated to advanced equine care.</p>
-                    </div>
-                    <a href="#" class="pillar-link">Read Clinical Journals &rarr;</a>
-                </div>
-                <div class="pillar-visual">
-                    <div class="technical-blueprint">
-                        <img src="Images/equine.png" alt="Equine clinical care" class="blueprint-image">
-                        <span class="blueprint-label">Folio 3.1 // Diagnostic Records</span>
-                    </div>
-                </div>
+            <div class="pillar-index">LOG SYSTEM [ 02 ]</div>
+            <h2 class="pillar-title">Whorton Automotive</h2>
+
+            <p class="pillar-description">
+                Restoration log of pre-war mechanical systems, machining processes, and component fabrication.
+            </p>
+        </div>
+
+        <div class="system-status">
+            <div>AUTO SYSTEM // ACTIVE</div>
+            <div>RESTORATION // IN PROGRESS</div>
+        </div>
+    </div>
+
+    <div class="pillar-visual">
+        <div class="technical-blueprint">
+            <div class="overlay-data">IMG REF: AUTO/1934/01 • WORKSHOP</div>
+            <img src="Images/automotive.png" class="blueprint-image" alt="">
+            <span class="blueprint-label">WORKSHOP STATE</span>
+        </div>
+    </div>
+</div>
+
+<div class="pillar">
+    <div class="pillar-meta">
+
+        <div>
+            <div class="record-meta">
+                <span>ARCHIVE ID: VET-CLN-09</span>
+                <span>STATUS: FIELD ACTIVE</span>
+                <span>DOMAIN: EQUINE</span>
             </div>
 
-        </section>
+            <div class="pillar-index">LOG SYSTEM [ 03 ]</div>
+            <h2 class="pillar-title">Equine Clinical</h2>
 
-        <section class="manifesto">
-            <div class="manifesto-container">
-                <span class="label">Our Philosophy</span>
-                <p>"We work strictly from first principles. Whether resolving mechanical tolerances, analyzing pre-war chassis geometry, or interpreting complex clinical data, our method is simple: Let the work speak for itself."</p>
-            </div>
-        </section>
+            <p class="pillar-description">
+                Clinical observation records, diagnostics, and veterinary field notes.
+            </p>
+        </div>
 
-        <footer>
-            <div class="footer-content-block">
-                <h4>Whorton Estate Registry</h4>
-                <p>A private family directory and professional archive. Technical histories, medical registries, and workshop ledgers are preserved here for documentation and ongoing study.</p>
-            </div>
-            
-            <ul class="footer-links-row">
-                <li><a href="#">Engineering Indices</a></li>
-                <li><a href="#">Clinical Diagnostics</a></li>
-                <li><a href="#">Workshop Logs</a></li>
-            </ul>
-        </footer>
+        <div class="system-status">
+            <div>CLINICAL SYSTEM // FIELD ACTIVE</div>
+            <div>DIAGNOSTICS // LIVE</div>
+        </div>
+    </div>
+
+    <div class="pillar-visual">
+        <div class="technical-blueprint">
+            <div class="overlay-data">IMG REF: VET/CLN/09 • FIELD UNIT</div>
+            <img src="Images/equine.png" class="blueprint-image" alt="">
+            <span class="blueprint-label">FIELD EXAMINATION</span>
+        </div>
+    </div>
+</div>
+
+</section>
+
+<section class="manifesto">
+    <div class="manifesto-container">
+
+        <span class="label">GENERAL OVERVIEW</span>
+
+        <p>
+            Work is governed by measurable constraints. Whether mechanical, computational, or clinical,
+            execution follows structure, not interpretation.
+        </p>
+
+        <div class="system-status">
+            <div>ALL SYSTEMS // SYNCHRONISED</div>
+            <div>ARCHIVE STATE // STABLE</div>
+        </div>
 
     </div>
+</section>
+
+<footer>
+    <div>
+        <h4>Whorton Estate Archive</h4>
+        <p>Technical registry and operational documentation system.</p>
+    </div>
+
+    <ul class="footer-links-row">
+        <li><a href="#">Engineering</a></li>
+        <li><a href="#">Clinical</a></li>
+        <li><a href="#">Workshop</a></li>
+    </ul>
+</footer>
+
+</div>
 
 </body>
 </html>
