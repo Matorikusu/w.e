@@ -6,12 +6,11 @@
     <title>Whorton Estate</title>
     <style>
         :root {
-            /* Swapped sterile white for a soft, historic linen/parchment tone */
-            --bg-color: #faf9f6; 
+            --bg-color: #faf9f6; /* Soft linen/parchment white */
             --panel-bg: #ffffff;
-            --text-color: #1c1a17; /* Soft charcoal-black */
+            --text-color: #1c1a17; /* Charcoal black */
             --text-muted: #706e6a; /* Warm grey */
-            --line-color: #eceae4; /* Softer, low-contrast grid lines */
+            --line-color: #eceae4; /* Low-contrast architectural lines */
             --font-serif: "Baskerville", "Georgia", "Times New Roman", serif;
             --font-sans: "Helvetica Neue", Arial, sans-serif;
         }
@@ -35,31 +34,31 @@
             background-attachment: fixed;
         }
 
-        /* Master Blueprint Framework */
+        /* Master Container */
         .grid-container {
             max-width: 1300px;
-            margin: 4rem auto;
+            margin: 3rem auto;
             border: 1px solid var(--line-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             background-color: var(--panel-bg);
-            box-shadow: 0 30px 70px rgba(0,0,0,0.03);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.02);
         }
 
-        /* Elegant, Spaced Header */
+        /* Ultra-Slim Navigation Bar */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 3rem;
+            padding: 0.75rem 3rem; /* Drastically shortened height */
             border-bottom: 1px solid var(--line-color);
         }
 
         .brand-title {
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: 400;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             text-decoration: none;
             color: var(--text-color);
@@ -67,31 +66,30 @@
 
         .coordinates {
             font-family: var(--font-sans);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--text-muted);
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 3rem;
+            gap: 2.5rem;
         }
 
         nav a {
             font-family: var(--font-sans);
-            font-size: 0.7rem;
+            font-size: 0.65rem;
             text-decoration: none;
             color: var(--text-color);
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
             position: relative;
-            padding-bottom: 0.2rem;
         }
 
         nav a span {
             color: var(--text-muted);
-            margin-right: 0.5rem;
+            margin-right: 0.4rem;
             font-style: italic;
             font-family: var(--font-serif);
         }
@@ -101,7 +99,7 @@
             position: absolute;
             width: 100%;
             height: 1px;
-            bottom: 0;
+            bottom: -2px;
             left: 0;
             background-color: var(--text-muted);
             transform: scaleX(0);
@@ -114,14 +112,14 @@
             transform-origin: bottom left;
         }
 
-        /* Framed Hero Visual */
+        /* Master Hero Visual Container */
         .hero {
-            height: 550px;
+            height: 480px;
             width: 100%;
             border-bottom: 1px solid var(--line-color);
             overflow: hidden;
             background-color: var(--bg-color);
-            padding: 2rem; /* Creates a gallery mat frame effect */
+            padding: 2rem;
         }
 
         .hero-inner {
@@ -135,9 +133,8 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) sepia(10%) contrast(95%);
             display: block;
-            transition: transform 0.8s ease;
+            filter: none !important; /* Forces completely clean image presentation */
         }
 
         /* Pillars Section */
@@ -148,7 +145,7 @@
         }
 
         .pillar-meta {
-            padding: 5rem;
+            padding: 4.5rem 5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -165,25 +162,24 @@
             font-family: var(--font-sans);
             font-size: 0.65rem;
             color: var(--text-muted);
-            margin-bottom: 1.5rem;
-            letter-spacing: 0.2em;
+            margin-bottom: 1.25rem;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
         }
 
         .pillar-title {
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 400;
             letter-spacing: 0.02em;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.25rem;
             color: var(--text-color);
         }
 
         .pillar-description {
             font-size: 1.05rem;
-            max-width: 460px;
+            max-width: 450px;
             color: var(--text-color);
-            margin-bottom: 4rem;
-            font-style: normal;
+            margin-bottom: 3.5rem;
         }
 
         .pillar-link {
@@ -199,7 +195,7 @@
             color: var(--text-muted);
         }
 
-        /* Elegant Visual Content Boxes */
+        /* Landscape 16:9 Aspect Ratio Alignment */
         .pillar-visual {
             padding: 4rem;
             display: flex;
@@ -210,11 +206,11 @@
 
         .technical-blueprint {
             width: 100%;
-            aspect-ratio: 4 / 3; /* More classic, portrait-leaning ratio than harsh 16:9 */
+            aspect-ratio: 16 / 9; /* Matches native 1920x1080 resolution perfectly */
             position: relative;
             background: #ffffff;
             overflow: hidden;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.02);
             border: 1px solid var(--line-color);
         }
 
@@ -222,13 +218,13 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) sepia(15%) contrast(95%);
+            filter: none !important; /* Zero tints or filters applied */
         }
 
         .blueprint-label {
             position: absolute;
-            bottom: 1.5rem;
-            right: 1.5rem;
+            bottom: 1.25rem;
+            right: 1.25rem;
             font-family: var(--font-sans);
             font-size: 0.55rem;
             color: var(--text-muted);
@@ -239,7 +235,7 @@
             letter-spacing: 0.1em;
         }
 
-        /* Manifesto Section */
+        /* Large, Readable Philosophy Inscription */
         .manifesto {
             padding: 10rem 3rem;
             text-align: center;
@@ -248,7 +244,7 @@
         }
 
         .manifesto-container {
-            max-width: 680px;
+            max-width: 800px; /* Widened slightly to balance larger font size */
             margin: 0 auto;
         }
 
@@ -257,53 +253,51 @@
             font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             display: block;
             margin-bottom: 3rem;
         }
 
         .manifesto p {
-            font-size: 1.4rem;
-            line-height: 1.9;
+            font-size: 1.8rem; /* Upgraded to meet criteria for prominent readability */
+            line-height: 1.8;
             color: var(--text-color);
             font-style: italic;
         }
 
-        /* Footer System */
+        /* Compact Mirror Footer System */
         footer {
-            padding: 6rem 3rem;
+            padding: 2.5rem 3rem; /* Closely mirrors the scaled-down navigation bar */
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
-            text-align: center;
-            gap: 4rem;
             background-color: var(--panel-bg);
             border-top: 1px solid var(--line-color);
         }
 
         .footer-content-block {
-            max-width: 520px;
+            max-width: 450px;
+            text-align: left;
         }
 
         footer h4 {
             color: var(--text-color);
             font-family: var(--font-serif);
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 400;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             letter-spacing: 0.05em;
         }
 
         footer p {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.6;
         }
 
         .footer-links-row {
             display: flex;
-            gap: 3rem;
+            gap: 2.5rem;
             list-style: none;
         }
 
@@ -313,7 +307,7 @@
             color: var(--text-muted);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.15em;
+            letter-spacing: 0.12em;
         }
 
         .footer-links-row a:hover {
@@ -324,15 +318,16 @@
         @media (max-width: 1024px) {
             body { padding: 0; background-image: none; }
             .grid-container { border: none; margin: 0; }
-            header { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-            .hero { height: 350px; padding: 1rem; }
+            header { padding: 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
+            .hero { height: 320px; padding: 1rem; }
             .pillar { grid-template-columns: 1fr; }
             .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 4rem 1.5rem; }
+            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 3.5rem 1.5rem; }
             .pillar-visual { padding: 2rem 1.5rem; }
             .manifesto { padding: 6rem 1.5rem; }
-            footer { padding: 5rem 1.5rem; }
-            .footer-links-row { flex-direction: column; gap: 1.5rem; }
+            .manifesto p { font-size: 1.4rem; }
+            footer { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+            .footer-links-row { flex-direction: column; gap: 1rem; }
         }
     </style>
 </head>
@@ -365,7 +360,7 @@
                     <div>
                         <div class="pillar-index">Chamber I // Design &amp; Development</div>
                         <h2 class="pillar-title">Engineering &amp; Design</h2>
-                        <p class="pillar-description">A multigenerational practice bridging industrial design and computational precision. This archive chronicles a decade of industrial design leadership for premier European firms, detailing projects from foundational software architecture to final structural assemblies.</p>
+                        <p class="pillar-description">A personal portfolio and repository of technical brain bites from a classically trained mechanical engineer. Backed by over a decade of manufacturing and engineering experience, my background spans directing CAD pipelines and product design at a bespoke firm, to leading large engineering teams within a billion-dollar German industrial company.</p>
                     </div>
                     <a href="#" class="pillar-link">Examine the Project Repository &rarr;</a>
                 </div>
