@@ -45,12 +45,12 @@
             background-color: var(--bg-color);
         }
 
-        /* Header / Registry Banner */
+        /* Header / Slimmer Navigation Banner */
         header {
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            padding: 3.5rem 3rem;
+            padding: 1.75rem 3rem; /* Height cut in half */
             border-bottom: 1px solid var(--line-color);
         }
 
@@ -137,12 +137,12 @@
         /* Pillars Section */
         .pillar {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1.1fr 0.9fr; /* Slightly altered grid weights for wide aspect photos */
             border-bottom: 1px solid var(--line-color);
         }
 
         .pillar-meta {
-            padding: 6rem 4rem;
+            padding: 5rem 4rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -159,7 +159,7 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
             letter-spacing: 0.08em;
         }
 
@@ -168,14 +168,14 @@
             font-weight: 400;
             letter-spacing: 0.05em;
             text-transform: uppercase;
-            margin-bottom: 1.75rem;
+            margin-bottom: 1.5rem;
         }
 
         .pillar-description {
             font-size: 1.05rem;
-            max-width: 480px;
+            max-width: 520px;
             color: var(--text-color);
-            margin-bottom: 5rem;
+            margin-bottom: 4rem;
             text-align: left;
         }
 
@@ -194,9 +194,9 @@
             transform: translateX(6px);
         }
 
-        /* Schematic Render Containers */
+        /* Updated Schematic Render Container for 16:9 Widescreen Images */
         .pillar-visual {
-            padding: 4rem;
+            padding: 3rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -205,8 +205,7 @@
 
         .technical-blueprint {
             width: 100%;
-            height: 100%;
-            min-height: 400px;
+            aspect-ratio: 16 / 9; /* Perfect bounding box for 1920x1080 native images */
             border: 1px solid rgba(0, 0, 0, 0.08);
             position: relative;
             display: flex;
@@ -233,7 +232,7 @@
         .technical-blueprint::before {
             content: '';
             position: absolute;
-            width: 92%;
+            width: 94%;
             height: 1px;
             background: linear-gradient(to right, transparent, rgba(0,0,0,0.06) 10%, rgba(0,0,0,0.06) 90%, transparent);
             z-index: 2;
@@ -243,7 +242,7 @@
         .technical-blueprint::after {
             content: '';
             position: absolute;
-            height: 92%;
+            height: 94%;
             width: 1px;
             background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.06) 10%, rgba(0,0,0,0.06) 90%, transparent);
             z-index: 2;
@@ -252,8 +251,8 @@
 
         .blueprint-label {
             position: absolute;
-            bottom: 1.25rem;
-            right: 1.25rem;
+            bottom: 1rem;
+            right: 1rem;
             font-family: var(--font-mono);
             font-size: 0.65rem;
             color: var(--text-color);
@@ -352,12 +351,12 @@
         @media (max-width: 1024px) {
             body { padding: 0; background-image: none; }
             .grid-container { border: none; }
+            header { padding: 1.5rem 2rem; }
             .hero { height: 350px; }
             .pillar { grid-template-columns: 1fr; }
             .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 5rem 2rem; }
+            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 4rem 2rem; }
             .pillar-visual { padding: 2rem; }
-            .technical-blueprint { min-height: 320px; }
             .manifesto { padding: 7rem 2rem; }
             footer { padding: 5rem 2rem; gap: 3rem; }
             .footer-links-row { flex-direction: column; gap: 1.25rem; }
@@ -389,16 +388,16 @@
             <div class="pillar">
                 <div class="pillar-meta">
                     <div>
-                        <div class="pillar-index">INDEX SYSTEM [ 01 ] // SOLIDWORKS / FUSION / CNC FABRICATION</div>
+                        <div class="pillar-index">INDEX SYSTEM [ 01 ] // R&amp;D / CAD LEADERSHIP / CNC PRODUCTION</div>
                         <h2 class="pillar-title">Whorton Engineering &amp; Design</h2>
-                        <p class="pillar-description">A decade of engineering experience covering end-to-end R&D development, CAD leadership, and advanced manufacturing. Taking concepts from initial CAD layout directly through to finished, machined components.</p>
+                        <p class="pillar-description">A decade of engineering experience leading teams and running development operations. Having served as Head of R&amp;D and Head of CAD managing manufacturing lines for a prominent German design group, the focus is entirely on taking specialized products from initial concept straight through to completed assembly.</p>
                     </div>
                     <a href="#" class="pillar-link">View CAD/CAM Repository &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/design.png" alt="CAD Wireframe Assembly View" class="blueprint-image">
-                        <span class="blueprint-label">FIG 1.1 // TOOLPATH VECTOR MATRIX [X, Y, Z]</span>
+                        <img src="Images/design.png" alt="Bespoke insert dash panel rendering on MacBook with Fusion layout near machined component" class="blueprint-image">
+                        <span class="blueprint-label">FIG 1.1 // CAD WORKROOM &amp; FINISHED PIECE</span>
                     </div>
                 </div>
             </div>
@@ -407,15 +406,15 @@
                 <div class="pillar-meta">
                     <div>
                         <div class="pillar-index">INDEX SYSTEM [ 02 ] // HISTORIC REGISTRY LOG</div>
-                        <h2 class="pillar-title">Whorton Automotive Archive</h2>
-                        <p class="pillar-description">Active logbook tracking the component-by-component reverse engineering and restoration of our 1934 Standard Nine. Documenting custom parts manufacturing and physical provenance tracking.</p>
+                        <h2 class="pillar-title">Whorton Automotive</h2>
+                        <p class="pillar-description">Active logbook tracking the component-by-component reverse engineering, restoration, and custom design of our 1934 Standard Nine. Documenting custom parts manufacturing and structural assembly modifications directly from the workshop line.</p>
                     </div>
                     <a href="#" class="pillar-link">Access 1934 Standard Nine Logbook &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/automotive.png" alt="Historic Mechanical Hub Unit Component" class="blueprint-image">
-                        <span class="blueprint-label">FIG 2.1 // REVERSE-ENGINEERED HUB ASSEMBLY</span>
+                        <img src="Images/automotive.png" alt="1934 Standard Nine with the bonnet completely open in the shop" class="blueprint-image">
+                        <span class="blueprint-label">FIG 2.1 // 1934 STANDARD NINE BONNET SHOT</span>
                     </div>
                 </div>
             </div>
@@ -425,14 +424,14 @@
                     <div>
                         <div class="pillar-index">INDEX SYSTEM [ 03 ] // CLINICAL RESEARCH JOURNAL</div>
                         <h2 class="pillar-title">Whorton Equine Clinical</h2>
-                        <p class="pillar-description">Clinical logging from a fully qualified equine veterinary surgeon. Tracking pathology, real-world case studies, diagnostic data, and pharmacology profiles.</p>
+                        <p class="pillar-description">Clinical logging from a fully qualified equine veterinary surgeon. Tracking active pathology parameters, real-world case studies, raw diagnostic data streams, and targeted pharmacology profiles.</p>
                     </div>
                     <a href="#" class="pillar-link">Read Clinical Research Papers &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/equine.png" alt="Anatomical Line Diagnostic Chart" class="blueprint-image">
-                        <span class="blueprint-label">FIG 3.1 // COMPARTMENTAL PHARMACOKINETICS DATA</span>
+                        <img src="Images/equine.png" alt="Equine practitioner using a scraper tool to clean out a horse's hooves cleanly" class="blueprint-image">
+                        <span class="blueprint-label">FIG 3.1 // CLINICAL HOOF DIAGNOSTIC PARAMETERS</span>
                     </div>
                 </div>
             </div>
@@ -442,7 +441,7 @@
         <section class="manifesto">
             <div class="manifesto-container">
                 <span class="label">[ SYSTEM METRIC NOTE // 00-A1 ]</span>
-                <p>We work from first principles. Whether modeling an assembly component to sub-millimeter tolerances, tracking the exact structural load of a pre-war chassis, or parsing clinical indicators in modern veterinary medicine, the rule remains absolute: The data dictates the execution. True craftsmanship is defined by the absolute absence of decoration.</p>
+                <p>We work from first principles. Whether modeling an assembly component to tight tolerances, tracking the exact structural load of a pre-war chassis, or parsing clinical indicators in modern veterinary medicine, the rule remains absolute: The data dictates the execution. True craftsmanship is defined by the absolute absence of decoration.</p>
             </div>
         </section>
 
