@@ -8,8 +8,8 @@
         :root {
             --bg-color: #ffffff;
             --text-color: #1a1a1a;
-            --text-muted: #767676;
-            --line-color: #e2e2e2;
+            --text-muted: #8c8c8c;
+            --line-color: #e8e8e8;
             --font-serif: "Times New Roman", Times, Baskerville, Georgia, serif;
             --font-mono: "Courier New", Courier, Monaco, monospace;
         }
@@ -27,6 +27,11 @@
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             padding: 0 2rem;
+            /* Faint drafting canvas backdrop to prevent looking plain */
+            background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
+                              linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
+            background-size: 100px 100px;
+            background-attachment: fixed;
         }
 
         /* Master Blueprint Framework */
@@ -38,6 +43,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background-color: var(--bg-color);
         }
 
         /* Header / Registry Banner */
@@ -45,30 +51,35 @@
             display: flex;
             justify-content: space-between;
             align-items: baseline;
-            padding: 3rem 2rem;
+            padding: 3.5rem 3rem;
             border-bottom: 1px solid var(--line-color);
         }
 
         .brand-title {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             font-weight: 400;
-            letter-spacing: 0.35em;
+            letter-spacing: 0.4em;
             text-transform: uppercase;
             text-decoration: none;
             color: var(--text-color);
+            transition: opacity 0.3s ease;
+        }
+
+        .brand-title:hover {
+            opacity: 0.7;
         }
 
         .coordinates {
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text-muted);
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 2.5rem;
+            gap: 3rem;
         }
 
         nav a {
@@ -76,35 +87,52 @@
             font-size: 0.8rem;
             text-decoration: none;
             color: var(--text-color);
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 0.25rem;
         }
 
         nav a span {
             color: var(--text-muted);
-            margin-right: 0.4rem;
+            margin-right: 0.5rem;
         }
 
-        nav a:hover {
-            text-decoration: underline;
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 1px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--text-color);
+            transform: scaleX(0);
+            transform-origin: bottom right;
+            transition: transform 0.3s ease;
+        }
+
+        nav a:hover::after {
+            transform: scaleX(1);
+            transform-origin: bottom left;
         }
 
         /* Hero / Umbrella Statement */
         .hero {
-            padding: 8rem 2rem;
+            padding: 9rem 3rem;
             border-bottom: 1px solid var(--line-color);
             display: grid;
-            grid-template-columns: 1.2fr 0.8fr;
-            gap: 4rem;
+            grid-template-columns: 1.25fr 0.75fr;
+            gap: 5rem;
             align-items: end;
         }
 
         .hero-statement h1 {
-            font-size: 2.8rem;
+            font-size: 3rem;
             font-weight: 400;
             line-height: 1.15;
             letter-spacing: -0.01em;
-            max-width: 700px;
+            max-width: 750px;
         }
 
         .hero-statement .label {
@@ -112,9 +140,9 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.2em;
+            letter-spacing: 0.25em;
             display: block;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
         }
 
         .hero-meta-block {
@@ -122,12 +150,12 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             border-left: 1px solid var(--line-color);
-            padding-left: 2rem;
+            padding-left: 2.5rem;
         }
 
         .hero-meta-block p {
             margin-bottom: 1rem;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         /* Reconfigured Pillars Section */
@@ -138,7 +166,7 @@
         }
 
         .pillar-meta {
-            padding: 5rem 3rem;
+            padding: 6rem 4rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -155,23 +183,23 @@
             font-family: var(--font-mono);
             font-size: 0.75rem;
             color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            letter-spacing: 0.05em;
+            margin-bottom: 3rem;
+            letter-spacing: 0.08em;
         }
 
         .pillar-title {
-            font-size: 2rem;
+            font-size: 2.25rem;
             font-weight: 400;
             letter-spacing: 0.02em;
             text-transform: uppercase;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.75rem;
         }
 
         .pillar-description {
             font-size: 1.1rem;
-            max-width: 460px;
+            max-width: 480px;
             color: var(--text-color);
-            margin-bottom: 4rem;
+            margin-bottom: 5rem;
             text-align: justify;
         }
 
@@ -181,72 +209,97 @@
             color: var(--text-color);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.12em;
+            display: inline-block;
+            transition: transform 0.3s ease;
         }
 
         .pillar-link:hover {
-            text-decoration: underline;
+            transform: translateX(6px);
         }
 
         /* Schematic Render Placeholders */
         .pillar-visual {
-            padding: 5rem;
+            padding: 4rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fbfbfb;
+            background-color: #fafafa;
         }
 
         .technical-blueprint {
             width: 100%;
             height: 100%;
-            min-height: 350px;
-            border: 1px solid rgba(0, 0, 0, 0.07);
+            min-height: 400px;
+            border: 1px solid rgba(0, 0, 0, 0.08);
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             background: #ffffff;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+        }
+
+        .blueprint-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(105%);
+            opacity: 0.95;
+            transition: opacity 0.3s ease;
+        }
+
+        .technical-blueprint:hover .blueprint-image {
+            opacity: 1;
         }
 
         /* Crosshair markers simulating drafting bounds */
         .technical-blueprint::before {
             content: '';
             position: absolute;
-            width: 90%;
+            width: 92%;
             height: 1px;
-            background: linear-gradient(to right, transparent, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.05) 90%, transparent);
+            background: linear-gradient(to right, transparent, rgba(0,0,0,0.06) 10%, rgba(0,0,0,0.06) 90%, transparent);
+            z-index: 2;
+            pointer-events: none;
         }
         
         .technical-blueprint::after {
             content: '';
             position: absolute;
-            height: 90%;
+            height: 92%;
             width: 1px;
-            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.05) 10%, rgba(0,0,0,0.05) 90%, transparent);
+            background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.06) 10%, rgba(0,0,0,0.06) 90%, transparent);
+            z-index: 2;
+            pointer-events: none;
         }
 
         .blueprint-label {
             position: absolute;
-            bottom: 1rem;
-            right: 1rem;
+            bottom: 1.25rem;
+            right: 1.25rem;
             font-family: var(--font-mono);
             font-size: 0.65rem;
-            color: var(--text-muted);
+            color: var(--text-color);
+            background: rgba(255, 255, 255, 0.9);
+            padding: 0.25rem 0.5rem;
+            border: 1px solid var(--line-color);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
+            z-index: 3;
         }
 
         /* Technical Manifesto Section */
         .manifesto {
-            padding: 9rem 2rem;
+            padding: 10rem 3rem;
             text-align: center;
             border-bottom: 1px solid var(--line-color);
             background-color: #ffffff;
         }
 
         .manifesto-container {
-            max-width: 720px;
+            max-width: 760px;
             margin: 0 auto;
         }
 
@@ -255,24 +308,24 @@
             font-size: 0.75rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.25em;
+            letter-spacing: 0.3em;
             display: block;
-            margin-bottom: 3rem;
+            margin-bottom: 3.5rem;
         }
 
         .manifesto p {
-            font-size: 1.35rem;
-            line-height: 1.8;
+            font-size: 1.4rem;
+            line-height: 1.85;
             color: var(--text-color);
             text-align: justify;
             text-justify: inter-word;
         }
 
-        /* Footer / The Title Block */
+        /* Footer / Two Column Balanced System */
         footer {
-            padding: 5rem 2rem;
+            padding: 6rem 3rem;
             display: grid;
-            grid-template-columns: 1.221fr 0.779fr 1fr;
+            grid-template-columns: 1fr 1fr;
             gap: 4rem;
             font-family: var(--font-mono);
             font-size: 0.75rem;
@@ -283,51 +336,40 @@
         .footer-col h4 {
             color: var(--text-color);
             font-weight: 400;
-            margin-bottom: 1.25rem;
+            margin-bottom: 1.5rem;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
         }
 
         .footer-col p, .footer-col ul {
             list-style: none;
-            line-height: 2;
+            line-height: 2.2;
         }
 
         .footer-col a {
             color: var(--text-muted);
             text-decoration: none;
+            transition: color 0.3s ease;
         }
 
         .footer-col a:hover {
             color: var(--text-color);
-        }
-
-        .ledger-input {
-            width: 100%;
-            background: transparent;
-            border: none;
-            border-bottom: 1px solid var(--text-color);
-            padding: 0.5rem 0;
-            color: var(--text-color);
-            font-family: var(--font-mono);
-            margin-top: 0.75rem;
-        }
-
-        .ledger-input:focus {
-            outline: none;
+            text-decoration: underline;
         }
 
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
-            body { padding: 0; }
+            body { padding: 0; background-image: none; }
             .grid-container { border: none; }
-            .hero { grid-template-columns: 1fr; gap: 2rem; padding: 4rem 2rem; }
+            .hero { grid-template-columns: 1fr; gap: 3rem; padding: 5rem 2rem; }
             .hero-meta-block { border-left: none; padding-left: 0; border-top: 1px solid var(--line-color); padding-top: 2rem; }
             .pillar { grid-template-columns: 1fr; }
             .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 4rem 2rem; }
+            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 5rem 2rem; }
             .pillar-visual { padding: 2rem; }
-            footer { grid-template-columns: 1fr; gap: 3rem; }
+            .technical-blueprint { min-height: 320px; }
+            .manifesto { padding: 7rem 2rem; }
+            footer { grid-template-columns: 1fr; gap: 4rem; padding: 4rem 2rem; }
         }
     </style>
 </head>
@@ -371,6 +413,7 @@
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
+                        <img src="mock.png" alt="CAD Wireframe Assembly View" class="blueprint-image">
                         <span class="blueprint-label">FIG 1.1 // TOOLPATH VECTOR MATRIX [X, Y, Z]</span>
                     </div>
                 </div>
@@ -387,6 +430,7 @@
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
+                        <img src="mock.png" alt="Historic Mechanical Hub Unit Component" class="blueprint-image">
                         <span class="blueprint-label">FIG 2.1 // REVERSE-ENGINEERED HUB ASSEMBLY</span>
                     </div>
                 </div>
@@ -403,6 +447,7 @@
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
+                        <img src="mock.png" alt="Anatomical Line Diagnostic Chart" class="blueprint-image">
                         <span class="blueprint-label">FIG 3.1 // COMPARTMENTAL PHARMACOKINETICS DATA</span>
                     </div>
                 </div>
@@ -419,10 +464,8 @@
 
         <footer>
             <div class="footer-col">
-                <h4>Whorton Estate Registry</h4>
-                <p>Private Operational Ledger<br>
-                Staffordshire / United Kingdom Office<br>
-                Established 2026</p>
+                <h4>Whorton Estate Archive</h4>
+                <p>All projects, clinical case outcomes, and custom assemblies managed under strict data privacy criteria. Portfolios showcase structural process and provenance recording.</p>
             </div>
             <div class="footer-col">
                 <h4>Data Matrix Index</h4>
@@ -431,11 +474,6 @@
                     <li><a href="#">Veterinary Case Logs</a></li>
                     <li><a href="#">Restoration Part Registries</a></li>
                 </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Private Ledger Enrolment</h4>
-                <p>Submit identification for access to raw technical document revisions:</p>
-                <input type="email" placeholder="[ Enter Academic or Engineering Email ]" class="ledger-input">
             </div>
         </footer>
 
