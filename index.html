@@ -6,13 +6,12 @@
     <title>Whorton Estate</title>
     <style>
         :root {
-            --bg-color: #0b0b0a; /* Premium deep ink black */
-            --panel-bg: #121212; /* Dark slate off-black for the main canvas */
-            --text-color: #ffffff; /* Crisp white for maximum contrast */
-            --text-muted: #8e8c84; /* Soft muted metallic grey */
-            --line-color: rgba(255, 255, 255, 0.06); /* Subtle technical layout lines */
+            --bg-color: #f7f7f9; /* Clean, modern off-white with a slight slate tint */
+            --panel-bg: #ffffff; /* Stark white panel canvas for deep contrast */
+            --text-color: #111111; /* Deep charcoal black */
+            --text-muted: #85858b; /* Neutral mid-grey for technical details */
+            --line-color: #e2e2e6; /* Crisp, ultra-thin modern boundary rules */
             --font-serif: "Baskerville", "Georgia", "Times New Roman", serif;
-            --font-sans: "Helvetica Neue", Arial, sans-serif;
             --font-mono: "Courier New", Courier, Monaco, monospace;
         }
 
@@ -28,43 +27,35 @@
             font-family: var(--font-serif);
             line-height: 1.7;
             -webkit-font-smoothing: antialiased;
-            padding: 0 3rem;
-            /* Technical structural grid layout */
-            background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
-                              linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-            background-size: 100px 100px;
-            background-attachment: fixed;
+            padding: 0 2rem;
         }
 
-        /* Master Framework Container */
+        /* Modern, Clean Frame Container */
         .grid-container {
             max-width: 1300px;
-            margin: 3rem auto;
-            border-left: 1px solid var(--line-color);
-            border-right: 1px solid var(--line-color);
-            border-top: 1px solid var(--line-color);
-            border-bottom: 1px solid var(--line-color);
+            margin: 2rem auto;
+            border: 1px solid var(--line-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             background-color: var(--panel-bg);
-            box-shadow: 0 40px 90px rgba(0, 0, 0, 0.6);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.03);
         }
 
-        /* Ultra-Slim Navigation Bar */
+        /* Ultra-Slim Modern Navigation Bar */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0.85rem 3rem;
+            padding: 0.75rem 2.5rem;
             border-bottom: 1px solid var(--line-color);
             background-color: var(--panel-bg);
         }
 
         .brand-title {
-            font-size: 1.05rem;
+            font-size: 1rem;
             font-weight: 400;
-            letter-spacing: 0.3em;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
             text-decoration: none;
             color: var(--text-color);
@@ -74,7 +65,7 @@
             font-family: var(--font-mono);
             font-size: 0.65rem;
             color: var(--text-muted);
-            letter-spacing: 0.1em;
+            letter-spacing: 0.05em;
         }
 
         nav ul {
@@ -116,14 +107,14 @@
             transform-origin: bottom left;
         }
 
-        /* Master Hero Showcase Frame */
+        /* Master Hero Presentation Frame */
         .hero {
             height: 480px;
             width: 100%;
             border-bottom: 1px solid var(--line-color);
             overflow: hidden;
             background-color: var(--bg-color);
-            padding: 2rem;
+            padding: 1.5rem;
         }
 
         .hero-inner {
@@ -138,10 +129,10 @@
             height: 100%;
             object-fit: cover;
             display: block;
-            filter: none !important; /* Forces raw presentation of landscape imagery */
+            filter: none !important; /* Zero tints or structural filters */
         }
 
-        /* Portfolio Registry Sections */
+        /* Architectural Portfolio Columns */
         .pillar {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -149,7 +140,7 @@
         }
 
         .pillar-meta {
-            padding: 4.5rem 5rem;
+            padding: 4.5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -168,11 +159,11 @@
             font-size: 0.65rem;
             color: var(--text-muted);
             margin-bottom: 1.5rem;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.02em;
         }
 
         .pillar-title {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 400;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -183,7 +174,7 @@
         .pillar-description {
             font-size: 1.05rem;
             max-width: 480px;
-            color: #e5e5e5; /* Softened off-white for body readability */
+            color: #333333;
             margin-bottom: 3.5rem;
         }
 
@@ -193,7 +184,7 @@
             color: var(--text-color);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             display: inline-block;
         }
 
@@ -202,9 +193,9 @@
             text-decoration: underline;
         }
 
-        /* 16:9 Landscape Photographic Layouts */
+        /* Pure 16:9 Aspect Ratio Display Boxes */
         .pillar-visual {
-            padding: 4rem;
+            padding: 3.5rem;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -213,38 +204,38 @@
 
         .technical-blueprint {
             width: 100%;
-            aspect-ratio: 16 / 9; /* Perfect bounding box for native 1920x1080 files */
+            aspect-ratio: 16 / 9; /* Built explicitly to frame 1920x1080 native resolutions */
             position: relative;
-            background: #181818;
+            background: #ffffff;
             overflow: hidden;
             border: 1px solid var(--line-color);
-            box-shadow: 0 20px 45px rgba(0,0,0,0.4);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
         }
 
         .blueprint-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: none !important; /* No destructive filters or color treatments */
+            filter: none !important; /* Forces raw presentation of media assets */
         }
 
         .blueprint-label {
             position: absolute;
-            bottom: 1.25rem;
-            right: 1.25rem;
+            bottom: 1rem;
+            right: 1rem;
             font-family: var(--font-mono);
             font-size: 0.6rem;
             color: var(--text-color);
-            background: rgba(18, 18, 18, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             padding: 0.25rem 0.5rem;
             border: 1px solid var(--line-color);
             text-transform: uppercase;
             letter-spacing: 0.05em;
         }
 
-        /* Stately Manifesto Wall Inscription */
+        /* Large, Bold Statement Block */
         .manifesto {
-            padding: 10rem 3rem;
+            padding: 9rem 2.5rem;
             text-align: center;
             border-bottom: 1px solid var(--line-color);
             background-color: var(--panel-bg);
@@ -262,19 +253,19 @@
             text-transform: uppercase;
             letter-spacing: 0.25em;
             display: block;
-            margin-bottom: 3rem;
+            margin-bottom: 2.5rem;
         }
 
         .manifesto p {
-            font-size: 2rem; /* Large, powerful, high-contrast statement presentation */
+            font-size: 2rem; /* Enhanced to maximize reading accessibility */
             line-height: 1.8;
             color: var(--text-color);
             font-style: normal;
         }
 
-        /* Compact Mirror Footer System */
+        /* Mirror Symmetrical Footer System */
         footer {
-            padding: 2rem 3rem; /* Symmetrical, slim dimensions match the header system */
+            padding: 1.5rem 2.5rem; /* Mirrors navigation dimensional balance */
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -291,7 +282,7 @@
             font-family: var(--font-serif);
             font-size: 1rem;
             font-weight: 400;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.25rem;
             text-transform: uppercase;
             letter-spacing: 0.1em;
         }
@@ -321,9 +312,9 @@
             color: var(--text-color);
         }
 
-        /* Responsive Breakpoints */
+        /* Responsive Adaptive Layouts */
         @media (max-width: 1024px) {
-            body { padding: 0; background-image: none; }
+            body { padding: 0; }
             .grid-container { border: none; margin: 0; }
             header { padding: 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
             .hero { height: 320px; padding: 1rem; }
@@ -356,7 +347,7 @@
 
         <section class="hero">
             <div class="hero-inner">
-                <img src="Images/hero.png" alt="Whorton Estate Blueprint Master Visual" class="hero-img">
+                <img src="Images/hero.png" alt="Whorton Estate Minimalist Visual Showcase" class="hero-img">
             </div>
         </section>
 
@@ -366,14 +357,14 @@
                 <div class="pillar-meta">
                     <div>
                         <div class="pillar-index">LOG SYSTEM [ 01 ] // DESIGN &amp; PRODUCTION DEVELOPMENT</div>
-                        <h2 class="pillar-title">Whorton Engineering &amp; Design</h2>
+                        <h2 class="pillar-title">Engineering &amp; Design</h2>
                         <p class="pillar-description">This is my personal portfolio and repository of technical brain bites. I am a classically trained mechanical engineer with over a decade of comprehensive experience rooted deep in manufacturing and precision engineering environments. My career history transitions from directing custom CAD development pipelines and heading design departments within a bespoke engineering firm, to leading technical development teams at a billion-dollar German industrial conglomerate.</p>
                     </div>
                     <a href="#" class="pillar-link">Project Repository &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/design.png" alt="Bespoke component assembly design layouts" class="blueprint-image">
+                        <img src="Images/design.png" alt="Bespoke component engineering CAD layout files" class="blueprint-image">
                         <span class="blueprint-label">REF 1.1 // MODEL WORKROOM &amp; ASSEMBLED VARIANT</span>
                     </div>
                 </div>
@@ -390,7 +381,7 @@
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/automotive.png" alt="1934 Standard Nine open engine bay diagnostic tracking" class="blueprint-image">
+                        <img src="Images/automotive.png" alt="1934 Standard Nine chassis structural workroom" class="blueprint-image">
                         <span class="blueprint-label">REF 2.1 // 1934 STANDARD NINE IN WORKSHOP</span>
                     </div>
                 </div>
@@ -400,14 +391,14 @@
                 <div class="pillar-meta">
                     <div>
                         <div class="pillar-index">LOG SYSTEM [ 03 ] // VETERINARY SURGERY LOGBOOKS</div>
-                        <h2 class="pillar-title">Whorton Equine</h2>
+                        <h2 class="pillar-title">Whorton Equine Clinical</h2>
                         <p class="pillar-description">Clinical documentation from a fully qualified equine veterinary surgeon. Tracking diagnostic case histories, active animal pathology profiles, field observations, and pharmacological records.</p>
                     </div>
                     <a href="#" class="pillar-link">Clinical Journals &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/equine.png" alt="Equine practitioner performing structural specimen examination" class="blueprint-image">
+                        <img src="Images/equine.png" alt="Equine surgical medicine and diagnostics tracking parameters" class="blueprint-image">
                         <span class="blueprint-label">REF 3.1 // CLINICAL SPECIMEN EXAMINATION</span>
                     </div>
                 </div>
