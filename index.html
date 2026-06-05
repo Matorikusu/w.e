@@ -6,12 +6,14 @@
     <title>Whorton Estate</title>
     <style>
         :root {
-            --bg-color: #ffffff;
-            --text-color: #1a1a1a;
-            --text-muted: #8c8c8c;
-            --line-color: #e8e8e8;
-            --font-serif: "Times New Roman", Times, Baskerville, Georgia, serif;
-            --font-mono: "Courier New", Courier, Monaco, monospace;
+            /* Swapped sterile white for a soft, historic linen/parchment tone */
+            --bg-color: #faf9f6; 
+            --panel-bg: #ffffff;
+            --text-color: #1c1a17; /* Soft charcoal-black */
+            --text-muted: #706e6a; /* Warm grey */
+            --line-color: #eceae4; /* Softer, low-contrast grid lines */
+            --font-serif: "Baskerville", "Georgia", "Times New Roman", serif;
+            --font-sans: "Helvetica Neue", Arial, sans-serif;
         }
 
         * {
@@ -24,64 +26,64 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: var(--font-serif);
-            line-height: 1.6;
+            line-height: 1.7;
             -webkit-font-smoothing: antialiased;
-            padding: 0 2rem;
+            padding: 0 3rem;
             background-image: linear-gradient(var(--line-color) 1px, transparent 1px),
                               linear-gradient(90deg, var(--line-color) 1px, transparent 1px);
-            background-size: 100px 100px;
+            background-size: 120px 120px;
             background-attachment: fixed;
         }
 
         /* Master Blueprint Framework */
         .grid-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            border-left: 1px solid var(--line-color);
-            border-right: 1px solid var(--line-color);
+            max-width: 1300px;
+            margin: 4rem auto;
+            border: 1px solid var(--line-color);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-color: var(--bg-color);
+            background-color: var(--panel-bg);
+            box-shadow: 0 30px 70px rgba(0,0,0,0.03);
         }
 
-        /* Compact, Sleek Header */
+        /* Elegant, Spaced Header */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.25rem 3rem; /* Reduced padding for a tighter baseline */
+            padding: 3rem;
             border-bottom: 1px solid var(--line-color);
         }
 
         .brand-title {
-            font-size: 1.1rem; /* Slightly smaller to match the sleek layout */
+            font-size: 1.25rem;
             font-weight: 400;
-            letter-spacing: 0.35em;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
             text-decoration: none;
             color: var(--text-color);
         }
 
         .coordinates {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
             color: var(--text-muted);
-            letter-spacing: 0.1em;
+            letter-spacing: 0.15em;
         }
 
         nav ul {
             display: flex;
             list-style: none;
-            gap: 2.5rem;
+            gap: 3rem;
         }
 
         nav a {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-family: var(--font-sans);
+            font-size: 0.7rem;
             text-decoration: none;
             color: var(--text-color);
-            letter-spacing: 0.05em;
+            letter-spacing: 0.15em;
             text-transform: uppercase;
             position: relative;
             padding-bottom: 0.2rem;
@@ -89,7 +91,9 @@
 
         nav a span {
             color: var(--text-muted);
-            margin-right: 0.4rem;
+            margin-right: 0.5rem;
+            font-style: italic;
+            font-family: var(--font-serif);
         }
 
         nav a::after {
@@ -99,10 +103,10 @@
             height: 1px;
             bottom: 0;
             left: 0;
-            background-color: var(--text-color);
+            background-color: var(--text-muted);
             transform: scaleX(0);
             transform-origin: bottom right;
-            transition: transform 0.2s ease;
+            transition: transform 0.3s ease;
         }
 
         nav a:hover::after {
@@ -110,32 +114,41 @@
             transform-origin: bottom left;
         }
 
-        /* Master Hero Visual */
+        /* Framed Hero Visual */
         .hero {
-            height: 500px;
+            height: 550px;
             width: 100%;
             border-bottom: 1px solid var(--line-color);
             overflow: hidden;
-            background-color: #fafafa;
+            background-color: var(--bg-color);
+            padding: 2rem; /* Creates a gallery mat frame effect */
+        }
+
+        .hero-inner {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            border: 1px solid var(--line-color);
         }
 
         .hero-img {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) contrast(105%);
+            filter: grayscale(100%) sepia(10%) contrast(95%);
             display: block;
+            transition: transform 0.8s ease;
         }
 
         /* Pillars Section */
         .pillar {
             display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
+            grid-template-columns: 1fr 1fr;
             border-bottom: 1px solid var(--line-color);
         }
 
         .pillar-meta {
-            padding: 4.5rem 4rem;
+            padding: 5rem;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -149,155 +162,158 @@
         }
 
         .pillar-index {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
             color: var(--text-muted);
-            margin-bottom: 2rem;
-            letter-spacing: 0.05em;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
         }
 
         .pillar-title {
-            font-size: 1.6rem;
+            font-size: 2rem;
             font-weight: 400;
-            letter-spacing: 0.05em;
-            text-transform: uppercase;
-            margin-bottom: 1.25rem;
+            letter-spacing: 0.02em;
+            margin-bottom: 1.5rem;
+            color: var(--text-color);
         }
 
         .pillar-description {
-            font-size: 1rem;
-            max-width: 520px;
+            font-size: 1.05rem;
+            max-width: 460px;
             color: var(--text-color);
-            margin-bottom: 3.5rem;
-            text-align: left;
+            margin-bottom: 4rem;
+            font-style: normal;
         }
 
         .pillar-link {
-            font-family: var(--font-mono);
-            font-size: 0.75rem;
+            font-family: var(--font-serif);
+            font-size: 0.9rem;
+            font-style: italic;
             color: var(--text-color);
             text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
             display: inline-block;
         }
 
         .pillar-link:hover {
-            text-decoration: underline;
+            color: var(--text-muted);
         }
 
-        /* Technical 16:9 Content Boxes */
+        /* Elegant Visual Content Boxes */
         .pillar-visual {
-            padding: 3rem;
+            padding: 4rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #fafafa;
+            background-color: var(--bg-color);
         }
 
         .technical-blueprint {
             width: 100%;
-            aspect-ratio: 16 / 9;
-            border: 1px solid rgba(0, 0, 0, 0.08);
+            aspect-ratio: 4 / 3; /* More classic, portrait-leaning ratio than harsh 16:9 */
             position: relative;
             background: #ffffff;
             overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.02);
+            border: 1px solid var(--line-color);
         }
 
         .blueprint-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            filter: grayscale(100%) contrast(105%);
+            filter: grayscale(100%) sepia(15%) contrast(95%);
         }
 
         .blueprint-label {
             position: absolute;
-            bottom: 1rem;
-            right: 1rem;
-            font-family: var(--font-mono);
-            font-size: 0.6rem;
-            color: var(--text-color);
+            bottom: 1.5rem;
+            right: 1.5rem;
+            font-family: var(--font-sans);
+            font-size: 0.55rem;
+            color: var(--text-muted);
             background: rgba(255, 255, 255, 0.95);
-            padding: 0.2rem 0.4rem;
+            padding: 0.3rem 0.6rem;
             border: 1px solid var(--line-color);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.1em;
         }
 
         /* Manifesto Section */
         .manifesto {
-            padding: 8rem 3rem;
+            padding: 10rem 3rem;
             text-align: center;
             border-bottom: 1px solid var(--line-color);
-            background-color: #ffffff;
+            background-color: var(--panel-bg);
         }
 
         .manifesto-container {
-            max-width: 720px;
+            max-width: 680px;
             margin: 0 auto;
         }
 
         .manifesto .label {
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 0.25em;
+            letter-spacing: 0.3em;
             display: block;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
         }
 
         .manifesto p {
-            font-size: 1.25rem;
-            line-height: 1.8;
+            font-size: 1.4rem;
+            line-height: 1.9;
             color: var(--text-color);
-            text-align: justify;
-            text-justify: inter-word;
+            font-style: italic;
         }
 
         /* Footer System */
         footer {
-            padding: 5rem 3rem;
+            padding: 6rem 3rem;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             text-align: center;
-            gap: 3rem;
-            font-family: var(--font-mono);
-            font-size: 0.7rem;
-            color: var(--text-muted);
-            background-color: #fff;
+            gap: 4rem;
+            background-color: var(--panel-bg);
+            border-top: 1px solid var(--line-color);
         }
 
         .footer-content-block {
-            max-width: 640px;
+            max-width: 520px;
         }
 
         footer h4 {
             color: var(--text-color);
+            font-family: var(--font-serif);
+            font-size: 1.1rem;
             font-weight: 400;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
         }
 
         footer p {
+            font-size: 0.95rem;
+            color: var(--text-muted);
             line-height: 1.8;
         }
 
         .footer-links-row {
             display: flex;
-            gap: 2.5rem;
+            gap: 3rem;
             list-style: none;
         }
 
         .footer-links-row a {
+            font-family: var(--font-sans);
+            font-size: 0.65rem;
             color: var(--text-muted);
             text-decoration: none;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.15em;
         }
 
         .footer-links-row a:hover {
@@ -307,16 +323,16 @@
         /* Responsive Breakpoints */
         @media (max-width: 1024px) {
             body { padding: 0; background-image: none; }
-            .grid-container { border: none; }
-            header { padding: 1rem 1.5rem; flex-direction: column; gap: 1rem; align-items: flex-start; }
-            .hero { height: 300px; }
+            .grid-container { border: none; margin: 0; }
+            header { padding: 2rem 1.5rem; flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+            .hero { height: 350px; padding: 1rem; }
             .pillar { grid-template-columns: 1fr; }
             .pillar:nth-child(even) .pillar-meta { order: 0; border-left: none; border-bottom: 1px solid var(--line-color); }
-            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 3.5rem 1.5rem; }
-            .pillar-visual { padding: 1.5rem; }
-            .manifesto { padding: 5rem 1.5rem; }
-            footer { padding: 4rem 1.5rem; }
-            .footer-links-row { flex-direction: column; gap: 1rem; }
+            .pillar-meta { border-right: none; border-bottom: 1px solid var(--line-color); padding: 4rem 1.5rem; }
+            .pillar-visual { padding: 2rem 1.5rem; }
+            .manifesto { padding: 6rem 1.5rem; }
+            footer { padding: 5rem 1.5rem; }
+            .footer-links-row { flex-direction: column; gap: 1.5rem; }
         }
     </style>
 </head>
@@ -329,15 +345,17 @@
             <div class="coordinates">52.1307° N, 0.4628° W</div>
             <nav>
                 <ul>
-                    <li><a href="#"><span>01</span>Design &amp; Eng.</a></li>
-                    <li><a href="#"><span>02</span>Automotive</a></li>
-                    <li><a href="#"><span>03</span>Equine Clinical</a></li>
+                    <li><a href="#"><span>I.</span> Design &amp; Eng.</a></li>
+                    <li><a href="#"><span>II.</span> Automotive</a></li>
+                    <li><a href="#"><span>III.</span> Equine Clinical</a></li>
                 </ul>
             </nav>
         </header>
 
         <section class="hero">
-            <img src="Images/hero.png" alt="Whorton Estate Master Visual" class="hero-img">
+            <div class="hero-inner">
+                <img src="Images/hero.png" alt="Whorton Estate Heritage Visual" class="hero-img">
+            </div>
         </section>
 
         <section class="pillars-list">
@@ -345,16 +363,16 @@
             <div class="pillar">
                 <div class="pillar-meta">
                     <div>
-                        <div class="pillar-index">LOG SYSTEM [ 01 ] // DESIGN &amp; PRODUCTION DEVELOPMENT</div>
+                        <div class="pillar-index">Chamber I // Design &amp; Development</div>
                         <h2 class="pillar-title">Engineering &amp; Design</h2>
-                        <p class="pillar-description">A record of professional work and technical design. Over a decade of background managing engineering frameworks, CAD development pipelines, and R&amp;D team leadership for a German industrial design firm. This section documents project oversight from initial software architecture to final product assemblies.</p>
+                        <p class="pillar-description">A multigenerational practice bridging industrial design and computational precision. This archive chronicles a decade of industrial design leadership for premier European firms, detailing projects from foundational software architecture to final structural assemblies.</p>
                     </div>
-                    <a href="#" class="pillar-link">Project Repository &rarr;</a>
+                    <a href="#" class="pillar-link">Examine the Project Repository &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/design.png" alt="Bespoke insert dash panel rendering on MacBook with Fusion layout near machined component" class="blueprint-image">
-                        <span class="blueprint-label">REF 1.1 // MODEL WORKROOM &amp; ASSEMBLED VARIANT</span>
+                        <img src="Images/design.png" alt="Bespoke dash panel assembly rendering" class="blueprint-image">
+                        <span class="blueprint-label">Folio 1.1 // Assembled Variant Studies</span>
                     </div>
                 </div>
             </div>
@@ -362,16 +380,16 @@
             <div class="pillar">
                 <div class="pillar-meta">
                     <div>
-                        <div class="pillar-index">LOG SYSTEM [ 02 ] // HISTORIC RESTORATION WORKS</div>
+                        <div class="pillar-index">Chamber II // Preservation Work</div>
                         <h2 class="pillar-title">Whorton Automotive</h2>
-                        <p class="pillar-description">Workshop tracking for the component-by-component restoration and custom design modifications of our 1934 Standard Nine. Documentation centers on manufacturing replacement hardware, custom machining, and active mechanical maintenance.</p>
+                        <p class="pillar-description">A dedicated workshop space focused on the bespoke restoration and mechanical preservation of historically significant vehicles. Current documentation focuses on the component-by-component commission of our 1934 Standard Nine.</p>
                     </div>
-                    <a href="#" class="pillar-link">Standard Nine Records &rarr;</a>
+                    <a href="#" class="pillar-link">View Workshop Logbooks &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/automotive.png" alt="1934 Standard Nine with the bonnet completely open in the shop" class="blueprint-image">
-                        <span class="blueprint-label">REF 2.1 // 1934 STANDARD NINE IN WORKSHOP</span>
+                        <img src="Images/automotive.png" alt="1934 Standard Nine restoration" class="blueprint-image">
+                        <span class="blueprint-label">Folio 2.1 // 1934 Standard Nine Archive</span>
                     </div>
                 </div>
             </div>
@@ -379,16 +397,16 @@
             <div class="pillar">
                 <div class="pillar-meta">
                     <div>
-                        <div class="pillar-index">LOG SYSTEM [ 03 ] // VETERINARY SURGERY LOGBOOKS</div>
-                        <h2 class="pillar-title">Whorton Equine Clinical</h2>
-                        <p class="pillar-description">Clinical documentation from a fully qualified equine veterinary surgeon. Tracking diagnostic case histories, active animal pathology profiles, field observations, and pharmacological records.</p>
+                        <div class="pillar-index">Chamber III // Medical Practice</div>
+                        <h2 class="pillar-title">Equine Clinical</h2>
+                        <p class="pillar-description">Clinical observations and case studies from qualified veterinary practice. This section compiles active diagnostic case histories, animal pathology profiles, and field evaluations dedicated to advanced equine care.</p>
                     </div>
-                    <a href="#" class="pillar-link">Clinical Journals &rarr;</a>
+                    <a href="#" class="pillar-link">Read Clinical Journals &rarr;</a>
                 </div>
                 <div class="pillar-visual">
                     <div class="technical-blueprint">
-                        <img src="Images/equine.png" alt="Equine practitioner using a scraper tool to clean out a horse's hooves cleanly" class="blueprint-image">
-                        <span class="blueprint-label">REF 3.1 // CLINICAL SPECIMEN EXAMINATION</span>
+                        <img src="Images/equine.png" alt="Equine clinical care" class="blueprint-image">
+                        <span class="blueprint-label">Folio 3.1 // Diagnostic Records</span>
                     </div>
                 </div>
             </div>
@@ -397,15 +415,15 @@
 
         <section class="manifesto">
             <div class="manifesto-container">
-                <span class="label">[ GENERAL OVERVIEW ]</span>
-                <p>We work from first principles. Whether modeling an assembly component to tight tolerances, tracking the exact structural load of a pre-war chassis, or parsing clinical indicators in modern veterinary medicine, the rule remains absolute: The data dictates the execution. True craftsmanship is defined by the absolute absence of decoration.</p>
+                <span class="label">Our Philosophy</span>
+                <p>"We work strictly from first principles. Whether resolving mechanical tolerances, analyzing pre-war chassis geometry, or interpreting complex clinical data, our method is simple: Let the work speak for itself."</p>
             </div>
         </section>
 
         <footer>
             <div class="footer-content-block">
-                <h4>Whorton Estate Archive</h4>
-                <p>A private family and professional directory. Technical records, medical histories, and asset registries are updated regularly for tracking and documentation purposes.</p>
+                <h4>Whorton Estate Registry</h4>
+                <p>A private family directory and professional archive. Technical histories, medical registries, and workshop ledgers are preserved here for documentation and ongoing study.</p>
             </div>
             
             <ul class="footer-links-row">
