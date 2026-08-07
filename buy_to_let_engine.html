@@ -1,26 +1,28 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Buy-to-Let Yield Engine | Whorton Estate</title>
+  <title>Whorton Estate | Buy-to-Let Yield Engine</title>
   
+  <!-- Modern Geometric Sans Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Visual Projections -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
     :root {
       --bg-dark: #0a0a0c;
       --card-bg: #141417;
-      --card-border: #27272a;
-      --input-bg: #1c1c21;
+      --border-color: #27272a;
       --text-primary: #ffffff;
       --text-muted: #a1a1aa;
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.15);
-      --warning: #f59e0b;
-      --danger: #ef4444;
+      --accent-alert: #f43f5e;
     }
 
     * {
@@ -35,67 +37,75 @@
       background-color: var(--bg-dark);
       color: var(--text-primary);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-      padding-bottom: 5rem;
     }
 
+    /* Navigation */
     nav {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 1.5rem 5%;
-      border-bottom: 1px solid var(--card-border);
-      background: rgba(10, 10, 12, 0.85);
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(10, 10, 12, 0.8);
       backdrop-filter: blur(12px);
       position: sticky;
       top: 0;
-      z-index: 100;
+      z-index: 50;
     }
 
     .brand {
       font-weight: 800;
-      font-size: 1.1rem;
+      font-size: 1.15rem;
       letter-spacing: -0.02em;
       text-transform: uppercase;
-      text-decoration: none;
       color: var(--text-primary);
+      text-decoration: none;
     }
 
     .brand span {
       color: var(--accent);
     }
 
-    .nav-back {
+    .back-link {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.85rem;
+      font-size: 0.875rem;
       font-weight: 600;
       transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
-    .nav-back:hover {
+    .back-link:hover {
       color: var(--text-primary);
     }
 
-    .container {
+    /* Main Container */
+    main {
+      flex: 1;
       max-width: 1280px;
-      margin: 2.5rem auto 0 auto;
-      padding: 0 5%;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 5%;
     }
 
-    .page-header {
-      margin-bottom: 2rem;
+    .header-block {
+      margin-bottom: 2.5rem;
     }
 
     .badge {
       display: inline-block;
       padding: 0.35rem 0.85rem;
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--card-border);
+      border: 1px solid var(--border-color);
       border-radius: 100px;
       font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 0.75rem;
+      margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 600;
@@ -105,720 +115,645 @@
       font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 0.35rem;
-    }
-
-    .subtitle {
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
-    .engine-grid {
-      display: grid;
-      grid-template-columns: 1fr 1.1fr;
-      gap: 2rem;
-      align-items: start;
-    }
-
-    @media (max-width: 960px) {
-      .engine-grid {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .panel {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2rem;
-    }
-
-    .control-group {
-      margin-bottom: 1.5rem;
-    }
-
-    .label-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.6rem;
-    }
-
-    label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      letter-spacing: 0.02em;
-    }
-
-    .val-badge {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      background: var(--input-bg);
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
-      border: 1px solid var(--card-border);
-    }
-
-    .segmented-control {
-      display: flex;
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 100px;
-      padding: 0.25rem;
-      gap: 0.25rem;
-    }
-
-    .segmented-btn {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: var(--text-muted);
-      padding: 0.55rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      border-radius: 7px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-
-    .segmented-btn.active {
-      background: var(--card-bg);
-      color: var(--text-primary);
-      border: 1px solid var(--card-border);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    input[type="range"] {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      height: 6px;
-      background: var(--input-bg);
-      border-radius: 100px;
-      outline: none;
-      margin-top: 0.5rem;
-    }
-
-    input[type="range"]::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--accent);
-      cursor: pointer;
-      box-shadow: 0 0 12px var(--accent);
-      transition: transform 0.15s ease;
-    }
-
-    input[type="range"]::-webkit-slider-thumb:hover {
-      transform: scale(1.15);
-    }
-
-    .analytics-panel {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-    }
-
-    .primary-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .primary-card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 200px;
-      height: 200px;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .metric-label {
-      font-size: 0.75rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: var(--text-muted);
       margin-bottom: 0.5rem;
     }
 
-    .metric-value-huge {
-      font-size: clamp(2.5rem, 5vw, 3.5rem);
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: var(--text-primary);
-      margin-bottom: 1.5rem;
-    }
-
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1rem;
-    }
-
-    .sub-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      padding: 1.25rem;
-      border-radius: 12px;
-    }
-
-    .sub-card .val {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-top: 0.25rem;
-      color: var(--text-primary);
-    }
-
-    .chart-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.5rem;
-    }
-
-    .chart-container {
-      width: 100%;
-      height: 200px;
-      position: relative;
-      margin-top: 1rem;
-    }
-
-    svg.growth-chart {
-      width: 100%;
-      height: 100%;
-      overflow: visible;
-    }
-
-    .tax-comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin-top: 1rem;
-    }
-
-    .tax-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-
-    .tax-card.highlight {
-      border-color: var(--accent);
-      background: rgba(16, 185, 129, 0.03);
-    }
-
-    .tax-card-title {
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
+    p.subtitle {
       color: var(--text-muted);
-      margin-bottom: 0.75rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .tax-tag {
-      font-size: 0.65rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 4px;
-      background: var(--input-bg);
-      border: 1px solid var(--card-border);
-    }
-
-    .tax-value {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--text-primary);
-      margin-bottom: 0.25rem;
-    }
-
-    .tax-subtext {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .section-divider {
-      border: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
-      margin: 4rem 0;
-    }
-
-    .explanation-section {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 2.5rem;
-      margin-top: 2rem;
-    }
-
-    .explanation-header {
-      margin-bottom: 1.5rem;
-    }
-
-    .explanation-header h2 {
-      font-size: 1.5rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.5rem;
-    }
-
-    .explanation-header p {
-      color: var(--text-muted);
-      font-size: 0.95rem;
+      font-size: 1rem;
+      max-width: 650px;
       line-height: 1.6;
     }
 
-    .explanation-grid {
+    /* Engine Layout Grid */
+    .engine-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
+      grid-template-columns: 1fr;
+      gap: 2rem;
     }
 
-    .explanation-card {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1.5rem;
+    @media (min-width: 1024px) {
+      .engine-grid {
+        grid-template-columns: 420px 1fr;
+      }
     }
 
-    .explanation-card h3 {
-      font-size: 1rem;
+    /* Input Controls Panel */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      height: fit-content;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
       font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
       color: var(--accent);
-      margin-bottom: 0.5rem;
+      margin-bottom: 1.25rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .explanation-card p {
-      font-size: 0.875rem;
+    .input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
       color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    .input-suffix {
+      position: absolute;
+      right: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      background: #0a0a0c;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="number"].has-prefix {
+      padding-left: 2.25rem;
+    }
+
+    input[type="number"].has-suffix {
+      padding-right: 2.5rem;
+    }
+
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 1.5rem 0;
+    }
+
+    /* Output Display Panel */
+    .display-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card.primary {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+    }
+
+    .metric-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .metric-value.accent {
+      color: var(--accent);
+    }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Dashboard & Breakdown Cards */
+    .dashboard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .card-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 260px;
+      width: 100%;
+    }
+
+    /* Breakdown List */
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .data-label {
+      color: var(--text-muted);
+    }
+
+    .data-val {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Stress Matrix Table */
+    .stress-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+
+    .stress-table th, .stress-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .stress-table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .stress-table td {
+      font-weight: 600;
+    }
+
+    .text-negative {
+      color: var(--accent-alert);
+    }
+
+    .text-positive {
+      color: var(--accent);
+    }
+
+    /* Information Section */
+    .info-section {
       line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-section p {
+      margin-bottom: 1rem;
+    }
+
+    .info-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2.5rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4rem;
     }
   </style>
 </head>
 <body>
 
+  <!-- Navigation -->
   <nav>
     <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
-    <a href="index.html" class="nav-back">← Back to Suite</a>
+    <a href="index.html" class="back-link">← Back to Suite</a>
   </nav>
 
-  <div class="container">
-    <div class="page-header">
-      <span class="badge">Engine 07 • Real Estate Matrix</span>
+  <main>
+    <div class="header-block">
+      <div class="badge">Engine 07 • Real Estate Model</div>
       <h1>Buy-to-Let Yield Engine</h1>
-      <p class="subtitle">Stress-test net yields, void risk, stamp duty, mortgage rate shocks, and Section 24 corporate structure drag.</p>
+      <p class="subtitle">Calculate true net yields, stress-test interest rate sensitivity, model void risks, and evaluate total return on invested capital.</p>
     </div>
 
     <div class="engine-grid">
       <!-- CONTROL PANEL -->
-      <div class="panel">
+      <div class="control-panel">
+        <div class="section-label">00. Engine Configuration</div>
+
+        <div class="input-group">
+          <label for="currencySelect">Display Currency</label>
+          <select id="currencySelect">
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">01. Acquisition Profile</div>
         
-        <!-- Currency Selector -->
-        <div class="control-group">
-          <label>Currency Unit</label>
-          <div class="segmented-control" id="currSymbol">
-            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
-            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
-            <button class="segmented-btn" onclick="setCurrency('€')">€</button>
-            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
-            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
+        <div class="input-group">
+          <label for="purchasePrice">Purchase Price</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currencyPrefix1">£</span>
+            <input type="number" id="purchasePrice" value="250000" step="5000" class="has-prefix">
           </div>
         </div>
 
-        <!-- Property Purchase Price -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderPrice">Purchase Price</label>
-            <span class="val-badge" id="badgePrice">£250,000</span>
+        <div class="input-group">
+          <label for="depositPercent">Deposit Amount</label>
+          <div class="input-wrapper">
+            <input type="number" id="depositPercent" value="25" min="0" max="100" class="has-suffix">
+            <span class="input-suffix">%</span>
           </div>
-          <input type="range" id="sliderPrice" min="50000" max="1500000" step="5000" value="250000" oninput="syncPrice(this.value)" />
         </div>
 
-        <!-- Monthly Gross Rent -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderRent">Monthly Gross Rent</label>
-            <span class="val-badge" id="badgeRent">£1,350</span>
+        <div class="input-group">
+          <label for="legalCosts">Refurb, Legal & Surcharges</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currencyPrefix2">£</span>
+            <input type="number" id="legalCosts" value="5000" step="500" class="has-prefix">
           </div>
-          <input type="range" id="sliderRent" min="400" max="8000" step="50" value="1350" oninput="syncRent(this.value)" />
         </div>
 
-        <!-- Deposit Percentage -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderDeposit">Equity Deposit (LTV: <span id="lblLtv">75%</span>)</label>
-            <span class="val-badge" id="badgeDeposit">25% (£62,500)</span>
+        <div class="divider"></div>
+        <div class="section-label">02. Financing & Income</div>
+
+        <div class="input-group">
+          <label for="monthlyRent">Gross Monthly Rent</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currencyPrefix3">£</span>
+            <input type="number" id="monthlyRent" value="1350" step="25" class="has-prefix">
           </div>
-          <input type="range" id="sliderDeposit" min="15" max="60" step="5" value="25" oninput="syncDeposit(this.value)" />
         </div>
 
-        <!-- Mortgage Interest Rate -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderMortgageRate">Mortgage Interest Rate</label>
-            <span class="val-badge" id="badgeMortgageRate">4.5%</span>
+        <div class="input-group">
+          <label for="interestRate">Mortgage Interest Rate</label>
+          <div class="input-wrapper">
+            <input type="number" id="interestRate" value="4.5" step="0.1" class="has-suffix">
+            <span class="input-suffix">%</span>
           </div>
-          <input type="range" id="sliderMortgageRate" min="1.0" max="10.0" step="0.25" value="4.5" oninput="syncMortgageRate(this.value)" />
         </div>
 
-        <!-- Stress Test Rate Hike -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderStressHike">Stress-Test Rate Hike</label>
-            <span class="val-badge" id="badgeStressHike">+2.0% (6.5% Total)</span>
+        <div class="divider"></div>
+        <div class="section-label">03. Operating Friction</div>
+
+        <div class="input-group">
+          <label for="managementFee">Lettings Management Fee</label>
+          <div class="input-wrapper">
+            <input type="number" id="managementFee" value="10" step="1" class="has-suffix">
+            <span class="input-suffix">%</span>
           </div>
-          <input type="range" id="sliderStressHike" min="0.0" max="5.0" step="0.5" value="2.0" oninput="syncStressHike(this.value)" />
         </div>
 
-        <!-- Operational Expenses (% of Rent) -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderManagement">Agent Management Fee</label>
-            <span class="val-badge" id="badgeManagement">10.0%</span>
+        <div class="input-group">
+          <label for="maintenanceBuffer">Maintenance & Service Charge</label>
+          <div class="input-wrapper">
+            <input type="number" id="maintenanceBuffer" value="8" step="1" class="has-suffix">
+            <span class="input-suffix">%</span>
           </div>
-          <input type="range" id="sliderManagement" min="0" max="20" step="1" value="10" oninput="syncManagement(this.value)" />
         </div>
 
-        <!-- Maintenance & Insurance (Annual) -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderMaintenance">Maintenance & Insurance (Annual)</label>
-            <span class="val-badge" id="badgeMaintenance">£1,800</span>
+        <div class="input-group">
+          <label for="voidWeeks">Annual Void Allowance</label>
+          <div class="input-wrapper">
+            <input type="number" id="voidWeeks" value="2" min="0" max="52" class="has-suffix">
+            <span class="input-suffix">Wks</span>
           </div>
-          <input type="range" id="sliderMaintenance" min="300" max="8000" step="100" value="1800" oninput="syncMaintenance(this.value)" />
         </div>
-
-        <!-- Void Weeks per Year -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderVoids">Expected Void Loss</label>
-            <span class="val-badge" id="badgeVoids">2 Weeks / Yr</span>
-          </div>
-          <input type="range" id="sliderVoids" min="0" max="8" step="1" value="2" oninput="syncVoids(this.value)" />
-        </div>
-
       </div>
 
-      <!-- ANALYTICS PANEL -->
-      <div class="analytics-panel">
+      <!-- DISPLAY PANEL -->
+      <div class="display-panel">
         
-        <!-- Primary Net Yield Card -->
-        <div class="primary-card">
-          <div class="metric-label">Real Net Yield (Post-Expenses & Mortgages)</div>
-          <div class="metric-value-huge" id="resNetYield">4.82%</div>
-
-          <div class="metrics-grid">
-            <div class="sub-card">
-              <div class="metric-label">Gross Yield</div>
-              <div class="val" id="resGrossYield" style="color: var(--accent);">6.48%</div>
-            </div>
-            <div class="sub-card">
-              <div class="metric-label">Cash-on-Cash Return</div>
-              <div class="val" id="resCoCR">6.15%</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Monthly Operating Metrics -->
+        <!-- Key Metrics -->
         <div class="metrics-grid">
-          <div class="sub-card">
-            <div class="metric-label">Monthly Gross Income</div>
-            <div class="val" id="resMonthlyGross">£1,350</div>
+          <div class="metric-card primary">
+            <div class="metric-title">Return On Equity (ROCE)</div>
+            <div class="metric-value accent" id="roceVal">0.0%</div>
+            <div class="metric-sub">Net Annual Cashflow / Invested Capital</div>
           </div>
-          <div class="sub-card">
-            <div class="metric-label">Monthly Net Pre-Tax Cashflow</div>
-            <div class="val" id="resMonthlyNet">£384</div>
+
+          <div class="metric-card">
+            <div class="metric-title">Net Yield</div>
+            <div class="metric-value" id="netYieldVal">0.0%</div>
+            <div class="metric-sub">Gross Yield: <span id="grossYieldVal">0.0%</span></div>
           </div>
-          <div class="sub-card">
-            <div class="metric-label">Stress-Tested Cashflow (+2%)</div>
-            <div class="val" id="resStressCashflow" style="color: var(--warning);">£72</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Total Entry Capital (Deposit+SDLT)</div>
-            <div class="val" id="resTotalEntryCapital">£75,000</div>
+
+          <div class="metric-card">
+            <div class="metric-title">Monthly Net Profit</div>
+            <div class="metric-value" id="monthlyNetVal">£0</div>
+            <div class="metric-sub">Annual: <span id="annualNetVal">£0</span></div>
           </div>
         </div>
 
-        <!-- Personal vs Corporate Tax Comparison -->
-        <div class="chart-card">
-          <div class="metric-label">Ownership Structure Tax Drag (Post-Tax Monthly Profit)</div>
-          <div class="tax-comparison-grid">
-            <div class="tax-card">
-              <div class="tax-card-title">
-                Personal Name
-                <span class="tax-tag">40% Rate (Sec 24)</span>
-              </div>
-              <div class="tax-value" id="resTaxPersonal">£210</div>
-              <div class="tax-subtext">Includes 20% mortgage tax credit restriction</div>
-            </div>
-
-            <div class="tax-card highlight">
-              <div class="tax-card-title">
-                Limited Co (SPV)
-                <span class="tax-tag" style="color: var(--accent);">25% Corp Tax</span>
-              </div>
-              <div class="tax-value" id="resTaxCorporate" style="color: var(--accent);">£288</div>
-              <div class="tax-subtext">Mortgage fully deductible as business expense</div>
-            </div>
+        <!-- Visual Cashflow Distribution -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Gross Revenue Breakdown</div>
           </div>
-        </div>
-
-        <!-- Mortgage Rate Sensitivity Chart -->
-        <div class="chart-card">
-          <div class="metric-label">Interest Rate Sensitivity Curve (Net Monthly Cashflow)</div>
           <div class="chart-container">
-            <svg class="growth-chart" id="stressSvg" viewBox="0 0 500 180">
-              <defs>
-                <linearGradient id="stressGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
-                  <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
-                </linearGradient>
-              </defs>
-              <line id="zeroLine" x1="0" y1="90" x2="500" y2="90" stroke="#ef4444" stroke-dasharray="4" stroke-width="1" />
-              <path id="stressArea" fill="url(#stressGrad)" d="" />
-              <path id="stressLine" fill="none" stroke="#10b981" stroke-width="3" d="" />
-            </svg>
+            <canvas id="yieldChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Stress Testing Matrix -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Interest Rate Stress Matrix</div>
+          </div>
+          <table class="stress-table">
+            <thead>
+              <tr>
+                <th>Mortgage Rate</th>
+                <th>Monthly Interest</th>
+                <th>Monthly Net Profit</th>
+                <th>ROCE</th>
+              </tr>
+            </thead>
+            <tbody id="stressTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Capital Requirements Breakdown -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Initial Capital Invested</div>
+          </div>
+          <div class="data-list">
+            <div class="data-row">
+              <span class="data-label">Deposit Required</span>
+              <span class="data-val" id="depositAmountVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Refurb, Legal & Setup Fees</span>
+              <span class="data-val" id="setupCostsVal">£0</span>
+            </div>
+            <div class="data-row" style="font-weight: 700; color: var(--accent);">
+              <span class="data-label" style="color: var(--text-primary);">Total Cash Required</span>
+              <span class="data-val" id="totalCapitalVal">£0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytical Overview / Info Section -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Investment Analysis & Overview</div>
+          </div>
+          <div class="info-section">
+            <p><strong>Yield vs. Return on Capital Employed (ROCE):</strong> While Gross and Net Yield measure return relative to the property's total valuation, ROCE measures performance against the physical cash deployed. Leveraging through a mortgage amplifies your ROCE when rental income outpaces financing costs.</p>
+            <p><strong>Managing Operating Friction:</strong> Profit margins in residential property depend heavily on controlling fixed friction costs. Accounting for property management fees, routine maintenance, and expected vacancy periods ensures realistic net income projections before acquisition.</p>
           </div>
         </div>
 
       </div>
     </div>
+  </main>
 
-    <!-- LINE SEPARATOR -->
-    <hr class="section-divider" />
-
-    <!-- TOOL EXPLANATION SECTION -->
-    <section class="explanation-section">
-      <div class="explanation-header">
-        <h2>About the Buy-to-Let Yield Engine</h2>
-        <p>The Real Estate Matrix stress-tests physical property investments across operational friction, tax changes, and interest rate spikes. It evaluates whether a residential asset provides true risk-adjusted cashflow or hidden capital drag.</p>
-      </div>
-
-      <div class="explanation-grid">
-        <div class="explanation-card">
-          <h3><span>•</span> Section 24 Tax Restriction</h3>
-          <p>Under UK Section 24, individual landlords can no longer deduct mortgage interest from rental income before calculating income tax. Instead, they receive a flat 20% tax credit, severely eroding profits for higher-rate taxpayers compared to Special Purpose Vehicle (SPV) Limited Companies.</p>
-        </div>
-
-        <div class="explanation-card">
-          <h3><span>•</span> Cash-on-Cash Return (CoCR)</h3>
-          <p>Measures the annual net cash income generated relative to the exact initial cash deployed (Deposit + Stamp Duty + Fees), providing a far more realistic metric for active investor capital deployment than headline gross yield.</p>
-        </div>
-
-        <div class="explanation-card">
-          <h3><span>•</span> Interest Rate Stress-Testing</h3>
-          <p>Simulates the exact impact of refinancing at higher interest rates. Standard lenders stress-test buy-to-let applications at 5.5%–7.0% interest coverage ratios (ICR) to safeguard against insolvency during monetary tightening cycles.</p>
-        </div>
-      </div>
-    </section>
-
-  </div>
+  <footer>
+    <p>© Whorton Estate. Clean execution tools.</p>
+  </footer>
 
   <script>
-    let currencySymbol = '£';
+    let yieldChart = null;
 
-    function setCurrency(symbol) {
-      currencySymbol = symbol;
-      document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText === symbol);
-      });
-      syncPrice(document.getElementById('sliderPrice').value);
-      syncRent(document.getElementById('sliderRent').value);
-      syncDeposit(document.getElementById('sliderDeposit').value);
-      syncMaintenance(document.getElementById('sliderMaintenance').value);
-      calculate();
+    const currencySymbols = {
+      GBP: '£',
+      USD: '$',
+      EUR: '€'
+    };
+
+    function formatCurrency(val, currencyCode) {
+      return new Intl.NumberFormat('en-GB', { 
+        style: 'currency', 
+        currency: currencyCode, 
+        maximumFractionDigits: 0 
+      }).format(val);
     }
 
-    function formatCurr(val) {
-      const isNeg = val < 0;
-      const formatted = currencySymbol + Math.abs(Math.round(val)).toLocaleString('en-GB');
-      return isNeg ? `-${formatted}` : formatted;
+    function updateCurrencyPrefixes(symbol) {
+      document.getElementById('currencyPrefix1').innerText = symbol;
+      document.getElementById('currencyPrefix2').innerText = symbol;
+      document.getElementById('currencyPrefix3').innerText = symbol;
     }
 
-    function syncPrice(val) {
-      document.getElementById('badgePrice').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      syncDeposit(document.getElementById('sliderDeposit').value);
-      calculate();
-    }
-
-    function syncRent(val) {
-      document.getElementById('badgeRent').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function syncDeposit(val) {
-      const price = parseFloat(document.getElementById('sliderPrice').value) || 250000;
-      const depPct = parseFloat(val) || 25;
-      const depAmt = price * (depPct / 100);
-      const ltv = 100 - depPct;
-
-      document.getElementById('lblLtv').innerText = `${ltv}%`;
-      document.getElementById('badgeDeposit').innerText = `${depPct}% (${currencySymbol}${Math.round(depAmt).toLocaleString('en-GB')})`;
-      calculate();
-    }
-
-    function syncMortgageRate(val) {
-      document.getElementById('badgeMortgageRate').innerText = parseFloat(val).toFixed(2) + '%';
-      calculate();
-    }
-
-    function syncStressHike(val) {
-      const baseRate = parseFloat(document.getElementById('sliderMortgageRate').value) || 4.5;
-      const hike = parseFloat(val) || 0;
-      const total = baseRate + hike;
-      document.getElementById('badgeStressHike').innerText = `+${hike.toFixed(1)}% (${total.toFixed(2)}% Total)`;
-      calculate();
-    }
-
-    function syncManagement(val) {
-      document.getElementById('badgeManagement').innerText = parseFloat(val).toFixed(1) + '%';
-      calculate();
-    }
-
-    function syncMaintenance(val) {
-      document.getElementById('badgeMaintenance').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function syncVoids(val) {
-      document.getElementById('badgeVoids').innerText = `${val} Weeks / Yr`;
-      calculate();
-    }
-
-    // Estimate UK Stamp Duty (SDLT) with 3% BTL surcharge for approximation
-    function calculateSDLT(price) {
-      let sdlt = 0;
-      // 3% additional surcharge on full price + tiered standard rates
-      sdlt += price * 0.03; 
-      if (price > 250000) {
-        sdlt += Math.min(price - 250000, 675000) * 0.05;
-      }
-      if (price > 925000) {
-        sdlt += (price - 925000) * 0.10;
-      }
-      return sdlt;
-    }
-
-    function calculate() {
-      const price = parseFloat(document.getElementById('sliderPrice').value) || 250000;
-      const monthlyRent = parseFloat(document.getElementById('sliderRent').value) || 1350;
-      const depositPct = (parseFloat(document.getElementById('sliderDeposit').value) || 25) / 100;
-      const mortgageRate = (parseFloat(document.getElementById('sliderMortgageRate').value) || 4.5) / 100;
-      const stressHike = (parseFloat(document.getElementById('sliderStressHike').value) || 2.0) / 100;
-      const managementPct = (parseFloat(document.getElementById('sliderManagement').value) || 10) / 100;
-      const annualMaintenance = parseFloat(document.getElementById('sliderMaintenance').value) || 1800;
-      const voidWeeks = parseFloat(document.getElementById('sliderVoids').value) || 2;
-
-      // Primary Financial Components
-      const grossAnnualRent = monthlyRent * 12;
-      const voidLoss = (monthlyRent * 12) * (voidWeeks / 52);
-      const effectiveAnnualRent = grossAnnualRent - voidLoss;
-
-      const depositAmount = price * depositPct;
-      const mortgageAmount = price - depositAmount;
-
-      const annualMortgageInterest = mortgageAmount * mortgageRate;
-      const annualManagement = effectiveAnnualRent * managementPct;
-      const annualExpenses = annualManagement + annualMaintenance + voidLoss;
-
-      const annualNOI = grossAnnualRent - annualExpenses; // Net Operating Income
-      const annualNetCashflow = annualNOI - annualMortgageInterest;
-      const monthlyNetCashflow = annualNetCashflow / 12;
-
-      // Yield Metrics
-      const grossYield = (grossAnnualRent / price) * 100;
-      const netYield = (annualNOI / price) * 100;
-
-      const sdlt = calculateSDLT(price);
-      const legalFeesEst = 2000;
-      const totalInitialCapital = depositAmount + sdlt + legalFeesEst;
-      const cashOnCashReturn = (annualNetCashflow / totalInitialCapital) * 100;
-
-      // Stress-tested Scenario
-      const stressRate = mortgageRate + stressHike;
-      const stressMortgageInterest = mortgageAmount * stressRate;
-      const stressAnnualNetCashflow = annualNOI - stressMortgageInterest;
-      const stressMonthlyNetCashflow = stressAnnualNetCashflow / 12;
-
-      // Tax Calculations (UK 40% Higher Rate Personal Sec 24 vs Corporate 25%)
-      // Personal Section 24: Taxed on gross profit before mortgage interest, minus 20% tax credit on interest
-      const personalTaxableProfit = Math.max(0, grossAnnualRent - (annualManagement + annualMaintenance));
-      const personalTaxAt40 = personalTaxableProfit * 0.40;
-      const taxCredit = annualMortgageInterest * 0.20;
-      const personalTaxLiability = Math.max(0, personalTaxAt40 - taxCredit);
-      const personalNetMonthlyProfit = (annualNetCashflow - (personalTaxLiability - (personalTaxableProfit - annualNOI))) / 12;
-
-      // Corporate SPV: 25% Corp Tax on Net Operating Profit (Mortgage Interest fully deductible)
-      const corpTaxableProfit = Math.max(0, annualNOI - annualMortgageInterest);
-      const corpTaxLiability = corpTaxableProfit * 0.25;
-      const corpNetMonthlyProfit = (annualNetCashflow - corpTaxLiability) / 12;
-
-      // UI Updates
-      document.getElementById('resNetYield').innerText = netYield.toFixed(2) + '%';
-      document.getElementById('resGrossYield').innerText = grossYield.toFixed(2) + '%';
-      document.getElementById('resCoCR').innerText = cashOnCashReturn.toFixed(2) + '%';
-
-      document.getElementById('resMonthlyGross').innerText = formatCurr(monthlyRent);
-      document.getElementById('resMonthlyNet').innerText = formatCurr(monthlyNetCashflow);
-      document.getElementById('resStressCashflow').innerText = formatCurr(stressMonthlyNetCashflow);
-      document.getElementById('resTotalEntryCapital').innerText = formatCurr(totalInitialCapital);
-
-      document.getElementById('resTaxPersonal').innerText = formatCurr(personalNetMonthlyProfit);
-      document.getElementById('resTaxCorporate').innerText = formatCurr(corpNetMonthlyProfit);
-
-      renderSensitivityChart(mortgageAmount, annualNOI);
-    }
-
-    function renderSensitivityChart(mortgageAmt, annualNOI) {
-      const width = 500;
-      const height = 180;
-      const rates = [0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10];
+    function calculateYields() {
+      const selectedCurrency = document.getElementById('currencySelect').value;
+      const currencySymbol = currencySymbols[selectedCurrency] || '£';
       
-      const cashflows = rates.map(r => (annualNOI - (mortgageAmt * r)) / 12);
-      const maxCf = Math.max(...cashflows, 500);
-      const minCf = Math.min(...cashflows, -500);
+      updateCurrencyPrefixes(currencySymbol);
 
-      const range = maxCf - minCf;
-      const zeroY = height - ((0 - minCf) / range) * height;
+      // Inputs
+      const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
+      const depositPercent = parseFloat(document.getElementById('depositPercent').value) || 0;
+      const legalCosts = parseFloat(document.getElementById('legalCosts').value) || 0;
+      const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 0;
+      const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
+      const managementFee = parseFloat(document.getElementById('managementFee').value) || 0;
+      const maintenanceBuffer = parseFloat(document.getElementById('maintenanceBuffer').value) || 0;
+      const voidWeeks = parseFloat(document.getElementById('voidWeeks').value) || 0;
 
-      document.getElementById('zeroLine').setAttribute('y1', zeroY.toFixed(1));
-      document.getElementById('zeroLine').setAttribute('y2', zeroY.toFixed(1));
+      // Calculations
+      const depositAmount = purchasePrice * (depositPercent / 100);
+      const mortgageAmount = purchasePrice - depositAmount;
+      const totalCapitalInvested = depositAmount + legalCosts;
 
-      let pathD = '';
-      cashflows.forEach((cf, i) => {
-        const x = (i / (cashflows.length - 1)) * width;
-        const y = height - ((cf - minCf) / range) * height;
-        pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
-      });
+      const potentialGrossAnnualRent = monthlyRent * 12;
+      const voidLoss = (monthlyRent / 4.33) * voidWeeks;
+      const effectiveAnnualRent = potentialGrossAnnualRent - voidLoss;
 
-      const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
+      const annualMortgageInterest = mortgageAmount * (interestRate / 100);
 
-      document.getElementById('stressLine').setAttribute('d', pathD);
-      document.getElementById('stressArea').setAttribute('d', areaD);
+      const annualManagement = effectiveAnnualRent * (managementFee / 100);
+      const annualMaintenance = effectiveAnnualRent * (maintenanceBuffer / 100);
+
+      const totalAnnualExpenses = annualMortgageInterest + annualManagement + annualMaintenance + voidLoss;
+      const annualNetProfit = potentialGrossAnnualRent - totalAnnualExpenses;
+      const monthlyNetProfit = annualNetProfit / 12;
+
+      const grossYield = purchasePrice > 0 ? (potentialGrossAnnualRent / purchasePrice) * 100 : 0;
+      const netYield = purchasePrice > 0 ? ((potentialGrossAnnualRent - (annualManagement + annualMaintenance + voidLoss)) / purchasePrice) * 100 : 0;
+      const roce = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
+
+      // Update UI Metrics
+      document.getElementById('roceVal').innerText = roce.toFixed(2) + '%';
+      document.getElementById('netYieldVal').innerText = netYield.toFixed(2) + '%';
+      document.getElementById('grossYieldVal').innerText = grossYield.toFixed(2) + '%';
+      document.getElementById('monthlyNetVal').innerText = formatCurrency(monthlyNetProfit, selectedCurrency);
+      document.getElementById('annualNetVal').innerText = formatCurrency(annualNetProfit, selectedCurrency);
+
+      document.getElementById('depositAmountVal').innerText = formatCurrency(depositAmount, selectedCurrency);
+      document.getElementById('setupCostsVal').innerText = formatCurrency(legalCosts, selectedCurrency);
+      document.getElementById('totalCapitalVal').innerText = formatCurrency(totalCapitalInvested, selectedCurrency);
+
+      // Render Stress Matrix
+      renderStressMatrix(mortgageAmount, totalCapitalInvested, potentialGrossAnnualRent, annualManagement + annualMaintenance + voidLoss, interestRate, selectedCurrency);
+
+      // Update Doughnut Chart
+      updateChart(annualMortgageInterest, annualManagement, annualMaintenance, voidLoss, Math.max(0, annualNetProfit));
     }
 
-    // Run initial calculation
-    calculate();
+    function renderStressMatrix(mortgage, totalInvested, grossRent, nonInterestCosts, currentRate, currencyCode) {
+      const ratesToTest = [
+        currentRate - 1.0,
+        currentRate,
+        currentRate + 1.0,
+        currentRate + 2.0,
+        currentRate + 3.0
+      ].filter(r => r > 0);
+
+      const tableBody = document.getElementById('stressTableBody');
+      tableBody.innerHTML = '';
+
+      ratesToTest.forEach(rate => {
+        const annualInterest = mortgage * (rate / 100);
+        const monthlyInterest = annualInterest / 12;
+        const annualNet = grossRent - nonInterestCosts - annualInterest;
+        const monthlyNet = annualNet / 12;
+        const roce = totalInvested > 0 ? (annualNet / totalInvested) * 100 : 0;
+
+        const row = document.createElement('tr');
+        row.style.background = (Math.abs(rate - currentRate) < 0.05) ? 'rgba(16, 185, 129, 0.08)' : 'transparent';
+        
+        row.innerHTML = `
+          <td>${rate.toFixed(1)}% ${Math.abs(rate - currentRate) < 0.05 ? '(Current)' : ''}</td>
+          <td>${formatCurrency(monthlyInterest, currencyCode)}</td>
+          <td class="${monthlyNet >= 0 ? 'text-positive' : 'text-negative'}">${formatCurrency(monthlyNet, currencyCode)}</td>
+          <td class="${roce >= 0 ? 'text-positive' : 'text-negative'}">${roce.toFixed(2)}%</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateChart(interest, mgmt, maint, voidLoss, netProfit) {
+      const ctx = document.getElementById('yieldChart').getContext('2d');
+      
+      const data = {
+        labels: ['Mortgage Interest', 'Management', 'Maintenance', 'Void Reserve', 'Net Profit'],
+        datasets: [{
+          data: [interest, mgmt, maint, voidLoss, netProfit],
+          backgroundColor: [
+            '#3b82f6',
+            '#a855f7',
+            '#f59e0b',
+            '#f43f5e',
+            '#10b981'
+          ],
+          borderWidth: 0
+        }]
+      };
+
+      if (yieldChart) {
+        yieldChart.data = data;
+        yieldChart.update();
+      } else {
+        yieldChart = new Chart(ctx, {
+          type: 'doughnut',
+          data: data,
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                position: 'right',
+                labels: {
+                  color: '#a1a1aa',
+                  font: { family: 'Plus Jakarta Sans', size: 12 }
+                }
+              }
+            },
+            cutout: '70%'
+          }
+        });
+      }
+    }
+
+    // Attach Event Listeners
+    document.querySelectorAll('input, select').forEach(element => {
+      element.addEventListener('input', calculateYields);
+      element.addEventListener('change', calculateYields);
+    });
+
+    // Initial Execution
+    calculateYields();
   </script>
 </body>
 </html>
