@@ -336,6 +336,69 @@
       margin-top: 1rem;
       display: none;
     }
+
+    /* LINE SEPARATOR & OVERVIEW SECTION STYLES */
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 4rem 0;
+    }
+
+    .explanation-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .explanation-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .explanation-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .explanation-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explanation-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
@@ -483,6 +546,35 @@
 
       </div>
     </div>
+
+    <!-- LINE SEPARATOR -->
+    <hr class="section-divider" />
+
+    <!-- TOOL EXPLANATION SECTION -->
+    <section class="explanation-section">
+      <div class="explanation-header">
+        <h2>About the Break-Even Model</h2>
+        <p>The Break-Even Model is a fundamental capital planning tool designed to evaluate the financial viability of products, services, or business ventures. By mapping the relationship between fixed overheads, variable production costs, and pricing structures, it determines the exact operational volume required to achieve net neutrality—where total revenue equals total costs.</p>
+      </div>
+
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h3><span>•</span> Unit Contribution Margin</h3>
+          <p>Calculated as <strong>Selling Price − Variable Cost</strong>. This reflects the amount each sold unit contributes toward covering fixed operational expenses before generating net profit.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Break-Even Threshold</h3>
+          <p>Determines the exact unit sales volume needed where total income matches combined operational costs. Beyond this point, every additional unit sold directly generates profit.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Margin of Safety</h3>
+          <p>Measures the buffer between projected or current sales volumes and the break-even volume. A higher percentage indicates greater resilience against demand fluctuations.</p>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
@@ -588,7 +680,7 @@
       const width = 500;
       const height = 180;
 
-      // X-Axis bounds (scale chart up to 1.5x target or break-even volume)
+      // X-Axis bounds (scale chart up to 1.3x target or break-even volume)
       const maxUnits = Math.max(targetUnits * 1.3, (breakEvenUnits || 0) * 1.3, 100);
       const maxRevenue = maxUnits * price;
 
