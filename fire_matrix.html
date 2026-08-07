@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -163,7 +163,7 @@
       display: flex;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 100px;
       padding: 0.25rem;
       gap: 0.25rem;
     }
@@ -298,13 +298,75 @@
       height: 100%;
       overflow: visible;
     }
+
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 4rem 0;
+    }
+
+    .explanation-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .explanation-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .explanation-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .explanation-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explanation-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
   </style>
 </head>
 <body>
 
   <nav>
-    <a href="#" class="brand">Whorton<span>.</span>Estate</a>
-    <a href="#" class="nav-back">← Back to Suite</a>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="nav-back">← Back to Suite</a>
   </nav>
 
   <div class="container">
@@ -414,7 +476,7 @@
           </div>
           <div class="sub-card">
             <div class="metric-label">Capital Multiplier</div>
-            <div class="val" id="resMultiplier">25x Burn</div>
+            <div class="val" id="resMultiplier">25.0x Burn</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Monthly Passive Yield</div>
@@ -446,6 +508,35 @@
 
       </div>
     </div>
+
+    <!-- LINE SEPARATOR -->
+    <hr class="section-divider" />
+
+    <!-- TOOL EXPLANATION SECTION -->
+    <section class="explanation-section">
+      <div class="explanation-header">
+        <h2>About the FIRE Independence Engine</h2>
+        <p>The FIRE (Financial Independence, Retire Early) Matrix maps out your trajectory to financial autonomy. By balancing annual expenditure with targeted savings and portfolio yield rates, it defines the required capital baseline needed to sustain ongoing living expenses without relying on traditional earned income.</p>
+      </div>
+
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h3><span>•</span> Safe Withdrawal Rate (SWR)</h3>
+          <p>The percentage of total portfolio assets withdrawn annually during retirement. A standard 4.0% SWR assumes an invested portfolio can perpetually support living expenses through historical market returns.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Capital Multiplier</h3>
+          <p>Directly derived from the Safe Withdrawal Rate. For example, a 4.0% SWR requires a net worth equivalent to 25x annual expenses ($1,000,000 portfolio for $40,000 annual burn).</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Real Post-Inflation Growth</h3>
+          <p>Assumes net annual returns after accounting for inflation and investment fees, giving a conservative, true-value representation of purchasing power growth over time.</p>
+        </div>
+      </div>
+    </section>
+
   </div>
 
   <script>
