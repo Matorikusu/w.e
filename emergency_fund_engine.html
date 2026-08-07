@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whorton Estate | Emergency Fund & Runway Matrix</title>
+  
+  <!-- Modern Geometric Sans Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Visual Projections -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --border-color: #27272a;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --accent-alert: #f43f5e;
+      --accent-warning: #f59e0b;
+      --accent-info: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Main Layout */
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 5%;
+    }
+
+    .header-block {
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 650px;
+      line-height: 1.6;
+    }
+
+    /* Grid Layout */
+    .engine-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .engine-grid {
+        grid-template-columns: 420px 1fr;
+      }
+    }
+
+    /* Controls Panel */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      height: fit-content;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .input-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .slider-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: #0a0a0c;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="number"].has-prefix {
+      padding-left: 2.25rem;
+    }
+
+    /* Range Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      margin-top: 0.4rem;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 1.5rem 0;
+    }
+
+    /* Display Panel */
+    .display-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card.primary {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+    }
+
+    .metric-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .metric-value.accent {
+      color: var(--accent);
+    }
+
+    .metric-value.alert {
+      color: var(--accent-alert);
+    }
+
+    .metric-value.warning {
+      color: var(--accent-warning);
+    }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .card-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Dynamic Data List */
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .data-label {
+      color: var(--text-muted);
+    }
+
+    .data-val {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Info Section */
+    .info-section {
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-section p {
+      margin-bottom: 1rem;
+    }
+
+    .info-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2.5rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="back-link">← Back to Suite</a>
+  </nav>
+
+  <main>
+    <div class="header-block">
+      <div class="badge">Engine 09 • Capital Liquidity</div>
+      <h1>Emergency Fund / Runway Matrix</h1>
+      <p class="subtitle">Determine exact liquid capital targets based on fixed versus discretionary burn rates, income stability, dependants, and custom volatility risk factors.</p>
+    </div>
+
+    <div class="engine-grid">
+      <!-- CONTROL PANEL -->
+      <div class="control-panel">
+        <div class="section-label">00. Engine Configuration</div>
+
+        <div class="input-group">
+          <label for="currencySelect">Display Currency</label>
+          <select id="currencySelect">
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">01. Monthly Outgoings & Reserves</div>
+        
+        <div class="input-group">
+          <label for="fixedBurn">Fixed Monthly Outgoings (Essentials)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefix1">£</span>
+            <input type="number" id="fixedBurn" value="2500" step="100" class="has-prefix">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="variableBurn">Variable Outgoings (Discretionary)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefix2">£</span>
+            <input type="number" id="variableBurn" value="1000" step="100" class="has-prefix">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="currentReserve">Current Liquid Cash Reserves</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefix3">£</span>
+            <input type="number" id="currentReserve" value="15000" step="500" class="has-prefix">
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">02. Volatility & Profile Risk</div>
+
+        <div class="input-group">
+          <label for="incomeType">Income Profile Stability</label>
+          <select id="incomeType">
+            <option value="1.0">Stable Corporate Salary (Base Model)</option>
+            <option value="1.2" selected>Single Income / Specialist Role (+20%)</option>
+            <option value="1.4">Freelancer / Variable Commission (+40%)</option>
+            <option value="1.6">Business Owner / Early Startup (+60%)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="dependants">Dependants Supported</label>
+            <span class="slider-val" id="dependantsVal">2</span>
+          </div>
+          <input type="range" id="dependants" min="0" max="6" step="1" value="2">
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="targetMonths">Target Runway Coverage</label>
+            <span class="slider-val" id="targetMonthsVal">6 Months</span>
+          </div>
+          <input type="range" id="targetMonths" min="3" max="24" step="1" value="6">
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="savingsYield">Reserve Account Yield (p.a.)</label>
+            <span class="slider-val" id="savingsYieldVal">4.5%</span>
+          </div>
+          <input type="range" id="savingsYield" min="0" max="8" step="0.25" value="4.5">
+        </div>
+      </div>
+
+      <!-- DISPLAY PANEL -->
+      <div class="display-panel">
+        
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div class="metric-title">Optimal Capital Reserve Target</div>
+            <div class="metric-value accent" id="targetReserveVal">£0</div>
+            <div class="metric-sub">Adjusted for Risk & Volatility</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">Current Core Runway</div>
+            <div class="metric-value" id="runwayMonthsVal">0 Months</div>
+            <div class="metric-sub">Based on Essential Fixed Outgoings</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">Reserve Surplus / Shortfall</div>
+            <div class="metric-value" id="reserveGapVal">£0</div>
+            <div class="metric-sub" id="reserveGapSub">Status: Calculating...</div>
+          </div>
+        </div>
+
+        <!-- Visual Runway Depletion Chart -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Runway Depletion Trajectory (Zero-Income Scenario)</div>
+          </div>
+          <div class="chart-container">
+            <canvas id="runwayChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Breakdown List -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Reserve Analysis & Financial Metrics</div>
+          </div>
+          <div class="data-list">
+            <div class="data-row">
+              <span class="data-label">Total Unadjusted Monthly Burn (Fixed + Variable)</span>
+              <span class="data-val" id="totalBurnVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Survival Monthly Burn (Fixed Only)</span>
+              <span class="data-val" id="survivalBurnVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Risk-Adjusted Monthly Target Burn</span>
+              <span class="data-val" id="adjustedBurnVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Estimated Annual Interest Earned on Reserves</span>
+              <span class="data-val" id="annualInterestVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Runway at Full Discretionary Spend</span>
+              <span class="data-val" id="fullRunwayVal">0 Months</span>
+            </div>
+            <div class="data-row" style="font-weight: 700; color: var(--accent);">
+              <span class="data-label" style="color: var(--text-primary);">Calculated Capital Buffer Efficiency</span>
+              <span class="data-val" id="bufferEfficiencyVal">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytical Overview / Information Section -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Financial Analysis & Risk Guidance</div>
+          </div>
+          <div class="info-section">
+            <p><strong>Fixed vs. Variable Burn Dynamics:</strong> In emergency scenarios, variable outgoings (dining out, subscriptions, travel) can be pruned instantly. However, fixed outgoings (mortgages, rent, utilities, insurance) remain rigid. An optimal emergency fund scales primarily off fixed commitments while providing a realistic buffer for essential living expenses.</p>
+            <p><strong>Income Stability & Risk-Weighting:</strong> A traditional 3-to-6-month heuristic fails to account for career volatility. Dual-salaried corporate employees generally require smaller liquid reserves, whereas freelancers, commission-based earners, and business owners face higher revenue variability and extended re-employment cycles, requiring 9 to 12 months of risk-adjusted coverage.</p>
+            <p><strong>Liquidity vs. Yield Optimisation:</strong> While emergency capital must remain immediately accessible and insulated from market downturns, leaving reserves in zero-interest accounts causes purchasing power erosion due to inflation. Holding funds in high-yield cash accounts or short-term Treasury bills strikes a balance between instant liquidity and capital preservation.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© Whorton Estate. Clean execution tools.</p>
+  </footer>
+
+  <script>
+    let runwayChart = null;
+
+    const currencySymbols = {
+      GBP: '£',
+      USD: '$',
+      EUR: '€',
+      INR: '₹',
+      JPY: '¥'
+    };
+
+    function formatCurrency(val, currencyCode) {
+      return new Intl.NumberFormat('en-GB', { 
+        style: 'currency', 
+        currency: currencyCode, 
+        maximumFractionDigits: 0 
+      }).format(val);
+    }
+
+    function updatePrefixes(symbol) {
+      document.getElementById('currPrefix1').innerText = symbol;
+      document.getElementById('currPrefix2').innerText = symbol;
+      document.getElementById('currPrefix3').innerText = symbol;
+    }
+
+    function calculateMatrix() {
+      const selectedCurrency = document.getElementById('currencySelect').value;
+      const currencySymbol = currencySymbols[selectedCurrency] || '£';
+      updatePrefixes(currencySymbol);
+
+      // Inputs
+      const fixedBurn = parseFloat(document.getElementById('fixedBurn').value) || 0;
+      const variableBurn = parseFloat(document.getElementById('variableBurn').value) || 0;
+      const currentReserve = parseFloat(document.getElementById('currentReserve').value) || 0;
+      const incomeMultiplier = parseFloat(document.getElementById('incomeType').value) || 1.0;
+      const dependants = parseInt(document.getElementById('dependants').value) || 0;
+      const targetMonths = parseInt(document.getElementById('targetMonths').value) || 6;
+      const savingsYieldPct = parseFloat(document.getElementById('savingsYield').value) || 0;
+
+      // Label Updates
+      document.getElementById('dependantsVal').innerText = dependants.toString();
+      document.getElementById('targetMonthsVal').innerText = targetMonths + ' Months';
+      document.getElementById('savingsYieldVal').innerText = savingsYieldPct.toFixed(1) + '%';
+
+      // Calculations
+      const totalMonthlyBurn = fixedBurn + variableBurn;
+      
+      // Dependant adjustment (+5% per dependant)
+      const dependantMultiplier = 1 + (dependants * 0.05);
+      
+      // Risk-adjusted monthly burn baseline (Fixed + 30% Variable as baseline essential, multiplied by risk factors)
+      const riskAdjustedMonthlyBurn = (fixedBurn + (variableBurn * 0.30)) * incomeMultiplier * dependantMultiplier;
+
+      // Optimal Reserve Target
+      const targetReserve = riskAdjustedMonthlyBurn * targetMonths;
+
+      // Current Runways
+      const survivalRunwayMonths = fixedBurn > 0 ? (currentReserve / fixedBurn) : 0;
+      const fullRunwayMonths = totalMonthlyBurn > 0 ? (currentReserve / totalMonthlyBurn) : 0;
+
+      // Gap
+      const reserveGap = currentReserve - targetReserve;
+      const gapElement = document.getElementById('reserveGapVal');
+      const gapSubElement = document.getElementById('reserveGapSub');
+
+      if (reserveGap >= 0) {
+        gapElement.innerText = '+' + formatCurrency(reserveGap, selectedCurrency);
+        gapElement.className = 'metric-value accent';
+        gapSubElement.innerText = 'Status: Target Fully Funded';
+      } else {
+        gapElement.innerText = formatCurrency(reserveGap, selectedCurrency);
+        gapElement.className = 'metric-value alert';
+        gapSubElement.innerText = 'Status: Shortfall Against Target';
+      }
+
+      // Interest Earned
+      const annualInterest = currentReserve * (savingsYieldPct / 100);
+      const bufferEfficiency = targetReserve > 0 ? Math.min(100, (currentReserve / targetReserve) * 100) : 0;
+
+      // Metric Updates
+      document.getElementById('targetReserveVal').innerText = formatCurrency(targetReserve, selectedCurrency);
+      document.getElementById('runwayMonthsVal').innerText = survivalRunwayMonths.toFixed(1) + ' Months';
+      
+      document.getElementById('totalBurnVal').innerText = formatCurrency(totalMonthlyBurn, selectedCurrency);
+      document.getElementById('survivalBurnVal').innerText = formatCurrency(fixedBurn, selectedCurrency);
+      document.getElementById('adjustedBurnVal').innerText = formatCurrency(riskAdjustedMonthlyBurn, selectedCurrency);
+      document.getElementById('annualInterestVal').innerText = formatCurrency(annualInterest, selectedCurrency);
+      document.getElementById('fullRunwayVal').innerText = fullRunwayMonths.toFixed(1) + ' Months';
+      document.getElementById('bufferEfficiencyVal').innerText = bufferEfficiency.toFixed(1) + '%';
+
+      // Chart Simulation Data (Depletion Trajectory over 18 Months)
+      const maxSimMonths = Math.max(18, targetMonths + 2);
+      const labels = [];
+      const survivalSeries = [];
+      const fullSpendSeries = [];
+
+      let tempSurvivalBalance = currentReserve;
+      let tempFullBalance = currentReserve;
+
+      for (let m = 0; m <= maxSimMonths; m++) {
+        labels.push('M' + m);
+
+        survivalSeries.push(Math.max(0, Math.round(tempSurvivalBalance)));
+        fullSpendSeries.push(Math.max(0, Math.round(tempFullBalance)));
+
+        // Monthly depletion with interest compounding
+        const monthlyInterestSurvival = (tempSurvivalBalance * (savingsYieldPct / 100 / 12));
+        const monthlyInterestFull = (tempFullBalance * (savingsYieldPct / 100 / 12));
+
+        tempSurvivalBalance = Math.max(0, tempSurvivalBalance - fixedBurn + monthlyInterestSurvival);
+        tempFullBalance = Math.max(0, tempFullBalance - totalMonthlyBurn + monthlyInterestFull);
+      }
+
+      renderChart(labels, survivalSeries, fullSpendSeries, targetReserve, selectedCurrency);
+    }
+
+    function renderChart(labels, survivalData, fullSpendData, targetThreshold, currencyCode) {
+      const ctx = document.getElementById('runwayChart').getContext('2d');
+
+      if (runwayChart) {
+        runwayChart.destroy();
+      }
+
+      runwayChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'Essential Outgoings Only (Survival)',
+              data: survivalData,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: true,
+              tension: 0.2,
+              borderWidth: 3,
+              pointRadius: 0
+            },
+            {
+              label: 'Full Discretionary Outgoings',
+              data: fullSpendData,
+              borderColor: '#f43f5e',
+              backgroundColor: 'rgba(244, 63, 94, 0.05)',
+              fill: true,
+              tension: 0.2,
+              borderWidth: 2,
+              borderDash: [5, 5],
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#a1a1aa',
+                font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y, currencyCode);
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#a1a1aa', font: { family: 'Plus Jakarta Sans' } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { 
+                color: '#a1a1aa', 
+                font: { family: 'Plus Jakarta Sans' },
+                callback: function(value) {
+                  return formatCurrency(value, currencyCode);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Attach Event Listeners
+    document.querySelectorAll('input, select').forEach(element => {
+      element.addEventListener('input', calculateMatrix);
+      element.addEventListener('change', calculateMatrix);
+    });
+
+    // Initial Execution
+    calculateMatrix();
+  </script>
+</body>
+</html>
