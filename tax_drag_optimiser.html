@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whorton Estate | Tax Drag & ISA vs. GIA Optimiser</title>
+  
+  <!-- Modern Geometric Sans Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Chart.js for Visual Projections -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --border-color: #27272a;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --accent-alert: #f43f5e;
+      --accent-info: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Navigation */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--border-color);
+      background: rgba(10, 10, 12, 0.8);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.15rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .back-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    /* Main Layout */
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 3rem 5%;
+    }
+
+    .header-block {
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 650px;
+      line-height: 1.6;
+    }
+
+    /* Grid Layout */
+    .engine-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 1024px) {
+      .engine-grid {
+        grid-template-columns: 420px 1fr;
+      }
+    }
+
+    /* Controls Panel */
+    .control-panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.75rem;
+      height: fit-content;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .input-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.4rem;
+    }
+
+    .input-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .slider-val {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-prefix {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      background: #0a0a0c;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input[type="number"].has-prefix {
+      padding-left: 2.25rem;
+    }
+
+    /* Range Sliders */
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--border-color);
+      border-radius: 4px;
+      outline: none;
+      margin-top: 0.4rem;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      transition: transform 0.1s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border-color);
+      margin: 1.5rem 0;
+    }
+
+    /* Display Panel */
+    .display-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.25rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .metric-card.primary {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+    }
+
+    .metric-title {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .metric-value.accent {
+      color: var(--accent);
+    }
+
+    .metric-value.alert {
+      color: var(--accent-alert);
+    }
+
+    .metric-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.35rem;
+    }
+
+    /* Dashboard Cards */
+    .dashboard-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .card-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-title {
+      font-size: 1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 300px;
+      width: 100%;
+    }
+
+    /* Dynamic Data List */
+    .data-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .data-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.875rem;
+      padding-bottom: 0.6rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .data-row:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .data-label {
+      color: var(--text-muted);
+    }
+
+    .data-val {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    /* Info Section */
+    .info-section {
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-section p {
+      margin-bottom: 1rem;
+    }
+
+    .info-section p:last-child {
+      margin-bottom: 0;
+    }
+
+    footer {
+      border-top: 1px solid var(--border-color);
+      padding: 2.5rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-top: 4rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="back-link">← Back to Suite</a>
+  </nav>
+
+  <main>
+    <div class="header-block">
+      <div class="badge">Engine 08 • Wealth Optimiser</div>
+      <h1>Tax Drag & ISA vs. GIA Optimiser</h1>
+      <p class="subtitle">Analyse the compounding friction of Capital Gains Tax and Dividend Tax in a General Investment Account (GIA) versus tax-sheltered wrappers like ISAs.</p>
+    </div>
+
+    <div class="engine-grid">
+      <!-- CONTROL PANEL -->
+      <div class="control-panel">
+        <div class="section-label">00. Engine Configuration</div>
+
+        <div class="input-group">
+          <label for="currencySelect">Display Currency</label>
+          <select id="currencySelect">
+            <option value="GBP">GBP (£)</option>
+            <option value="USD">USD ($)</option>
+            <option value="EUR">EUR (€)</option>
+            <option value="INR">INR (₹)</option>
+            <option value="JPY">JPY (¥)</option>
+          </select>
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">01. Portfolio Profile</div>
+        
+        <div class="input-group">
+          <label for="initialLumpSum">Initial Portfolio Value</label>
+          <div class="input-wrapper">
+            <span class="input-prefix" id="currPrefix1">£</span>
+            <input type="number" id="initialLumpSum" value="50000" step="5000" class="has-prefix">
+          </div>
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="monthlyContrib">Monthly Contribution</label>
+            <span class="slider-val" id="monthlyContribVal">£1,000</span>
+          </div>
+          <input type="range" id="monthlyContrib" min="0" max="5000" step="100" value="1000">
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="timeHorizon">Investment Horizon (Years)</label>
+            <span class="slider-val" id="timeHorizonVal">20 Yrs</span>
+          </div>
+          <input type="range" id="timeHorizon" min="3" max="40" step="1" value="20">
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">02. Market Assumptions</div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="annualReturn">Gross Expected Growth</label>
+            <span class="slider-val" id="annualReturnVal">7.0%</span>
+          </div>
+          <input type="range" id="annualReturn" min="1" max="15" step="0.5" value="7.0">
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="dividendYield">Dividend Yield Portion</label>
+            <span class="slider-val" id="dividendYieldVal">2.0%</span>
+          </div>
+          <input type="range" id="dividendYield" min="0" max="8" step="0.5" value="2.0">
+        </div>
+
+        <div class="divider"></div>
+        <div class="section-label">03. Tax Drag Parameters</div>
+
+        <div class="input-group">
+          <label for="taxBand">Investor Tax Bracket</label>
+          <select id="taxBand">
+            <option value="basic">Basic Rate (10% CGT / 8.75% Div)</option>
+            <option value="higher" selected>Higher Rate (20% CGT / 33.75% Div)</option>
+            <option value="additional">Additional Rate (20% CGT / 39.35% Div)</option>
+          </select>
+        </div>
+
+        <div class="input-group">
+          <div class="input-header">
+            <label for="portfolioTurnover">Annual Realised Capital Gains</label>
+            <span class="slider-val" id="portfolioTurnoverVal">15%</span>
+          </div>
+          <input type="range" id="portfolioTurnover" min="0" max="100" step="5" value="15">
+        </div>
+      </div>
+
+      <!-- DISPLAY PANEL -->
+      <div class="display-panel">
+        
+        <!-- Key Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-card primary">
+            <div class="metric-title">ISA Wrapper Valuation</div>
+            <div class="metric-value accent" id="isaEndingVal">£0</div>
+            <div class="metric-sub">100% Tax-Free Compound Growth</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">GIA Valuation (Taxed)</div>
+            <div class="metric-value" id="giaEndingVal">£0</div>
+            <div class="metric-sub">After Annual Taxes & CGT Liquidation</div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-title">Total Tax Drag Friction</div>
+            <div class="metric-value alert" id="taxDragVal">£0</div>
+            <div class="metric-sub">Capital Lost to Tax: <span id="taxDragPercentVal">0%</span></div>
+          </div>
+        </div>
+
+        <!-- Visual Comparison Chart -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Wealth Trajectory: ISA vs. GIA</div>
+          </div>
+          <div class="chart-container">
+            <canvas id="comparisonChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Breakdown List -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Long-Term Wealth Breakdown</div>
+          </div>
+          <div class="data-list">
+            <div class="data-row">
+              <span class="data-label">Total Out-of-Pocket Contributions</span>
+              <span class="data-val" id="totalContributionsVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">ISA Net Investment Gain</span>
+              <span class="data-val" id="isaGainVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">GIA Net Investment Gain</span>
+              <span class="data-val" id="giaGainVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Cumulative Dividend & Annual Tax Paid</span>
+              <span class="data-val" id="annualTaxPaidVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">Final CGT Charge On Full Liquidation</span>
+              <span class="data-val" id="finalCgtVal">£0</span>
+            </div>
+            <div class="data-row" style="font-weight: 700; color: var(--accent);">
+              <span class="data-label" style="color: var(--text-primary);">Total Wealth Preserved by ISA</span>
+              <span class="data-val" id="netWrapperAdvantageVal">£0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Analytical Overview / Information Section -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Investment Analysis & Overview</div>
+          </div>
+          <div class="info-section">
+            <p><strong>The Anatomy of Tax Drag:</strong> When assets are held inside a taxable General Investment Account (GIA), compounding returns are subject to annual friction from Dividend Tax and Capital Gains Tax (CGT). Even modest tax rates slice off a fraction of returns every year, creating a widening performance gap over long horizons compared to tax-sheltered accounts such as Individual Savings Accounts (ISAs).</p>
+            <p><strong>Turnover and CGT Deferral:</strong> Capital gains tax is only triggered when investments are sold or rebalanced (realised). High turnover rates force you to pay CGT early and often, stripping away capital that could otherwise compound. Minimising portfolio turnover in a GIA helps defer CGT liabilities and preserves more long-term wealth.</p>
+            <p><strong>The Strategic Power of Wrappers:</strong> Tax wrappers like ISAs eliminate income tax, dividend tax, and capital gains tax entirely. Directing new capital and utilizing mechanisms such as "Bed and ISA" transfers helps shield your capital from annual tax drag, ensuring 100% of your investment yield compounds uninterrupted.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>© Whorton Estate. Clean execution tools.</p>
+  </footer>
+
+  <script>
+    let comparisonChart = null;
+
+    const currencySymbols = {
+      GBP: '£',
+      USD: '$',
+      EUR: '€',
+      INR: '₹',
+      JPY: '¥'
+    };
+
+    const taxRates = {
+      basic: { cgt: 0.10, div: 0.0875 },
+      higher: { cgt: 0.20, div: 0.3375 },
+      additional: { cgt: 0.20, div: 0.3935 }
+    };
+
+    function formatCurrency(val, currencyCode) {
+      return new Intl.NumberFormat('en-GB', { 
+        style: 'currency', 
+        currency: currencyCode, 
+        maximumFractionDigits: 0 
+      }).format(val);
+    }
+
+    function updatePrefixes(symbol) {
+      document.getElementById('currPrefix1').innerText = symbol;
+    }
+
+    function calculateOptimizer() {
+      const selectedCurrency = document.getElementById('currencySelect').value;
+      const currencySymbol = currencySymbols[selectedCurrency] || '£';
+      updatePrefixes(currencySymbol);
+
+      // Inputs
+      const initialLumpSum = parseFloat(document.getElementById('initialLumpSum').value) || 0;
+      const monthlyContrib = parseFloat(document.getElementById('monthlyContrib').value) || 0;
+      const horizonYears = parseInt(document.getElementById('timeHorizon').value) || 20;
+      const grossReturnPct = parseFloat(document.getElementById('annualReturn').value) || 7.0;
+      const divYieldPct = parseFloat(document.getElementById('dividendYield').value) || 2.0;
+      const taxBandKey = document.getElementById('taxBand').value;
+      const turnoverPct = parseFloat(document.getElementById('portfolioTurnover').value) || 15;
+
+      // Label Updates
+      document.getElementById('monthlyContribVal').innerText = formatCurrency(monthlyContrib, selectedCurrency);
+      document.getElementById('timeHorizonVal').innerText = horizonYears + ' Yrs';
+      document.getElementById('annualReturnVal').innerText = grossReturnPct.toFixed(1) + '%';
+      document.getElementById('dividendYieldVal').innerText = divYieldPct.toFixed(1) + '%';
+      document.getElementById('portfolioTurnoverVal').innerText = turnoverPct + '%';
+
+      const capGrowthPct = Math.max(0, grossReturnPct - divYieldPct);
+      const rates = taxRates[taxBandKey];
+
+      // Time Series Simulation
+      let isaValue = initialLumpSum;
+      let giaValue = initialLumpSum;
+      let giaCostBasis = initialLumpSum;
+
+      let totalContributions = initialLumpSum + (monthlyContrib * 12 * horizonYears);
+      let cumulativeAnnualTax = 0;
+
+      const isaLabels = [];
+      const isaData = [];
+      const giaData = [];
+
+      for (let yr = 1; yr <= horizonYears; yr++) {
+        isaLabels.push('Yr ' + yr);
+
+        // --- ISA MODEL (100% Tax Free) ---
+        for (let m = 0; m < 12; m++) {
+          isaValue += monthlyContrib;
+          isaValue *= (1 + (grossReturnPct / 100 / 12));
+        }
+
+        // --- GIA MODEL (Tax Drag) ---
+        for (let m = 0; m < 12; m++) {
+          giaValue += monthlyContrib;
+          giaCostBasis += monthlyContrib;
+
+          // Monthly income & capital gains calculations
+          const mDiv = giaValue * (divYieldPct / 100 / 12);
+          const mCap = giaValue * (capGrowthPct / 100 / 12);
+
+          // Monthly Dividend Tax
+          const divTax = mDiv * rates.div;
+          
+          // Monthly Realised CGT based on portfolio turnover rate
+          const monthlyTurnover = (turnoverPct / 100) / 12;
+          const unrealisedGain = Math.max(0, giaValue - giaCostBasis);
+          const realisedGain = unrealisedGain * monthlyTurnover;
+          const cgtTax = realisedGain * rates.cgt;
+
+          cumulativeAnnualTax += (divTax + cgtTax);
+
+          // Net Value growth after taxes
+          giaValue = giaValue + mDiv + mCap - divTax - cgtTax;
+          giaCostBasis = giaCostBasis + mDiv + mCap - divTax - cgtTax - realisedGain;
+        }
+
+        isaData.push(Math.round(isaValue));
+        giaData.push(Math.round(giaValue));
+      }
+
+      // Final CGT Liquidation Event on Remaining Unrealised Gain
+      const finalUnrealisedGain = Math.max(0, giaValue - giaCostBasis);
+      const finalCgtTax = finalUnrealisedGain * rates.cgt;
+      const giaNetLiquidationValue = giaValue - finalCgtTax;
+
+      const totalTaxDrag = isaValue - giaNetLiquidationValue;
+      const dragPercent = isaValue > 0 ? (totalTaxDrag / isaValue) * 100 : 0;
+
+      // Update UI Display Elements
+      document.getElementById('isaEndingVal').innerText = formatCurrency(isaValue, selectedCurrency);
+      document.getElementById('giaEndingVal').innerText = formatCurrency(giaNetLiquidationValue, selectedCurrency);
+      document.getElementById('taxDragVal').innerText = formatCurrency(totalTaxDrag, selectedCurrency);
+      document.getElementById('taxDragPercentVal').innerText = dragPercent.toFixed(1) + '%';
+
+      document.getElementById('totalContributionsVal').innerText = formatCurrency(totalContributions, selectedCurrency);
+      document.getElementById('isaGainVal').innerText = formatCurrency(isaValue - totalContributions, selectedCurrency);
+      document.getElementById('giaGainVal').innerText = formatCurrency(giaNetLiquidationValue - totalContributions, selectedCurrency);
+      document.getElementById('annualTaxPaidVal').innerText = formatCurrency(cumulativeAnnualTax, selectedCurrency);
+      document.getElementById('finalCgtVal').innerText = formatCurrency(finalCgtTax, selectedCurrency);
+      document.getElementById('netWrapperAdvantageVal').innerText = formatCurrency(totalTaxDrag, selectedCurrency);
+
+      // Render Chart
+      renderChart(isaLabels, isaData, giaData, selectedCurrency);
+    }
+
+    function renderChart(labels, isaSeries, giaSeries, currencyCode) {
+      const ctx = document.getElementById('comparisonChart').getContext('2d');
+
+      if (comparisonChart) {
+        comparisonChart.destroy();
+      }
+
+      comparisonChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'ISA (Tax-Free)',
+              data: isaSeries,
+              borderColor: '#10b981',
+              backgroundColor: 'rgba(16, 185, 129, 0.1)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 3,
+              pointRadius: 0
+            },
+            {
+              label: 'GIA (Taxed Portfolio)',
+              data: giaSeries,
+              borderColor: '#f43f5e',
+              backgroundColor: 'rgba(244, 63, 94, 0.05)',
+              fill: true,
+              tension: 0.3,
+              borderWidth: 2,
+              borderDash: [5, 5],
+              pointRadius: 0
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            intersect: false,
+          },
+          plugins: {
+            legend: {
+              position: 'top',
+              labels: {
+                color: '#a1a1aa',
+                font: { family: 'Plus Jakarta Sans', size: 12, weight: '600' }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  let label = context.dataset.label || '';
+                  if (label) {
+                    label += ': ';
+                  }
+                  if (context.parsed.y !== null) {
+                    label += formatCurrency(context.parsed.y, currencyCode);
+                  }
+                  return label;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#a1a1aa', font: { family: 'Plus Jakarta Sans' } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { 
+                color: '#a1a1aa', 
+                font: { family: 'Plus Jakarta Sans' },
+                callback: function(value) {
+                  return formatCurrency(value, currencyCode);
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    // Attach Event Listeners
+    document.querySelectorAll('input, select').forEach(element => {
+      element.addEventListener('input', calculateOptimizer);
+      element.addEventListener('change', calculateOptimizer);
+    });
+
+    // Initial Execution
+    calculateOptimizer();
+  </script>
+</body>
+</html>
