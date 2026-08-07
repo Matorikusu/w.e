@@ -384,8 +384,8 @@
         <div class="control-group">
           <label>Currency Unit</label>
           <div class="segmented-control" id="currSymbol">
-            <button class="segmented-btn active" onclick="setCurrency('$')">$</button>
-            <button class="segmented-btn" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
             <button class="segmented-btn" onclick="setCurrency('€')">€</button>
             <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
             <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
@@ -404,28 +404,28 @@
         <!-- Annual Expenses Slider -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderExpenses">Annual Expenses (Target Burn)</label>
-            <span class="val-badge" id="badgeExpenses">$40,000</span>
+            <label for="sliderExpenses">Annual Expenditure (Target Burn)</label>
+            <span class="val-badge" id="badgeExpenses">£35,000</span>
           </div>
-          <input type="range" id="sliderExpenses" min="10000" max="250000" step="2500" value="40000" oninput="syncExpenses(this.value)" />
+          <input type="range" id="sliderExpenses" min="10000" max="250000" step="2500" value="35000" oninput="syncExpenses(this.value)" />
         </div>
 
         <!-- Current Net Worth Slider -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderPortfolio">Current Invested Capital</label>
-            <span class="val-badge" id="badgePortfolio">$50,000</span>
+            <span class="val-badge" id="badgePortfolio">£40,000</span>
           </div>
-          <input type="range" id="sliderPortfolio" min="0" max="1000000" step="5000" value="50000" oninput="syncPortfolio(this.value)" />
+          <input type="range" id="sliderPortfolio" min="0" max="1000000" step="5000" value="40000" oninput="syncPortfolio(this.value)" />
         </div>
 
         <!-- Annual Savings Slider -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderSavings">Annual Savings Contribution</label>
-            <span class="val-badge" id="badgeSavings">$20,000</span>
+            <span class="val-badge" id="badgeSavings">£15,000</span>
           </div>
-          <input type="range" id="sliderSavings" min="0" max="200000" step="2500" value="20000" oninput="syncSavings(this.value)" />
+          <input type="range" id="sliderSavings" min="0" max="200000" step="2500" value="15000" oninput="syncSavings(this.value)" />
         </div>
 
         <!-- Safe Withdrawal Rate Slider -->
@@ -454,16 +454,16 @@
         <!-- Primary FIRE Number Card -->
         <div class="primary-card">
           <div class="metric-label">Target FIRE Net Worth</div>
-          <div class="metric-value-huge" id="resFireNumber">$1,000,000</div>
+          <div class="metric-value-huge" id="resFireNumber">£875,000</div>
 
           <div class="metrics-grid">
             <div class="sub-card">
               <div class="metric-label">Years to Freedom</div>
-              <div class="val" id="resYearsToFire" style="color: var(--accent);">18.2 Years</div>
+              <div class="val" id="resYearsToFire" style="color: var(--accent);">18.5 Years</div>
             </div>
             <div class="sub-card">
               <div class="metric-label">Autonomy Age</div>
-              <div class="val" id="resFireAge">48 Years Old</div>
+              <div class="val" id="resFireAge">49 Years Old</div>
             </div>
           </div>
         </div>
@@ -472,7 +472,7 @@
         <div class="metrics-grid">
           <div class="sub-card">
             <div class="metric-label">Savings Rate</div>
-            <div class="val" id="resSavingsRate">33.3%</div>
+            <div class="val" id="resSavingsRate">30.0%</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Capital Multiplier</div>
@@ -480,11 +480,11 @@
           </div>
           <div class="sub-card">
             <div class="metric-label">Monthly Passive Yield</div>
-            <div class="val" id="resMonthlyYield">$3,333</div>
+            <div class="val" id="resMonthlyYield">£2,917</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Progress to Target</div>
-            <div class="val" id="resProgress">5.0%</div>
+            <div class="val" id="resProgress">4.6%</div>
           </div>
         </div>
 
@@ -516,23 +516,23 @@
     <section class="explanation-section">
       <div class="explanation-header">
         <h2>About the FIRE Independence Engine</h2>
-        <p>The FIRE (Financial Independence, Retire Early) Matrix maps out your trajectory to financial autonomy. By balancing annual expenditure with targeted savings and portfolio yield rates, it defines the required capital baseline needed to sustain ongoing living expenses without relying on traditional earned income.</p>
+        <p>The FIRE (Financial Independence, Retire Early) Matrix maps out your trajectory to complete financial sovereignty. By balance-matching annual expenditure with target savings contributions and real portfolio yields, it defines the requisite capital baseline needed to sustain ongoing living costs without reliance on conventional earned income.</p>
       </div>
 
       <div class="explanation-grid">
         <div class="explanation-card">
           <h3><span>•</span> Safe Withdrawal Rate (SWR)</h3>
-          <p>The percentage of total portfolio assets withdrawn annually during retirement. A standard 4.0% SWR assumes an invested portfolio can perpetually support living expenses through historical market returns.</p>
+          <p>The proportion of accumulated capital drawn down annually. A standard 4.0% SWR assumes an invested portfolio can perpetually support living expenditure through historical compounding returns.</p>
         </div>
 
         <div class="explanation-card">
           <h3><span>•</span> Capital Multiplier</h3>
-          <p>Directly derived from the Safe Withdrawal Rate. For example, a 4.0% SWR requires a net worth equivalent to 25x annual expenses ($1,000,000 portfolio for $40,000 annual burn).</p>
+          <p>Directly derived from the Safe Withdrawal Rate. For example, a 4.0% SWR necessitates a net worth equivalent to 25x annual expenditure (£875,000 portfolio for a £35,000 annual burn).</p>
         </div>
 
         <div class="explanation-card">
           <h3><span>•</span> Real Post-Inflation Growth</h3>
-          <p>Assumes net annual returns after accounting for inflation and investment fees, giving a conservative, true-value representation of purchasing power growth over time.</p>
+          <p>Calculates net returns after accounting for inflation and fund management charges, offering a conservative and realistic representation of real purchasing power growth over time.</p>
         </div>
       </div>
     </section>
@@ -540,7 +540,7 @@
   </div>
 
   <script>
-    let currencySymbol = '$';
+    let currencySymbol = '£';
 
     function setCurrency(symbol) {
       currencySymbol = symbol;
@@ -554,7 +554,7 @@
     }
 
     function formatCurr(val) {
-      return currencySymbol + Math.round(val).toLocaleString('en-US');
+      return currencySymbol + Math.round(val).toLocaleString('en-GB');
     }
 
     function syncAge(val) {
@@ -563,17 +563,17 @@
     }
 
     function syncExpenses(val) {
-      document.getElementById('badgeExpenses').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      document.getElementById('badgeExpenses').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
     function syncPortfolio(val) {
-      document.getElementById('badgePortfolio').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      document.getElementById('badgePortfolio').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
     function syncSavings(val) {
-      document.getElementById('badgeSavings').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      document.getElementById('badgeSavings').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
@@ -589,9 +589,9 @@
 
     function calculate() {
       const currentAge = parseInt(document.getElementById('sliderAge').value) || 30;
-      const annualExpenses = parseFloat(document.getElementById('sliderExpenses').value) || 40000;
+      const annualExpenses = parseFloat(document.getElementById('sliderExpenses').value) || 35000;
       let portfolio = parseFloat(document.getElementById('sliderPortfolio').value) || 0;
-      const annualSavings = parseFloat(document.getElementById('sliderSavings').value) || 20000;
+      const annualSavings = parseFloat(document.getElementById('sliderSavings').value) || 15000;
       const swr = (parseFloat(document.getElementById('sliderSwr').value) || 4.0) / 100;
       const realReturn = (parseFloat(document.getElementById('sliderReturn').value) || 7.0) / 100;
 
