@@ -19,9 +19,6 @@
       --text-muted: #a1a1aa;
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.15);
-      --salary-color: #3b82f6;
-      --dividend-color: #10b981;
-      --tax-color: #ef4444;
     }
 
     * {
@@ -219,23 +216,28 @@
       transform: scale(1.15);
     }
 
-    .preset-btn {
+    .inline-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    input[type="number"], select {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      color: var(--accent);
-      padding: 0.75rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      margin-top: 0.5rem;
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .preset-btn:hover {
-      background: rgba(16, 185, 129, 0.1);
+    input[type="number"]:focus, select:focus {
       border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
     .analytics-panel {
@@ -325,13 +327,12 @@
     }
 
     .legend {
-      display: flex;
-      justify-content: space-between;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
       margin-top: 1rem;
       font-size: 0.75rem;
       color: var(--text-muted);
-      flex-wrap: wrap;
-      gap: 0.5rem;
     }
 
     .legend-item {
@@ -346,78 +347,66 @@
       border-radius: 50%;
     }
 
-    /* INFO SECTION STYLES */
-    .info-section {
-      margin-top: 3.5rem;
-      border-top: 1px solid var(--card-border);
-      padding-top: 3rem;
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 4rem 0;
     }
 
-    .info-header {
-      margin-bottom: 2rem;
+    .explanation-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
     }
 
-    .info-header h2 {
+    .explanation-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .explanation-header h2 {
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.5rem;
     }
 
-    .info-header p {
+    .explanation-header p {
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .info-grid {
+    .explanation-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
+      margin-top: 2rem;
     }
 
-    .info-card {
-      background: var(--card-bg);
+    .explanation-card {
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 1.5rem;
     }
 
-    .info-card h3 {
-      font-size: 1.05rem;
+    .explanation-card h3 {
+      font-size: 1rem;
       font-weight: 700;
-      margin-bottom: 0.75rem;
-      color: var(--text-primary);
+      color: var(--accent);
+      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .info-card p {
-      font-size: 0.85rem;
+    .explanation-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
       line-height: 1.6;
-      color: var(--text-muted);
-    }
-
-    .info-card ul {
-      list-style-type: none;
-      margin-top: 0.75rem;
-    }
-
-    .info-card ul li {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .info-card ul li:last-child {
-      border-bottom: none;
-    }
-
-    .info-card ul li strong {
-      color: var(--text-primary);
     }
   </style>
 </head>
@@ -430,9 +419,9 @@
 
   <div class="container">
     <div class="page-header">
-      <span class="badge">Engine 04 • Tax Optimization</span>
+      <span class="badge">Engine 06 • Tax Strategy</span>
       <h1>Dividend / Salary Splitter</h1>
-      <p class="subtitle">Optimize director remuneration by balancing low-salary and dividend distributions under UK tax thresholds.</p>
+      <p class="subtitle">Optimize director remuneration structure to maximize take-home pay and minimize corporate and personal tax exposure.</p>
     </div>
 
     <div class="engine-grid">
@@ -446,44 +435,51 @@
             <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
             <button class="segmented-btn" onclick="setCurrency('$')">$</button>
             <button class="segmented-btn" onclick="setCurrency('€')">€</button>
+            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
+            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
           </div>
         </div>
 
-        <!-- Gross Company Profit Before Director Pay -->
+        <!-- Gross Commercial Profit Before Director Pay -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderProfit">Company Gross Profit (Pre-Director Pay)</label>
+            <label for="sliderProfit">Company Gross Profit (Pre-Salary)</label>
             <span class="val-badge" id="badgeProfit">£100,000</span>
           </div>
-          <input type="range" id="sliderProfit" min="20000" max="300000" step="5000" value="100000" oninput="syncProfit(this.value)" />
+          <input type="range" id="sliderProfit" min="20000" max="300000" step="2500" value="100000" oninput="syncProfit(this.value)" />
         </div>
 
-        <!-- Director Salary -->
+        <!-- Annual Director Salary Slider -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderSalary">Director Annual Salary</label>
+            <label for="sliderSalary">Director Salary Allocation</label>
             <span class="val-badge" id="badgeSalary">£12,570</span>
           </div>
-          <input type="range" id="sliderSalary" min="0" max="50000" step="100" value="12570" oninput="syncSalary(this.value)" />
-          <button class="preset-btn" onclick="applyTaxOptimalSalary()">Set Tax-Optimal Salary (£12,570)</button>
+          <input type="range" id="sliderSalary" min="0" max="60000" step="500" value="12570" oninput="syncSalary(this.value)" />
         </div>
 
-        <!-- Dividend Withdrawal -->
+        <!-- Quick Presets -->
         <div class="control-group">
-          <div class="label-row">
-            <label for="sliderDividend">Target Dividend Withdrawal</label>
-            <span class="val-badge" id="badgeDividend">£60,000</span>
+          <label>Salary Presets</label>
+          <div class="segmented-control" style="margin-top: 0.5rem;">
+            <button class="segmented-btn" onclick="applyPreset(0)">£0</button>
+            <button class="segmented-btn" onclick="applyPreset(9100)">£9,100 (Secondary Threshold)</button>
+            <button class="segmented-btn active" id="btnNiPreset" onclick="applyPreset(12570)">£12,570 (Primary Threshold)</button>
+            <button class="segmented-btn" onclick="applyPreset(50270)">£50,270 (Higher Threshold)</button>
           </div>
-          <input type="range" id="sliderDividend" min="0" max="200000" step="1000" value="60000" oninput="syncDividend(this.value)" />
         </div>
 
-        <!-- Other Personal Income -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderOtherIncome">Other Personal Income</label>
-            <span class="val-badge" id="badgeOtherIncome">£0</span>
+        <!-- Tax Rates Configuration -->
+        <div class="inline-inputs">
+          <div class="control-group">
+            <label for="corpTaxRate">Corp Tax Rate (%)</label>
+            <input type="number" id="corpTaxRate" value="19.0" step="0.5" min="0" max="35" oninput="calculate()" />
           </div>
-          <input type="range" id="sliderOtherIncome" min="0" max="50000" step="1000" value="0" oninput="syncOtherIncome(this.value)" />
+
+          <div class="control-group">
+            <label for="otherIncome">Other Personal Income</label>
+            <input type="number" id="otherIncome" value="0" step="1000" min="0" oninput="calculate()" />
+          </div>
         </div>
 
       </div>
@@ -494,16 +490,16 @@
         <!-- Primary Rate Card -->
         <div class="primary-card">
           <div class="metric-label">Total Net Take-Home Pay</div>
-          <div class="metric-value-huge" id="resNetTakeHome">£64,360</div>
+          <div class="metric-value-huge" id="resTakeHome">£75,214</div>
 
           <div class="metrics-grid">
             <div class="sub-card">
-              <div class="metric-label">Effective Tax Rate</div>
-              <div class="val" id="resEffectiveTaxRate" style="color: var(--accent);">11.3%</div>
+              <div class="metric-label">Effective Overall Tax Rate</div>
+              <div class="val" id="resEffectiveTax" style="color: var(--accent);">24.79%</div>
             </div>
             <div class="sub-card">
-              <div class="metric-label">Retained Company Profit</div>
-              <div class="val" id="resRetainedProfit">£10,819</div>
+              <div class="metric-label">Total Tax Paid (Corp + Personal)</div>
+              <div class="val" id="resTotalTax">£24,786</div>
             </div>
           </div>
         </div>
@@ -511,84 +507,71 @@
         <!-- Secondary Financial Metrics -->
         <div class="metrics-grid">
           <div class="sub-card">
-            <div class="metric-label">Corporation Tax (19%-25%)</div>
+            <div class="metric-label">Gross Dividends Paid</div>
+            <div class="val" id="resGrossDividends">£70,818</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Corporation Tax</div>
             <div class="val" id="resCorpTax">£16,612</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Personal Dividend Tax</div>
-            <div class="val" id="resDividendTax">£8,210</div>
+            <div class="val" id="resDividendTax">£8,174</div>
           </div>
           <div class="sub-card">
-            <div class="metric-label">National Insurance (Emp/Emp'ee)</div>
-            <div class="val" id="resNITax">£0</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Personal Income Tax</div>
-            <div class="val" id="resIncomeTax">£0</div>
+            <div class="metric-label">Personal Income Tax & NI</div>
+            <div class="val" id="resSalaryTax">£0</div>
           </div>
         </div>
 
-        <!-- Distribution Breakout Bar -->
+        <!-- Revenue Distribution Breakout Bar -->
         <div class="chart-card">
-          <div class="metric-label">Company Profit Allocation</div>
+          <div class="metric-label">Profit Allocation Breakdown</div>
           
           <div class="bar-container">
-            <div id="barSalary" class="bar-segment" style="background: var(--salary-color); width: 12%;"></div>
-            <div id="barDividend" class="bar-segment" style="background: var(--dividend-color); width: 60%;"></div>
-            <div id="barTax" class="bar-segment" style="background: var(--tax-color); width: 17%;"></div>
-            <div id="barRetained" class="bar-segment" style="background: #8b5cf6; width: 11%;"></div>
+            <div id="barNetSalary" class="bar-segment" style="background: #10b981; width: 12%;"></div>
+            <div id="barNetDividends" class="bar-segment" style="background: #3b82f6; width: 63%;"></div>
+            <div id="barCorpTax" class="bar-segment" style="background: #f59e0b; width: 17%;"></div>
+            <div id="barPersonalTax" class="bar-segment" style="background: #ef4444; width: 8%;"></div>
           </div>
 
           <div class="legend">
-            <div class="legend-item"><div class="dot" style="background: var(--salary-color);"></div> Net Salary</div>
-            <div class="legend-item"><div class="dot" style="background: var(--dividend-color);"></div> Net Dividends</div>
-            <div class="legend-item"><div class="dot" style="background: var(--tax-color);"></div> Total Tax</div>
-            <div class="legend-item"><div class="dot" style="background: #8b5cf6;"></div> Retained Cash</div>
+            <div class="legend-item"><div class="dot" style="background: #10b981;"></div> Net Director Salary</div>
+            <div class="legend-item"><div class="dot" style="background: #3b82f6;"></div> Net Dividend Income</div>
+            <div class="legend-item"><div class="dot" style="background: #f59e0b;"></div> Corporation Tax</div>
+            <div class="legend-item"><div class="dot" style="background: #ef4444;"></div> Personal Tax & NI</div>
           </div>
         </div>
 
       </div>
     </div>
 
-    <!-- EDUCATIONAL & INSIGHTS SECTION -->
-    <div class="info-section">
-      <div class="info-header">
-        <h2>Remuneration Architecture</h2>
-        <p>Key tax thresholds and efficiency strategies for director-shareholders operating via a UK Limited Company.</p>
+    <!-- EXPLANATION SECTION -->
+    <hr class="section-divider" />
+
+    <section class="explanation-section">
+      <div class="explanation-header">
+        <h2>Optimal Remuneration Architecture</h2>
+        <p>Combining a low salary with dividend distribution remains the most tax-efficient structure for business owners operating via limited companies in the UK.</p>
       </div>
 
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>🏛️ Optimal Director Salary Thresholds</h3>
-          <p>Taking a low salary minimizes National Insurance contributions while keeping your State Pension qualifying years intact.</p>
-          <ul>
-            <li><span>Personal Allowance</span> <strong>£12,570 (0% Income Tax)</strong></li>
-            <li><span>Secondary NI Threshold</span> <strong>£9,100 (Employer NI starts)</strong></li>
-            <li><span>Primary NI Threshold</span> <strong>£12,570 (Employee NI starts)</strong></li>
-          </ul>
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h3><span>•</span> The Primary Threshold Strategy</h3>
+          <p>Setting salary to the Personal Allowance / Primary Threshold (£12,570) allows salary to be written off as a tax-deductible company expense, reducing Corporation Tax while building State Pension qualifying years without triggering Personal Income Tax or Employee NI.</p>
         </div>
 
-        <div class="info-card">
-          <h3>📊 Corporation Tax vs Dividend Tax</h3>
-          <p>Salaries are deductible expenses for Corporation Tax. Dividends are paid from post-tax profits and subject to personal dividend rates.</p>
-          <ul>
-            <li><span>Small Profits Rate</span> <strong>19% (Profits up to £50k)</strong></li>
-            <li><span>Main Rate</span> <strong>25% (Profits over £250k)</strong></li>
-            <li><span>Dividend Allowance</span> <strong>£500 tax-free per year</strong></li>
-          </ul>
+        <div class="explanation-card">
+          <h3><span>•</span> Dividend Tax Dynamics</h3>
+          <p>Dividends are paid out of post-tax profit. While not corporation-tax deductible, dividend tax rates (8.75% basic, 33.75% higher) are significantly lower than standard Income Tax rates combined with National Insurance contributions.</p>
         </div>
 
-        <div class="info-card">
-          <h3>⚖️ Dividend Income Tax Bands</h3>
-          <p>Dividends fall into your remaining personal tax bands after applying your salary and other income source totals.</p>
-          <ul>
-            <li><span>Basic Rate (up to £50,270)</span> <strong>8.75% tax rate</strong></li>
-            <li><span>Higher Rate (£50,271-£125,140)</span> <strong>33.75% tax rate</strong></li>
-            <li><span>Additional Rate (>£125,140)</span> <strong>39.35% tax rate</strong></li>
-          </ul>
+        <div class="explanation-card">
+          <h3><span>•</span> Dividend Allowance & Brackets</h3>
+          <p>Utilises the £500 tax-free Dividend Allowance alongside standard basic rate (£50,270 threshold) and higher rate band structures to prevent unwanted bracket creep and minimize total tax obligations.</p>
         </div>
       </div>
-    </div>
+    </section>
 
   </div>
 
@@ -602,8 +585,6 @@
       });
       syncProfit(document.getElementById('sliderProfit').value);
       syncSalary(document.getElementById('sliderSalary').value);
-      syncDividend(document.getElementById('sliderDividend').value);
-      syncOtherIncome(document.getElementById('sliderOtherIncome').value);
       calculate();
     }
 
@@ -621,121 +602,100 @@
       calculate();
     }
 
-    function syncDividend(val) {
-      document.getElementById('badgeDividend').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function syncOtherIncome(val) {
-      document.getElementById('badgeOtherIncome').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function applyTaxOptimalSalary() {
-      document.getElementById('sliderSalary').value = 12570;
-      syncSalary(12570);
-    }
-
-    function calculateCorpTax(taxableProfit) {
-      if (taxableProfit <= 0) return 0;
-      if (taxableProfit <= 50000) {
-        return taxableProfit * 0.19;
-      } else if (taxableProfit >= 250000) {
-        return taxableProfit * 0.25;
-      } else {
-        // Marginal relief calculation
-        const mainTax = taxableProfit * 0.25;
-        const relief = (250000 - taxableProfit) * 0.015;
-        return mainTax - relief;
-      }
+    function applyPreset(amount) {
+      document.getElementById('sliderSalary').value = amount;
+      syncSalary(amount);
     }
 
     function calculate() {
       const grossProfit = parseFloat(document.getElementById('sliderProfit').value) || 0;
       const salary = parseFloat(document.getElementById('sliderSalary').value) || 0;
-      const requestedDividend = parseFloat(document.getElementById('sliderDividend').value) || 0;
-      const otherIncome = parseFloat(document.getElementById('sliderOtherIncome').value) || 0;
+      const corpTaxRate = (parseFloat(document.getElementById('corpTaxRate').value) || 0) / 100;
+      const otherIncome = parseFloat(document.getElementById('otherIncome').value) || 0;
 
-      // Employer NI Calculation (13.8% above £9,100)
-      const empNIThreshold = 9100;
-      const employerNI = salary > empNIThreshold ? (salary - empNIThreshold) * 0.138 : 0;
+      // 1. Corporate Tax Calculation
+      // Salary is deductible for Corp Tax
+      const taxableProfit = Math.max(0, grossProfit - salary);
+      const corpTax = taxableProfit * corpTaxRate;
+      const postTaxProfit = taxableProfit - corpTax;
 
-      // Corporate level deductions
-      const totalEmploymentCost = salary + employerNI;
-      const taxableProfit = Math.max(0, grossProfit - totalEmploymentCost);
-      const corpTax = calculateCorpTax(taxableProfit);
-      const postTaxDistributableProfit = Math.max(0, taxableProfit - corpTax);
+      // Assume all remaining post-tax profit is distributed as Dividends
+      const grossDividends = postTaxProfit;
 
-      // Capped Dividend based on available profit
-      const actualDividend = Math.min(requestedDividend, postTaxDistributableProfit);
-      const retainedProfit = postTaxDistributableProfit - actualDividend;
-
-      // Employee NI Calculation (8% between £12,570 and £50,270, 2% above)
-      let employeeNI = 0;
-      if (salary > 50270) {
-        employeeNI = ((50270 - 12570) * 0.08) + ((salary - 50270) * 0.02);
-      } else if (salary > 12570) {
-        employeeNI = (salary - 12570) * 0.08;
-      }
-
-      // Personal Income Tax on Salary + Other Income
-      const totalEarnedIncome = salary + otherIncome;
+      // 2. Personal Income Tax & NI Calculation (UK Threshold Rules)
       const personalAllowance = 12570;
-      const taxableEarnedIncome = Math.max(0, totalEarnedIncome - personalAllowance);
+      const dividendAllowance = 500;
+      const basicRateLimit = 50270;
+      const higherRateLimit = 125140;
 
-      let personalIncomeTax = 0;
-      if (taxableEarnedIncome > 0) {
-        if (taxableEarnedIncome <= (50270 - personalAllowance)) {
-          personalIncomeTax = taxableEarnedIncome * 0.20;
+      // Income Tax on Salary
+      let salaryTax = 0;
+      let employeeNI = 0;
+
+      // Primary NI Threshold ~ £12,570
+      if (salary > 12570) {
+        if (salary <= 50270) {
+          employeeNI = (salary - 12570) * 0.08; // 8% EE NI
         } else {
-          personalIncomeTax = ((50270 - personalAllowance) * 0.20) + ((taxableEarnedIncome - (50270 - personalAllowance)) * 0.40);
+          employeeNI = ((50270 - 12570) * 0.08) + ((salary - 50270) * 0.02);
         }
       }
 
-      // Personal Dividend Tax Calculations
-      const dividendAllowance = 500;
-      let taxableDividend = Math.max(0, actualDividend - dividendAllowance);
+      // Remaining Personal Allowance available after Salary & Other Income
+      const totalEarnedIncome = salary + otherIncome;
+      let unusedPA = Math.max(0, personalAllowance - totalEarnedIncome);
+
+      if (totalEarnedIncome > personalAllowance) {
+        if (totalEarnedIncome <= basicRateLimit) {
+          salaryTax = (totalEarnedIncome - personalAllowance) * 0.20;
+        } else {
+          salaryTax = ((basicRateLimit - personalAllowance) * 0.20) + ((totalEarnedIncome - basicRateLimit) * 0.40);
+        }
+      }
+
+      // 3. Personal Dividend Tax Calculation
+      let taxableDividends = Math.max(0, grossDividends - unusedPA - dividendAllowance);
       let dividendTax = 0;
 
-      if (taxableDividend > 0) {
-        // Determine band positions relative to threshold £50,270
-        const totalIncomeBeforeDiv = totalEarnedIncome;
-        const basicBandRemaining = Math.max(0, 50270 - totalIncomeBeforeDiv);
+      if (taxableDividends > 0) {
+        // Find position relative to tax bands
+        let totalIncomeForBands = totalEarnedIncome + grossDividends;
+        
+        let remainingBasicBand = Math.max(0, basicRateLimit - Math.max(personalAllowance, totalEarnedIncome));
+        let remainingHigherBand = Math.max(0, higherRateLimit - Math.max(basicRateLimit, totalEarnedIncome));
 
-        if (basicBandRemaining >= taxableDividend) {
-          dividendTax = taxableDividend * 0.0875;
-        } else {
-          const basicRateDiv = basicBandRemaining;
-          const higherRateDiv = taxableDividend - basicRateDiv;
-          dividendTax = (basicRateDiv * 0.0875) + (higherRateDiv * 0.3375);
-        }
+        let basicDiv = Math.min(taxableDividends, remainingBasicBand);
+        let higherDiv = Math.min(Math.max(0, taxableDividends - basicDiv), remainingHigherBand);
+        let additionalDiv = Math.max(0, taxableDividends - basicDiv - higherDiv);
+
+        dividendTax = (basicDiv * 0.0875) + (higherDiv * 0.3375) + (additionalDiv * 0.3935);
       }
 
       // Totals
-      const totalPersonalTax = personalIncomeTax + employeeNI + dividendTax;
-      const totalTax = corpTax + employerNI + totalPersonalTax;
+      const totalPersonalTax = salaryTax + employeeNI + dividendTax;
+      const totalTax = corpTax + totalPersonalTax;
       
-      const netSalary = salary - personalIncomeTax - employeeNI;
-      const netDividend = actualDividend - dividendTax;
-      const netTakeHome = netSalary + netDividend;
+      const netSalary = Math.max(0, salary - salaryTax - employeeNI);
+      const netDividends = Math.max(0, grossDividends - dividendTax);
+      const totalTakeHome = netSalary + netDividends;
 
       const effectiveTaxRate = grossProfit > 0 ? (totalTax / grossProfit) * 100 : 0;
 
-      // UI Updates
-      document.getElementById('resNetTakeHome').innerText = formatCurr(netTakeHome);
-      document.getElementById('resEffectiveTaxRate').innerText = `${effectiveTaxRate.toFixed(1)}%`;
-      document.getElementById('resRetainedProfit').innerText = formatCurr(retainedProfit);
+      // Update UI Metrics
+      document.getElementById('resTakeHome').innerText = formatCurr(totalTakeHome);
+      document.getElementById('resEffectiveTax').innerText = effectiveTaxRate.toFixed(2) + '%';
+      document.getElementById('resTotalTax').innerText = formatCurr(totalTax);
+      document.getElementById('resGrossDividends').innerText = formatCurr(grossDividends);
       document.getElementById('resCorpTax').innerText = formatCurr(corpTax);
       document.getElementById('resDividendTax').innerText = formatCurr(dividendTax);
-      document.getElementById('resNITax').innerText = formatCurr(employerNI + employeeNI);
-      document.getElementById('resIncomeTax').innerText = formatCurr(personalIncomeTax);
+      document.getElementById('resSalaryTax').innerText = formatCurr(salaryTax + employeeNI);
 
-      // Update Allocation Bar Widths
+      // Allocation Bar Update
       if (grossProfit > 0) {
-        document.getElementById('barSalary').style.width = `${(netSalary / grossProfit) * 100}%`;
-        document.getElementById('barDividend').style.width = `${(netDividend / grossProfit) * 100}%`;
-        document.getElementById('barTax').style.width = `${(totalTax / grossProfit) * 100}%`;
-        document.getElementById('barRetained').style.width = `${(retainedProfit / grossProfit) * 100}%`;
+        document.getElementById('barNetSalary').style.width = `${(netSalary / grossProfit) * 100}%`;
+        document.getElementById('barNetDividends').style.width = `${(netDividends / grossProfit) * 100}%`;
+        document.getElementById('barCorpTax').style.width = `${(corpTax / grossProfit) * 100}%`;
+        document.getElementById('barPersonalTax').style.width = `${(totalPersonalTax / grossProfit) * 100}%`;
       }
     }
 
