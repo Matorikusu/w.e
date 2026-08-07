@@ -309,6 +309,80 @@
       margin-top: 1rem;
       display: none;
     }
+
+    /* INFO SECTION STYLES */
+    .info-section {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 3rem;
+    }
+
+    .info-header {
+      margin-bottom: 2rem;
+    }
+
+    .info-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .info-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-card p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .info-card ul {
+      list-style-type: none;
+      margin-top: 0.75rem;
+    }
+
+    .info-card ul li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .info-card ul li:last-child {
+      border-bottom: none;
+    }
+
+    .info-card ul li strong {
+      color: var(--text-primary);
+    }
   </style>
 </head>
 <body>
@@ -442,6 +516,47 @@
 
       </div>
     </div>
+
+    <!-- EDUCATIONAL & INSIGHTS SECTION -->
+    <div class="info-section">
+      <div class="info-header">
+        <h2>Strategic Payoff Frameworks</h2>
+        <p>Understanding how interest compounding works against you is the key to accelerated debt elimination.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>⚡ Payoff Strategies</h3>
+          <p>When tackling multiple debts, your choice of strategy dictates whether you maximize psychological wins or mathematical savings.</p>
+          <ul>
+            <li><span>Debt Avalanche (Math First)</span> <strong>Highest APR First</strong></li>
+            <li><span>Debt Snowball (Behavior First)</span> <strong>Lowest Balance First</strong></li>
+            <li><span>Hybrid Method</span> <strong>Small balance, then high APR</strong></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>📉 The Power of Acceleration</h3>
+          <p>Even small monthly additions directly attack the principal balance, triggering a compounding reduction in monthly interest charges.</p>
+          <ul>
+            <li><span>100% of Extra Allocations</span> <strong>Goes to Principal</strong></li>
+            <li><span>Payoff Efficiency</span> <strong>Principal / Total Spent</strong></li>
+            <li><span>Target Efficiency Goal</span> <strong>> 75%</strong></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>⚠️ Minimum Payment Trap</h3>
+          <p>Lenders design minimum payments to keep you in debt as long as possible. A payment that only covers monthly interest leads to zero balance progress.</p>
+          <ul>
+            <li><span>Interest Accrual</span> <strong>(Balance × APR) / 12</strong></li>
+            <li><span>Negative Amortization</span> <strong>Payment < Monthly Interest</strong></li>
+            <li><span>Optimal Strategy</span> <strong>Fixed dollar payment vs %</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
