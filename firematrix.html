@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FIRE Matrix | Whorton Estate</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 2.5rem auto 0 auto;
+      padding: 0 5%;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .engine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .engine-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .control-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .val-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    .segmented-control {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .segmented-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .segmented-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--input-bg);
+      border-radius: 100px;
+      outline: none;
+      margin-top: 0.5rem;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 12px var(--accent);
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .analytics-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .primary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value-huge {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .sub-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 12px;
+    }
+
+    .sub-card .val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    svg.growth-chart {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="#" class="nav-back">← Back to Suite</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Engine 02 • Autonomy Matrix</span>
+      <h1>FIRE Independence Engine</h1>
+      <p class="subtitle">Calculate your target net worth milestone and timeline to complete financial autonomy.</p>
+    </div>
+
+    <div class="engine-grid">
+      <!-- CONTROL PANEL -->
+      <div class="panel">
+        
+        <!-- Currency Selector -->
+        <div class="control-group">
+          <label>Currency Unit</label>
+          <div class="segmented-control" id="currSymbol">
+            <button class="segmented-btn active" onclick="setCurrency('$')">$</button>
+            <button class="segmented-btn" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('€')">€</button>
+            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
+            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
+          </div>
+        </div>
+
+        <!-- Current Age Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderAge">Current Age</label>
+            <span class="val-badge" id="badgeAge">30</span>
+          </div>
+          <input type="range" id="sliderAge" min="18" max="70" step="1" value="30" oninput="syncAge(this.value)" />
+        </div>
+
+        <!-- Annual Expenses Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderExpenses">Annual Expenses (Target Burn)</label>
+            <span class="val-badge" id="badgeExpenses">$40,000</span>
+          </div>
+          <input type="range" id="sliderExpenses" min="10000" max="250000" step="2500" value="40000" oninput="syncExpenses(this.value)" />
+        </div>
+
+        <!-- Current Net Worth Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderPortfolio">Current Invested Capital</label>
+            <span class="val-badge" id="badgePortfolio">$50,000</span>
+          </div>
+          <input type="range" id="sliderPortfolio" min="0" max="1000000" step="5000" value="50000" oninput="syncPortfolio(this.value)" />
+        </div>
+
+        <!-- Annual Savings Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderSavings">Annual Savings Contribution</label>
+            <span class="val-badge" id="badgeSavings">$20,000</span>
+          </div>
+          <input type="range" id="sliderSavings" min="0" max="200000" step="2500" value="20000" oninput="syncSavings(this.value)" />
+        </div>
+
+        <!-- Safe Withdrawal Rate Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderSwr">Safe Withdrawal Rate (SWR)</label>
+            <span class="val-badge" id="badgeSwr">4.0%</span>
+          </div>
+          <input type="range" id="sliderSwr" min="2.5" max="5.0" step="0.1" value="4.0" oninput="syncSwr(this.value)" />
+        </div>
+
+        <!-- Expected Investment Return Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderReturn">Expected Real Growth (Post-Inflation)</label>
+            <span class="val-badge" id="badgeReturn">7.0%</span>
+          </div>
+          <input type="range" id="sliderReturn" min="2.0" max="12.0" step="0.5" value="7.0" oninput="syncReturn(this.value)" />
+        </div>
+
+      </div>
+
+      <!-- ANALYTICS PANEL -->
+      <div class="analytics-panel">
+        
+        <!-- Primary FIRE Number Card -->
+        <div class="primary-card">
+          <div class="metric-label">Target FIRE Net Worth</div>
+          <div class="metric-value-huge" id="resFireNumber">$1,000,000</div>
+
+          <div class="metrics-grid">
+            <div class="sub-card">
+              <div class="metric-label">Years to Freedom</div>
+              <div class="val" id="resYearsToFire" style="color: var(--accent);">18.2 Years</div>
+            </div>
+            <div class="sub-card">
+              <div class="metric-label">Autonomy Age</div>
+              <div class="val" id="resFireAge">48 Years Old</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary Metrics Grid -->
+        <div class="metrics-grid">
+          <div class="sub-card">
+            <div class="metric-label">Savings Rate</div>
+            <div class="val" id="resSavingsRate">33.3%</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Capital Multiplier</div>
+            <div class="val" id="resMultiplier">25x Burn</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Monthly Passive Yield</div>
+            <div class="val" id="resMonthlyYield">$3,333</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Progress to Target</div>
+            <div class="val" id="resProgress">5.0%</div>
+          </div>
+        </div>
+
+        <!-- Visual Trajectory SVG Chart -->
+        <div class="chart-card">
+          <div class="metric-label">Autonomy Runway</div>
+          <div class="chart-container">
+            <svg class="growth-chart" id="growthSvg" viewBox="0 0 500 180">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <line id="targetLine" x1="0" y1="0" x2="500" y2="0" stroke="#a1a1aa" stroke-dasharray="4" stroke-width="1" />
+              <path id="chartArea" fill="url(#chartGrad)" d="" />
+              <path id="chartLine" fill="none" stroke="#10b981" stroke-width="3" d="" />
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currencySymbol = '$';
+
+    function setCurrency(symbol) {
+      currencySymbol = symbol;
+      document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText === symbol);
+      });
+      syncExpenses(document.getElementById('sliderExpenses').value);
+      syncPortfolio(document.getElementById('sliderPortfolio').value);
+      syncSavings(document.getElementById('sliderSavings').value);
+      calculate();
+    }
+
+    function formatCurr(val) {
+      return currencySymbol + Math.round(val).toLocaleString('en-US');
+    }
+
+    function syncAge(val) {
+      document.getElementById('badgeAge').innerText = val;
+      calculate();
+    }
+
+    function syncExpenses(val) {
+      document.getElementById('badgeExpenses').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      calculate();
+    }
+
+    function syncPortfolio(val) {
+      document.getElementById('badgePortfolio').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      calculate();
+    }
+
+    function syncSavings(val) {
+      document.getElementById('badgeSavings').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      calculate();
+    }
+
+    function syncSwr(val) {
+      document.getElementById('badgeSwr').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
+
+    function syncReturn(val) {
+      document.getElementById('badgeReturn').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
+
+    function calculate() {
+      const currentAge = parseInt(document.getElementById('sliderAge').value) || 30;
+      const annualExpenses = parseFloat(document.getElementById('sliderExpenses').value) || 40000;
+      let portfolio = parseFloat(document.getElementById('sliderPortfolio').value) || 0;
+      const annualSavings = parseFloat(document.getElementById('sliderSavings').value) || 20000;
+      const swr = (parseFloat(document.getElementById('sliderSwr').value) || 4.0) / 100;
+      const realReturn = (parseFloat(document.getElementById('sliderReturn').value) || 7.0) / 100;
+
+      const fireTarget = annualExpenses / swr;
+      const multiplier = 1 / swr;
+
+      let years = 0;
+      let trajectory = [portfolio];
+      const maxYearsLimit = 60;
+
+      while (portfolio < fireTarget && years < maxYearsLimit) {
+        portfolio = (portfolio * (1 + realReturn)) + annualSavings;
+        years++;
+        trajectory.push(portfolio);
+      }
+
+      const totalIncomeEstimate = annualExpenses + annualSavings;
+      const savingsRate = totalIncomeEstimate > 0 ? (annualSavings / totalIncomeEstimate) * 100 : 0;
+      const initialPortfolio = parseFloat(document.getElementById('sliderPortfolio').value) || 0;
+      const progress = Math.min(100, (initialPortfolio / fireTarget) * 100);
+
+      document.getElementById('resFireNumber').innerText = formatCurr(fireTarget);
+      document.getElementById('resYearsToFire').innerText = years >= maxYearsLimit ? '60+ Years' : `${years.toFixed(1)} Years`;
+      document.getElementById('resFireAge').innerText = years >= maxYearsLimit ? 'N/A' : `${Math.round(currentAge + years)} Yrs Old`;
+      document.getElementById('resSavingsRate').innerText = savingsRate.toFixed(1) + '%';
+      document.getElementById('resMultiplier').innerText = `${multiplier.toFixed(1)}x Burn`;
+      document.getElementById('resMonthlyYield').innerText = formatCurr(annualExpenses / 12);
+      document.getElementById('resProgress').innerText = progress.toFixed(1) + '%';
+
+      renderChart(trajectory, fireTarget);
+    }
+
+    function renderChart(points, target) {
+      if (points.length < 2) return;
+      const maxVal = Math.max(...points, target) * 1.05;
+      const width = 500;
+      const height = 180;
+      
+      let pathD = '';
+      points.forEach((val, i) => {
+        const x = (i / (points.length - 1)) * width;
+        const y = height - (val / maxVal) * height;
+        pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
+      });
+
+      const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
+
+      const targetY = height - (target / maxVal) * height;
+      const targetLine = document.getElementById('targetLine');
+      targetLine.setAttribute('y1', targetY.toFixed(1));
+      targetLine.setAttribute('y2', targetY.toFixed(1));
+
+      document.getElementById('chartLine').setAttribute('d', pathD);
+      document.getElementById('chartArea').setAttribute('d', areaD);
+    }
+
+    // Run initial calculation
+    calculate();
+  </script>
+</body>
+</html>
