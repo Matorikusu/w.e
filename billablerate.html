@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Billable Rate Engine | Whorton Estate</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 2.5rem auto 0 auto;
+      padding: 0 5%;
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.35rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .engine-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    @media (max-width: 960px) {
+      .engine-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+    }
+
+    .control-group {
+      margin-bottom: 1.75rem;
+    }
+
+    .label-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
+    }
+
+    .val-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    .segmented-control {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .segmented-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.55rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .segmented-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--input-bg);
+      border-radius: 100px;
+      outline: none;
+      margin-top: 0.5rem;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 12px var(--accent);
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .analytics-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .primary-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .metric-label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-value-huge {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .sub-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 12px;
+    }
+
+    .sub-card .val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .bar-container {
+      width: 100%;
+      height: 24px;
+      background: var(--input-bg);
+      border-radius: 100px;
+      overflow: hidden;
+      display: flex;
+      margin-top: 1rem;
+      border: 1px solid var(--card-border);
+    }
+
+    .bar-segment {
+      height: 100%;
+      transition: width 0.3s ease;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="#" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="#" class="nav-back">← Back to Suite</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Engine 03 • Commercial Pricing</span>
+      <h1>Billable Rate Engine</h1>
+      <p class="subtitle">Calculate required minimum hourly rates based on net targets, overheads, taxes, and billable utilization.</p>
+    </div>
+
+    <div class="engine-grid">
+      <!-- CONTROL PANEL -->
+      <div class="panel">
+        
+        <!-- Currency Selector -->
+        <div class="control-group">
+          <label>Currency Unit</label>
+          <div class="segmented-control" id="currSymbol">
+            <button class="segmented-btn active" onclick="setCurrency('$')">$</button>
+            <button class="segmented-btn" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('€')">€</button>
+            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
+            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
+          </div>
+        </div>
+
+        <!-- Target Personal Net Income -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderTakeHome">Target Net Personal Take-Home</label>
+            <span class="val-badge" id="badgeTakeHome">$120,000</span>
+          </div>
+          <input type="range" id="sliderTakeHome" min="30000" max="500000" step="5000" value="120000" oninput="syncTakeHome(this.value)" />
+        </div>
+
+        <!-- Annual Operating Expenses (Overhead) -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderOverhead">Annual Business Overheads</label>
+            <span class="val-badge" id="badgeOverhead">$24,000</span>
+          </div>
+          <input type="range" id="sliderOverhead" min="0" max="150000" step="2000" value="24000" oninput="syncOverhead(this.value)" />
+        </div>
+
+        <!-- Tax Provision Percentage -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderTax">Tax & Compliance Provision</label>
+            <span class="val-badge" id="badgeTax">25.0%</span>
+          </div>
+          <input type="range" id="sliderTax" min="10" max="45" step="1" value="25" oninput="syncTax(this.value)" />
+        </div>
+
+        <!-- Profit Margin Buffer -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderMargin">Desired Business Profit Margin</label>
+            <span class="val-badge" id="badgeMargin">15.0%</span>
+          </div>
+          <input type="range" id="sliderMargin" min="0" max="40" step="1" value="15" oninput="syncMargin(this.value)" />
+        </div>
+
+        <!-- Billable Utilization (Hours/Week) -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderHours">Billable Hours per Week</label>
+            <span class="val-badge" id="badgeHours">25 hrs/wk</span>
+          </div>
+          <input type="range" id="sliderHours" min="10" max="45" step="1" value="25" oninput="syncHours(this.value)" />
+        </div>
+
+        <!-- Working Weeks per Year -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderWeeks">Working Weeks per Year</label>
+            <span class="val-badge" id="badgeWeeks">46 Weeks</span>
+          </div>
+          <input type="range" id="sliderWeeks" min="30" max="50" step="1" value="46" oninput="syncWeeks(this.value)" />
+        </div>
+
+      </div>
+
+      <!-- ANALYTICS PANEL -->
+      <div class="analytics-panel">
+        
+        <!-- Primary Rate Card -->
+        <div class="primary-card">
+          <div class="metric-label">Minimum Target Billable Rate</div>
+          <div class="metric-value-huge" id="resHourlyRate">$188/hr</div>
+
+          <div class="metrics-grid">
+            <div class="sub-card">
+              <div class="metric-label">Target Gross Revenue</div>
+              <div class="val" id="resGrossRev" style="color: var(--accent);">$216,470</div>
+            </div>
+            <div class="sub-card">
+              <div class="metric-label">Annual Billable Hours</div>
+              <div class="val" id="resTotalHours">1,150 hrs</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Secondary Financial Metrics -->
+        <div class="metrics-grid">
+          <div class="sub-card">
+            <div class="metric-label">Day Rate Target (8h)</div>
+            <div class="val" id="resDayRate">$1,504/day</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Total Tax Allocation</div>
+            <div class="val" id="resTaxAmount">$40,000</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Retained Profit</div>
+            <div class="val" id="resProfitAmount">$32,470</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Utilization Rate</div>
+            <div class="val" id="resUtilization">62.5%</div>
+          </div>
+        </div>
+
+        <!-- Revenue Distribution Breakout Bar -->
+        <div class="chart-card">
+          <div class="metric-label">Revenue Breakdown Allocation</div>
+          
+          <div class="bar-container">
+            <div id="barTakeHome" class="bar-segment" style="background: #10b981; width: 55%;"></div>
+            <div id="barTax" class="bar-segment" style="background: #3b82f6; width: 20%;"></div>
+            <div id="barOverhead" class="bar-segment" style="background: #f59e0b; width: 12%;"></div>
+            <div id="barProfit" class="bar-segment" style="background: #8b5cf6; width: 13%;"></div>
+          </div>
+
+          <div class="legend">
+            <div class="legend-item"><div class="dot" style="background: #10b981;"></div> Net Salary</div>
+            <div class="legend-item"><div class="dot" style="background: #3b82f6;"></div> Tax</div>
+            <div class="legend-item"><div class="dot" style="background: #f59e0b;"></div> Overhead</div>
+            <div class="legend-item"><div class="dot" style="background: #8b5cf6;"></div> Profit</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currencySymbol = '$';
+
+    function setCurrency(symbol) {
+      currencySymbol = symbol;
+      document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText === symbol);
+      });
+      syncTakeHome(document.getElementById('sliderTakeHome').value);
+      syncOverhead(document.getElementById('sliderOverhead').value);
+      calculate();
+    }
+
+    function formatCurr(val) {
+      return currencySymbol + Math.round(val).toLocaleString('en-US');
+    }
+
+    function syncTakeHome(val) {
+      document.getElementById('badgeTakeHome').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      calculate();
+    }
+
+    function syncOverhead(val) {
+      document.getElementById('badgeOverhead').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      calculate();
+    }
+
+    function syncTax(val) {
+      document.getElementById('badgeTax').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
+
+    function syncMargin(val) {
+      document.getElementById('badgeMargin').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
+
+    function syncHours(val) {
+      document.getElementById('badgeHours').innerText = val + ' hrs/wk';
+      calculate();
+    }
+
+    function syncWeeks(val) {
+      document.getElementById('badgeWeeks').innerText = val + ' Weeks';
+      calculate();
+    }
+
+    function calculate() {
+      const takeHome = parseFloat(document.getElementById('sliderTakeHome').value) || 0;
+      const overhead = parseFloat(document.getElementById('sliderOverhead').value) || 0;
+      const taxRate = (parseFloat(document.getElementById('sliderTax').value) || 0) / 100;
+      const profitMargin = (parseFloat(document.getElementById('sliderMargin').value) || 0) / 100;
+      const hoursPerWeek = parseFloat(document.getElementById('sliderHours').value) || 1;
+      const weeksPerYear = parseFloat(document.getElementById('sliderWeeks').value) || 1;
+
+      // Net Income needed pre-tax
+      const preTaxPersonalIncome = takeHome / (1 - taxRate);
+      const taxAmount = preTaxPersonalIncome - takeHome;
+
+      // Total Expenses before Business Profit
+      const subTotalCosts = preTaxPersonalIncome + overhead;
+
+      // Gross Revenue Target accounting for profit margin
+      const grossRevenue = subTotalCosts / (1 - profitMargin);
+      const profitAmount = grossRevenue - subTotalCosts;
+
+      const totalBillableHours = hoursPerWeek * weeksPerYear;
+      const hourlyRate = totalBillableHours > 0 ? grossRevenue / totalBillableHours : 0;
+      const dayRate = hourlyRate * 8;
+      const utilizationPercent = (hoursPerWeek / 40) * 100;
+
+      // UI Updates
+      document.getElementById('resHourlyRate').innerText = `${currencySymbol}${Math.ceil(hourlyRate)}/hr`;
+      document.getElementById('resGrossRev').innerText = formatCurr(grossRevenue);
+      document.getElementById('resTotalHours').innerText = `${totalBillableHours.toLocaleString('en-US')} hrs`;
+      document.getElementById('resDayRate').innerText = `${currencySymbol}${Math.ceil(dayRate)}/day`;
+      document.getElementById('resTaxAmount').innerText = formatCurr(taxAmount);
+      document.getElementById('resProfitAmount').innerText = formatCurr(profitAmount);
+      document.getElementById('resUtilization').innerText = `${utilizationPercent.toFixed(1)}%`;
+
+      // Update Allocation Bar Widths
+      if (grossRevenue > 0) {
+        document.getElementById('barTakeHome').style.width = `${(takeHome / grossRevenue) * 100}%`;
+        document.getElementById('barTax').style.width = `${(taxAmount / grossRevenue) * 100}%`;
+        document.getElementById('barOverhead').style.width = `${(overhead / grossRevenue) * 100}%`;
+        document.getElementById('barProfit').style.width = `${(profitAmount / grossRevenue) * 100}%`;
+      }
+    }
+
+    // Run initial calculation
+    calculate();
+  </script>
+</body>
+</html>
