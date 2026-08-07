@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -163,7 +163,7 @@
       display: flex;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 100px;
       padding: 0.25rem;
       gap: 0.25rem;
     }
@@ -321,20 +321,94 @@
       height: 8px;
       border-radius: 50%;
     }
+
+    /* INFO SECTION STYLES */
+    .info-section {
+      margin-top: 3.5rem;
+      border-top: 1px solid var(--card-border);
+      padding-top: 3rem;
+    }
+
+    .info-header {
+      margin-bottom: 2rem;
+    }
+
+    .info-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .info-header p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+    }
+
+    .info-card h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .info-card p {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .info-card ul {
+      list-style-type: none;
+      margin-top: 0.75rem;
+    }
+
+    .info-card ul li {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding: 0.4rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      display: flex;
+      justify-between: space-between;
+    }
+
+    .info-card ul li:last-child {
+      border-bottom: none;
+    }
+
+    .info-card ul li strong {
+      color: var(--text-primary);
+    }
   </style>
 </head>
 <body>
 
   <nav>
-    <a href="#" class="brand">Whorton<span>.</span>Estate</a>
-    <a href="#" class="nav-back">← Back to Suite</a>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="nav-back">← Back to Suite</a>
   </nav>
 
   <div class="container">
     <div class="page-header">
       <span class="badge">Engine 03 • Commercial Pricing</span>
       <h1>Billable Rate Engine</h1>
-      <p class="subtitle">Calculate required minimum hourly rates based on net targets, overheads, taxes, and billable utilization.</p>
+      <p class="subtitle">Calculate required minimum hourly rates based on net targets, overheads, taxes, and billable utilisation.</p>
     </div>
 
     <div class="engine-grid">
@@ -345,8 +419,8 @@
         <div class="control-group">
           <label>Currency Unit</label>
           <div class="segmented-control" id="currSymbol">
-            <button class="segmented-btn active" onclick="setCurrency('$')">$</button>
-            <button class="segmented-btn" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
             <button class="segmented-btn" onclick="setCurrency('€')">€</button>
             <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
             <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
@@ -357,18 +431,18 @@
         <div class="control-group">
           <div class="label-row">
             <label for="sliderTakeHome">Target Net Personal Take-Home</label>
-            <span class="val-badge" id="badgeTakeHome">$120,000</span>
+            <span class="val-badge" id="badgeTakeHome">£85,000</span>
           </div>
-          <input type="range" id="sliderTakeHome" min="30000" max="500000" step="5000" value="120000" oninput="syncTakeHome(this.value)" />
+          <input type="range" id="sliderTakeHome" min="20000" max="350000" step="5000" value="85000" oninput="syncTakeHome(this.value)" />
         </div>
 
         <!-- Annual Operating Expenses (Overhead) -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderOverhead">Annual Business Overheads</label>
-            <span class="val-badge" id="badgeOverhead">$24,000</span>
+            <span class="val-badge" id="badgeOverhead">£18,000</span>
           </div>
-          <input type="range" id="sliderOverhead" min="0" max="150000" step="2000" value="24000" oninput="syncOverhead(this.value)" />
+          <input type="range" id="sliderOverhead" min="0" max="100000" step="1000" value="18000" oninput="syncOverhead(this.value)" />
         </div>
 
         <!-- Tax Provision Percentage -->
@@ -415,12 +489,12 @@
         <!-- Primary Rate Card -->
         <div class="primary-card">
           <div class="metric-label">Minimum Target Billable Rate</div>
-          <div class="metric-value-huge" id="resHourlyRate">$188/hr</div>
+          <div class="metric-value-huge" id="resHourlyRate">£133/hr</div>
 
           <div class="metrics-grid">
             <div class="sub-card">
               <div class="metric-label">Target Gross Revenue</div>
-              <div class="val" id="resGrossRev" style="color: var(--accent);">$216,470</div>
+              <div class="val" id="resGrossRev" style="color: var(--accent);">£154,510</div>
             </div>
             <div class="sub-card">
               <div class="metric-label">Annual Billable Hours</div>
@@ -433,18 +507,18 @@
         <div class="metrics-grid">
           <div class="sub-card">
             <div class="metric-label">Day Rate Target (8h)</div>
-            <div class="val" id="resDayRate">$1,504/day</div>
+            <div class="val" id="resDayRate">£1,064/day</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Total Tax Allocation</div>
-            <div class="val" id="resTaxAmount">$40,000</div>
+            <div class="val" id="resTaxAmount">£28,333</div>
           </div>
           <div class="sub-card">
             <div class="metric-label">Retained Profit</div>
-            <div class="val" id="resProfitAmount">$32,470</div>
+            <div class="val" id="resProfitAmount">£23,177</div>
           </div>
           <div class="sub-card">
-            <div class="metric-label">Utilization Rate</div>
+            <div class="metric-label">Utilisation Rate</div>
             <div class="val" id="resUtilization">62.5%</div>
           </div>
         </div>
@@ -470,10 +544,51 @@
 
       </div>
     </div>
+
+    <!-- EDUCATIONAL & INSIGHTS SECTION -->
+    <div class="info-section">
+      <div class="info-header">
+        <h2>Commercial Rate Architecture</h2>
+        <p>Understanding the components required to price professional services sustainability and protect margins.</p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>⏱️ The Utilisation Gap</h3>
+          <p>Full-time work consists of 2,080 annual hours, but client-billable time is rarely 100%. The remaining time covers essential non-billable business operations.</p>
+          <ul>
+            <li><span>Billable Output</span> <strong>Client deliverables & billable tasks</strong></li>
+            <li><span>Non-Billable Time</span> <strong>Sales, admin, CPD & marketing</strong></li>
+            <li><span>Realistic Benchmark</span> <strong>20 - 30 billable hrs/week</strong></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>💼 Business Overhead Allocation</h3>
+          <p>Your rate must account for fixed operating costs before you draw a single pound of income or retain commercial profit.</p>
+          <ul>
+            <li><span>Fixed Overheads</span> <strong>Software, insurances, subscriptions</strong></li>
+            <li><span>Variable Expenses</span> <strong>Travel, equipment, subcontracting</strong></li>
+            <li><span>Tax Provisions</span> <strong>National Insurance, VAT & Corp Tax</strong></li>
+          </ul>
+        </div>
+
+        <div class="info-card">
+          <h3>📈 Commercial Margin Buffer</h3>
+          <p>Pricing solely for take-home pay leaves no buffer for lean periods. Retained business profit funds growth, reserves, and scaling.</p>
+          <ul>
+            <li><span>Gross Revenue</span> <strong>(Take-Home + Tax + Overhead) / (1 - Margin)</strong></li>
+            <li><span>Retained Profit Goal</span> <strong>10% - 20% of Gross Revenue</strong></li>
+            <li><span>Day Rate Model</span> <strong>Hourly Rate × 8 billable hours</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <script>
-    let currencySymbol = '$';
+    let currencySymbol = '£';
 
     function setCurrency(symbol) {
       currencySymbol = symbol;
@@ -486,16 +601,16 @@
     }
 
     function formatCurr(val) {
-      return currencySymbol + Math.round(val).toLocaleString('en-US');
+      return currencySymbol + Math.round(val).toLocaleString('en-GB');
     }
 
     function syncTakeHome(val) {
-      document.getElementById('badgeTakeHome').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      document.getElementById('badgeTakeHome').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
     function syncOverhead(val) {
-      document.getElementById('badgeOverhead').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+      document.getElementById('badgeOverhead').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
@@ -546,7 +661,7 @@
       // UI Updates
       document.getElementById('resHourlyRate').innerText = `${currencySymbol}${Math.ceil(hourlyRate)}/hr`;
       document.getElementById('resGrossRev').innerText = formatCurr(grossRevenue);
-      document.getElementById('resTotalHours').innerText = `${totalBillableHours.toLocaleString('en-US')} hrs`;
+      document.getElementById('resTotalHours').innerText = `${totalBillableHours.toLocaleString('en-GB')} hrs`;
       document.getElementById('resDayRate').innerText = `${currencySymbol}${Math.ceil(dayRate)}/day`;
       document.getElementById('resTaxAmount').innerText = formatCurr(taxAmount);
       document.getElementById('resProfitAmount').innerText = formatCurr(profitAmount);
