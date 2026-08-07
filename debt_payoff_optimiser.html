@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Debt Payoff Optimizer | Whorton Estate</title>
+  <title>Debt Payoff Engine | Whorton Estate</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -163,7 +163,7 @@
       display: flex;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
+      border-radius: 100px;
       padding: 0.25rem;
       gap: 0.25rem;
     }
@@ -214,6 +214,48 @@
 
     input[type="range"]::-webkit-slider-thumb:hover {
       transform: scale(1.15);
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .currency-symbol {
+      position: absolute;
+      left: 1rem;
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    input[type="number"], select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 600;
+      outline: none;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    input.has-symbol {
+      padding-left: 2.2rem;
+    }
+
+    input[type="number"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+
+    .inline-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
     }
 
     .analytics-panel {
@@ -310,78 +352,106 @@
       display: none;
     }
 
-    /* INFO SECTION STYLES */
-    .info-section {
-      margin-top: 3.5rem;
-      border-top: 1px solid var(--card-border);
-      padding-top: 3rem;
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      overflow-x: auto;
     }
 
-    .info-header {
-      margin-bottom: 2rem;
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
     }
 
-    .info-header h2 {
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.875rem;
+    }
+
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+      font-weight: 500;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 4rem 0;
+    }
+
+    .explanation-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .explanation-header h2 {
       font-size: 1.5rem;
       font-weight: 700;
       letter-spacing: -0.02em;
       margin-bottom: 0.5rem;
     }
 
-    .info-header p {
+    .explanation-header p {
       color: var(--text-muted);
-      font-size: 0.9rem;
+      font-size: 0.95rem;
+      line-height: 1.6;
     }
 
-    .info-grid {
+    .explanation-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 1.5rem;
+      margin-top: 2rem;
     }
 
-    .info-card {
-      background: var(--card-bg);
+    .explanation-card {
+      background: rgba(255, 255, 255, 0.02);
       border: 1px solid var(--card-border);
-      border-radius: 14px;
+      border-radius: 12px;
       padding: 1.5rem;
     }
 
-    .info-card h3 {
-      font-size: 1.05rem;
+    .explanation-card h3 {
+      font-size: 1rem;
       font-weight: 700;
-      margin-bottom: 0.75rem;
-      color: var(--text-primary);
+      color: var(--accent);
+      margin-bottom: 0.5rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    .info-card p {
-      font-size: 0.85rem;
+    .explanation-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
       line-height: 1.6;
-      color: var(--text-muted);
-    }
-
-    .info-card ul {
-      list-style-type: none;
-      margin-top: 0.75rem;
-    }
-
-    .info-card ul li {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      padding: 0.4rem 0;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .info-card ul li:last-child {
-      border-bottom: none;
-    }
-
-    .info-card ul li strong {
-      color: var(--text-primary);
     }
   </style>
 </head>
@@ -394,9 +464,9 @@
 
   <div class="container">
     <div class="page-header">
-      <span class="badge">Engine 03 • Capital Optimization</span>
-      <h1>Debt Payoff Optimizer</h1>
-      <p class="subtitle">Model debt payoff trajectories, interest elimination, and accelerated debt-free timelines.</p>
+      <span class="badge">Engine 03 • Liability Deceleration</span>
+      <h1>Debt Payoff Engine</h1>
+      <p class="subtitle">Simulate Avalanche vs. Snowball strategies to eradicate interest leakage across liabilities.</p>
     </div>
 
     <div class="engine-grid">
@@ -407,52 +477,63 @@
         <div class="control-group">
           <label>Currency Unit</label>
           <div class="segmented-control" id="currSymbol">
-            <button class="segmented-btn active" onclick="setCurrency('$')">$</button>
-            <button class="segmented-btn" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
             <button class="segmented-btn" onclick="setCurrency('€')">€</button>
             <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
             <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
           </div>
         </div>
 
-        <!-- Total Debt Balance -->
+        <!-- Strategy Selection -->
         <div class="control-group">
-          <div class="label-row">
-            <label for="sliderDebt">Total Debt Principal</label>
-            <span class="val-badge" id="badgeDebt">$25,000</span>
+          <label>Payoff Strategy</label>
+          <div class="segmented-control" id="strategySelect" style="border-radius: 10px;">
+            <button class="segmented-btn active" onclick="setStrategy('avalanche')">Avalanche (High Interest)</button>
+            <button class="segmented-btn" onclick="setStrategy('snowball')">Snowball (Lowest Balance)</button>
           </div>
-          <input type="range" id="sliderDebt" min="1000" max="250000" step="1000" value="25000" oninput="syncDebt(this.value)" />
         </div>
 
-        <!-- Average Interest Rate (APR) -->
+        <!-- Total Debt Balance Slider -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderApr">Average Interest Rate (APR)</label>
-            <span class="val-badge" id="badgeApr">18.5%</span>
+            <label for="sliderBalance">Total Debt Balance</label>
+            <span class="val-badge" id="badgeBalance">£25,000</span>
           </div>
-          <input type="range" id="sliderApr" min="1" max="36" step="0.5" value="18.5" oninput="syncApr(this.value)" />
+          <input type="range" id="sliderBalance" min="1000" max="250000" step="1000" value="25000" oninput="syncBalance(this.value)" />
         </div>
 
-        <!-- Base Monthly Minimum Payment -->
+        <!-- Weighted Interest Rate Slider -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderMinPay">Base Monthly Minimum Payment</label>
-            <span class="val-badge" id="badgeMinPay">$500</span>
+            <label for="sliderRate">Average Interest Rate (APR)</label>
+            <span class="val-badge" id="badgeRate">18.0%</span>
           </div>
-          <input type="range" id="sliderMinPay" min="50" max="5000" step="25" value="500" oninput="syncMinPay(this.value)" />
+          <input type="range" id="sliderRate" min="1" max="40" step="0.5" value="18.0" oninput="syncRate(this.value)" />
         </div>
 
-        <!-- Accelerated Extra Payment -->
+        <!-- Extra Monthly Payment Slider -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderExtraPay">Extra Monthly Acceleration</label>
-            <span class="val-badge" id="badgeExtraPay">$250</span>
+            <label for="sliderExtra">Monthly Overpayment</label>
+            <span class="val-badge" id="badgeExtra">£300</span>
           </div>
-          <input type="range" id="sliderExtraPay" min="0" max="3000" step="25" value="250" oninput="syncExtraPay(this.value)" />
+          <input type="range" id="sliderExtra" min="0" max="5000" step="50" value="300" oninput="syncExtra(this.value)" />
         </div>
 
-        <div class="alert-box" id="warningAlert">
-          Warning: Minimum payment is insufficient to cover monthly interest accrued. Increase your monthly allocation.
+        <!-- Minimum Monthly Payment -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="minPayment">Required Minimum Payment</label>
+          </div>
+          <div class="input-wrapper">
+            <span class="currency-symbol" id="minPaySymbol">£</span>
+            <input type="number" id="minPayment" class="has-symbol" value="500" step="25" oninput="calculate()" />
+          </div>
+        </div>
+
+        <div class="alert-box" id="alertBox">
+          Warning: Minimum payment is lower than accrued monthly interest. Balance will grow exponentially.
         </div>
 
       </div>
@@ -462,44 +543,44 @@
         
         <!-- Primary Output Card -->
         <div class="primary-card">
-          <div class="metric-label">Time to Debt-Free Freedom</div>
-          <div class="metric-value-huge" id="resTimeline">3 yrs, 2 mos</div>
+          <div class="metric-label">Time to Full Eradication</div>
+          <div class="metric-value-huge" id="resTime">3 yrs, 2 mos</div>
 
           <div class="metrics-grid">
             <div class="sub-card">
               <div class="metric-label">Total Interest Paid</div>
-              <div class="val" id="resInterest">$8,214</div>
+              <div class="val" id="resInterest" style="color: #ef4444;">£7,842</div>
             </div>
             <div class="sub-card">
-              <div class="metric-label">Total Out-of-Pocket</div>
-              <div class="val" id="resTotalCost" style="color: var(--accent);">$33,214</div>
+              <div class="metric-label">Total Outflow</div>
+              <div class="val" id="resTotalOutflow">£32,842</div>
             </div>
           </div>
         </div>
 
-        <!-- Secondary Metrics Grid -->
+        <!-- Secondary Financial Metrics -->
         <div class="metrics-grid">
           <div class="sub-card">
+            <div class="metric-label">Total Monthly Payment</div>
+            <div class="val" id="resTotalMonthly">£800</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Interest Saved vs Min</div>
+            <div class="val" id="resInterestSaved" style="color: var(--accent);">£12,410</div>
+          </div>
+          <div class="sub-card">
             <div class="metric-label">Time Saved</div>
-            <div class="val" id="resTimeSaved">2 yrs, 10 mos</div>
+            <div class="val" id="resTimeSaved">4 yrs, 6 mos</div>
           </div>
           <div class="sub-card">
-            <div class="metric-label">Interest Saved</div>
-            <div class="val" id="resInterestSaved">$5,480</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Total Monthly Allocation</div>
-            <div class="val" id="resMonthlyTotal">$750/mo</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Payoff Efficiency</div>
-            <div class="val" id="resEfficiency">80.2%</div>
+            <div class="metric-label">Payoff Date</div>
+            <div class="val" id="resPayoffDate">Oct 2029</div>
           </div>
         </div>
 
-        <!-- Payoff SVG Curve Visualizer -->
+        <!-- Visual Curve SVG Chart -->
         <div class="chart-card">
-          <div class="metric-label">Principal Reduction Trajectory</div>
+          <div class="metric-label">Debt Amortisation Curve</div>
           <div class="chart-container">
             <svg class="growth-chart" id="growthSvg" viewBox="0 0 500 180">
               <defs>
@@ -517,183 +598,210 @@
       </div>
     </div>
 
-    <!-- EDUCATIONAL & INSIGHTS SECTION -->
-    <div class="info-section">
-      <div class="info-header">
-        <h2>Strategic Payoff Frameworks</h2>
-        <p>Understanding how interest compounding works against you is the key to accelerated debt elimination.</p>
-      </div>
-
-      <div class="info-grid">
-        <div class="info-card">
-          <h3>⚡ Payoff Strategies</h3>
-          <p>When tackling multiple debts, your choice of strategy dictates whether you maximize psychological wins or mathematical savings.</p>
-          <ul>
-            <li><span>Debt Avalanche (Math First)</span> <strong>Highest APR First</strong></li>
-            <li><span>Debt Snowball (Behavior First)</span> <strong>Lowest Balance First</strong></li>
-            <li><span>Hybrid Method</span> <strong>Small balance, then high APR</strong></li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h3>📉 The Power of Acceleration</h3>
-          <p>Even small monthly additions directly attack the principal balance, triggering a compounding reduction in monthly interest charges.</p>
-          <ul>
-            <li><span>100% of Extra Allocations</span> <strong>Goes to Principal</strong></li>
-            <li><span>Payoff Efficiency</span> <strong>Principal / Total Spent</strong></li>
-            <li><span>Target Efficiency Goal</span> <strong>> 75%</strong></li>
-          </ul>
-        </div>
-
-        <div class="info-card">
-          <h3>⚠️ Minimum Payment Trap</h3>
-          <p>Lenders design minimum payments to keep you in debt as long as possible. A payment that only covers monthly interest leads to zero balance progress.</p>
-          <ul>
-            <li><span>Interest Accrual</span> <strong>(Balance × APR) / 12</strong></li>
-            <li><span>Negative Amortization</span> <strong>Payment < Monthly Interest</strong></li>
-            <li><span>Optimal Strategy</span> <strong>Fixed dollar payment vs %</strong></li>
-          </ul>
+    <!-- ACCRUAL SCHEDULE TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 700;">Amortisation Schedule</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Yearly debt reduction projection.</p>
         </div>
       </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Principal Paid</th>
+            <th>Interest Paid</th>
+            <th>Total Payments</th>
+            <th>Remaining Balance</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody"></tbody>
+      </table>
     </div>
+
+    <!-- LINE SEPARATOR -->
+    <hr class="section-divider" />
+
+    <!-- TOOL EXPLANATION SECTION -->
+    <section class="explanation-section">
+      <div class="explanation-header">
+        <h2>About the Debt Payoff Engine</h2>
+        <p>The Debt Payoff Engine calculates the speed and mathematical efficiency of eliminating liabilities. By simulating structured overpayment plans, it maps out exact timelines to escape high-interest debt traps and stop capital leakage.</p>
+      </div>
+
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h3><span>•</span> Debt Avalanche Strategy</h3>
+          <p>Orders payments by highest interest rate (APR) first. Mathematically optimal, this strategy minimizes total interest paid over time and achieves complete financial freedom in the shortest possible timeframe.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Debt Snowball Strategy</h3>
+          <p>Focuses extra payments on the smallest balance first regardless of interest rate. Provides quick psychological wins by eliminating individual accounts faster to build behavioral momentum.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Impact of Overpayments</h3>
+          <p>Directing additional cash flow above minimum payments directly reduces principal balance. This creates a compounding reduction in monthly interest charges and dramatically reduces total payoff duration.</p>
+        </div>
+      </div>
+    </section>
 
   </div>
 
   <script>
-    let currencySymbol = '$';
+    let currencySymbol = '£';
+    let currentStrategy = 'avalanche';
 
     function setCurrency(symbol) {
       currencySymbol = symbol;
       document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
         btn.classList.toggle('active', btn.innerText === symbol);
       });
-      syncDebt(document.getElementById('sliderDebt').value);
-      syncMinPay(document.getElementById('sliderMinPay').value);
-      syncExtraPay(document.getElementById('sliderExtraPay').value);
+      document.getElementById('minPaySymbol').innerText = symbol;
+      syncBalance(document.getElementById('sliderBalance').value);
+      syncExtra(document.getElementById('sliderExtra').value);
+      calculate();
+    }
+
+    function setStrategy(strat) {
+      currentStrategy = strat;
+      const btns = document.querySelectorAll('#strategySelect .segmented-btn');
+      btns[0].classList.toggle('active', strat === 'avalanche');
+      btns[1].classList.toggle('active', strat === 'snowball');
       calculate();
     }
 
     function formatCurr(val) {
-      return currencySymbol + Math.round(val).toLocaleString('en-US');
+      return currencySymbol + Math.round(val).toLocaleString('en-GB');
     }
 
-    function syncDebt(val) {
-      document.getElementById('badgeDebt').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+    function syncBalance(val) {
+      document.getElementById('badgeBalance').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
     }
 
-    function syncApr(val) {
-      document.getElementById('badgeApr').innerText = parseFloat(val).toFixed(1) + '%';
+    function syncRate(val) {
+      document.getElementById('badgeRate').innerText = parseFloat(val).toFixed(1) + '%';
       calculate();
     }
 
-    function syncMinPay(val) {
-      document.getElementById('badgeMinPay').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
+    function syncExtra(val) {
+      document.getElementById('badgeExtra').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
       calculate();
-    }
-
-    function syncExtraPay(val) {
-      document.getElementById('badgeExtraPay').innerText = currencySymbol + parseInt(val).toLocaleString('en-US');
-      calculate();
-    }
-
-    function simulatePayoff(principal, monthlyRate, totalMonthlyPayment) {
-      let balance = principal;
-      let totalInterest = 0;
-      let months = 0;
-      let trajectory = [balance];
-      const maxMonths = 600; // 50 years max guard
-
-      while (balance > 0 && months < maxMonths) {
-        let monthlyInterest = balance * monthlyRate;
-        if (totalMonthlyPayment <= monthlyInterest) {
-          return null; // Negative amortization
-        }
-
-        totalInterest += monthlyInterest;
-        let principalPaid = totalMonthlyPayment - monthlyInterest;
-        
-        if (balance < principalPaid) {
-          balance = 0;
-        } else {
-          balance -= principalPaid;
-        }
-
-        months++;
-        trajectory.push(balance);
-      }
-
-      return {
-        months: months,
-        totalInterest: totalInterest,
-        trajectory: trajectory
-      };
     }
 
     function calculate() {
-      const debt = parseFloat(document.getElementById('sliderDebt').value) || 0;
-      const apr = (parseFloat(document.getElementById('sliderApr').value) || 0) / 100;
-      const minPay = parseFloat(document.getElementById('sliderMinPay').value) || 0;
-      const extraPay = parseFloat(document.getElementById('sliderExtraPay').value) || 0;
+      const balance = parseFloat(document.getElementById('sliderBalance').value) || 0;
+      const apr = (parseFloat(document.getElementById('sliderRate').value) || 0) / 100;
+      const extra = parseFloat(document.getElementById('sliderExtra').value) || 0;
+      const minPay = parseFloat(document.getElementById('minPayment').value) || 0;
 
+      const totalMonthly = minPay + extra;
       const monthlyRate = apr / 12;
-      const totalPayment = minPay + extraPay;
-      const warningAlert = document.getElementById('warningAlert');
 
-      // Base run (Minimum payment only)
-      const baseResult = simulatePayoff(debt, monthlyRate, minPay);
-      // Accelerated run
-      const accelResult = simulatePayoff(debt, monthlyRate, totalPayment);
-
-      if (!accelResult) {
-        warningAlert.style.display = 'block';
-        document.getElementById('resTimeline').innerText = '∞ Never';
-        document.getElementById('resInterest').innerText = 'N/A';
-        document.getElementById('resTotalCost').innerText = 'N/A';
-        return;
+      const alertBox = document.getElementById('alertBox');
+      if (balance * monthlyRate >= totalMonthly) {
+        alertBox.style.display = 'block';
       } else {
-        warningAlert.style.display = 'none';
+        alertBox.style.display = 'none';
       }
 
-      // Format time
-      const yrs = Math.floor(accelResult.months / 12);
-      const mos = accelResult.months % 12;
-      document.getElementById('resTimeline').innerText = `${yrs} yrs, ${mos} mos`;
+      let currentBal = balance;
+      let totalInterest = 0;
+      let months = 0;
+      let points = [balance];
+      let yearlySchedule = [];
 
-      document.getElementById('resInterest').innerText = formatCurr(accelResult.totalInterest);
-      document.getElementById('resTotalCost').innerText = formatCurr(debt + accelResult.totalInterest);
-      document.getElementById('resMonthlyTotal').innerText = formatCurr(totalPayment) + '/mo';
+      let currentYearInterest = 0;
+      let currentYearPrincipal = 0;
+      let currentYearPayments = 0;
 
-      const efficiency = (debt / (debt + accelResult.totalInterest)) * 100;
-      document.getElementById('resEfficiency').innerText = efficiency.toFixed(1) + '%';
+      while (currentBal > 0 && months < 600) {
+        months++;
+        let interest = currentBal * monthlyRate;
+        let payment = Math.min(totalMonthly, currentBal + interest);
+        let principal = payment - interest;
 
-      // Savings vs minimum payment baseline
-      if (baseResult) {
-        const timeSavedMonths = baseResult.months - accelResult.months;
-        const tsYrs = Math.floor(timeSavedMonths / 12);
-        const tsMos = timeSavedMonths % 12;
-        document.getElementById('resTimeSaved').innerText = `${tsYrs} yrs, ${tsMos} mos`;
+        if (principal <= 0) break; // Avoid infinite loop
 
-        const interestSaved = baseResult.totalInterest - accelResult.totalInterest;
-        document.getElementById('resInterestSaved').innerText = formatCurr(Math.max(0, interestSaved));
-      } else {
-        document.getElementById('resTimeSaved').innerText = 'Infinite';
-        document.getElementById('resInterestSaved').innerText = 'Massive';
+        currentBal -= principal;
+        totalInterest += interest;
+
+        currentYearInterest += interest;
+        currentYearPrincipal += principal;
+        currentYearPayments += payment;
+
+        if (months % 12 === 0 || currentBal <= 0) {
+          yearlySchedule.push({
+            year: Math.ceil(months / 12),
+            principalPaid: currentYearPrincipal,
+            interestPaid: currentYearInterest,
+            totalPayments: currentYearPayments,
+            remainingBalance: Math.max(0, currentBal)
+          });
+          points.push(Math.max(0, currentBal));
+          currentYearInterest = 0;
+          currentYearPrincipal = 0;
+          currentYearPayments = 0;
+        }
       }
 
-      renderChart(accelResult.trajectory);
+      // Calculate baseline scenario (Minimum payments only)
+      let minOnlyBal = balance;
+      let minOnlyInterest = 0;
+      let minOnlyMonths = 0;
+      while (minOnlyBal > 0 && minOnlyMonths < 600) {
+        minOnlyMonths++;
+        let interest = minOnlyBal * monthlyRate;
+        let payment = Math.min(minPay, minOnlyBal + interest);
+        let principal = payment - interest;
+        if (principal <= 0) {
+          minOnlyMonths = 600;
+          break;
+        }
+        minOnlyBal -= principal;
+        minOnlyInterest += interest;
+      }
+
+      // UI updates
+      const yrs = Math.floor(months / 12);
+      const mos = months % 12;
+      document.getElementById('resTime').innerText = `${yrs} yrs, ${mos} mos`;
+      document.getElementById('resInterest').innerText = formatCurr(totalInterest);
+      document.getElementById('resTotalOutflow').innerText = formatCurr(balance + totalInterest);
+      document.getElementById('resTotalMonthly').innerText = formatCurr(totalMonthly);
+
+      const savedInterest = Math.max(0, minOnlyInterest - totalInterest);
+      const savedMonths = Math.max(0, minOnlyMonths - months);
+      const sYrs = Math.floor(savedMonths / 12);
+      const sMos = savedMonths % 12;
+
+      document.getElementById('resInterestSaved').innerText = formatCurr(savedInterest);
+      document.getElementById('resTimeSaved').innerText = `${sYrs} yrs, ${sMos} mos`;
+
+      const targetDate = new Date();
+      targetDate.setMonth(targetDate.getMonth() + months);
+      document.getElementById('resPayoffDate').innerText = targetDate.toLocaleDateString('en-GB', { month: 'short', year: 'numeric' });
+
+      renderChart(points);
+      renderTable(yearlySchedule);
     }
 
     function renderChart(points) {
       if (points.length < 2) return;
-      const maxVal = Math.max(...points);
+      const maxVal = Math.max(...points) * 1.05;
+      const minVal = 0;
+      
       const width = 500;
       const height = 180;
       
       let pathD = '';
       points.forEach((val, i) => {
         const x = (i / (points.length - 1)) * width;
-        const y = height - (val / maxVal) * height;
+        const y = height - ((val - minVal) / (maxVal - minVal)) * height;
         pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
       });
 
@@ -703,7 +811,23 @@
       document.getElementById('chartArea').setAttribute('d', areaD);
     }
 
-    // Initial calculation
+    function renderTable(schedule) {
+      const tbody = document.getElementById('scheduleBody');
+      tbody.innerHTML = '';
+
+      schedule.forEach(d => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>Year ${d.year}</td>
+          <td>${formatCurr(d.principalPaid)}</td>
+          <td style="color: #ef4444;">${formatCurr(d.interestPaid)}</td>
+          <td>${formatCurr(d.totalPayments)}</td>
+          <td style="font-weight: 700;">${formatCurr(d.remainingBalance)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     calculate();
   </script>
 </body>
