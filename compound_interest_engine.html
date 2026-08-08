@@ -1,28 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whorton Estate | Global Buy-to-Let & Yield Engine</title>
+  <title>Compound Interest Engine | Whorton Estate</title>
   
-  <!-- Modern Geometric Sans Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Chart.js for Visual Projections -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- html2canvas for DOM image snapshots -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
   <style>
     :root {
       --bg-dark: #0a0a0c;
       --card-bg: #141417;
-      --border-color: #27272a;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
       --text-primary: #ffffff;
       --text-muted: #a1a1aa;
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.15);
-      --accent-alert: #f43f5e;
+      --accent-secondary: #6366f1;
+      --accent-secondary-glow: rgba(99, 102, 241, 0.15);
     }
 
     * {
@@ -37,243 +40,194 @@
       background-color: var(--bg-dark);
       color: var(--text-primary);
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
       -webkit-font-smoothing: antialiased;
-    }
-
-    /* Standardized Suite Header Navigation */
-    header {
-      background: rgba(10, 10, 12, 0.85);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      width: 100%;
+      padding-bottom: 5rem;
     }
 
     nav {
-      max-width: 1380px;
-      margin: 0 auto;
-      padding: 1rem 5%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      gap: 1.5rem;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
 
     .brand {
       font-weight: 800;
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       letter-spacing: -0.02em;
       text-transform: uppercase;
-      color: var(--text-primary);
       text-decoration: none;
+      color: var(--text-primary);
     }
 
     .brand span {
       color: var(--accent);
     }
 
-    .nav-links {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      list-style: none;
-    }
-
-    .nav-link {
+    .nav-back {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.875rem;
+      font-size: 0.85rem;
       font-weight: 600;
       transition: color 0.2s ease;
-    }
-
-    .nav-link:hover, .nav-link.active {
-      color: var(--text-primary);
-    }
-
-    .nav-back {
-      color: var(--text-primary);
-      text-decoration: none;
-      font-size: 0.875rem;
-      font-weight: 600;
-      transition: color 0.2s ease;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
     }
 
     .nav-back:hover {
-      color: var(--accent);
+      color: var(--text-primary);
     }
 
-    .nav-cta {
-      background: var(--accent);
-      color: #000;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      font-weight: 700;
-      font-size: 0.85rem;
-      text-decoration: none;
-      transition: opacity 0.2s ease;
+    .container {
+      max-width: 1280px;
+      margin: 2.5rem auto 0 auto;
+      padding: 0 5%;
     }
 
-    .nav-cta:hover {
-      opacity: 0.9;
-    }
-
-    /* Main Container */
-    main {
-      flex: 1;
-      max-width: 1380px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 3rem 5%;
-    }
-
-    .header-block {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
-      margin-bottom: 2.5rem;
-      flex-wrap: wrap;
-      gap: 1.5rem;
+    .page-header {
+      margin-bottom: 2rem;
     }
 
     .badge {
       display: inline-block;
       padding: 0.35rem 0.85rem;
       background: rgba(255, 255, 255, 0.03);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--card-border);
       border-radius: 100px;
       font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 600;
-    }
-
-    .badge-verified {
-      background: rgba(16, 185, 129, 0.1);
-      border-color: var(--accent);
-      color: var(--accent);
-      margin-left: 0.5rem;
     }
 
     h1 {
       font-size: clamp(2rem, 4vw, 2.75rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.35rem;
     }
 
-    p.subtitle {
+    .subtitle {
       color: var(--text-muted);
-      font-size: 1rem;
-      max-width: 650px;
-      line-height: 1.6;
+      font-size: 0.95rem;
     }
 
-    .btn-export {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      color: var(--text-primary);
-      padding: 0.75rem 1.25rem;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-    }
-
-    .btn-export:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Engine Layout Grid */
     .engine-grid {
       display: grid;
-      grid-template-columns: 1fr;
+      grid-template-columns: 1fr 1.1fr;
       gap: 2rem;
+      align-items: start;
     }
 
-    @media (min-width: 1024px) {
+    @media (max-width: 960px) {
       .engine-grid {
-        grid-template-columns: 440px 1fr;
+        grid-template-columns: 1fr;
       }
     }
 
-    /* Input Controls Panel */
-    .control-panel {
+    .panel {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 1.75rem;
-      height: fit-content;
+      padding: 2rem;
     }
 
-    .section-label {
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
+    .control-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .label-row {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
     }
 
-    .input-group {
-      margin-bottom: 1.25rem;
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      letter-spacing: 0.02em;
     }
 
-    .input-group label {
-      display: block;
+    .val-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid var(--card-border);
+    }
+
+    .segmented-control {
+      display: flex;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      padding: 0.25rem;
+      gap: 0.25rem;
+    }
+
+    .segmented-btn {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.55rem;
       font-size: 0.8rem;
       font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 0.4rem;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
     }
 
-    .input-wrapper {
-      position: relative;
-      display: flex;
-      align-items: center;
+    .segmented-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .input-prefix {
-      position: absolute;
-      left: 1rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.9rem;
-      pointer-events: none;
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      background: var(--input-bg);
+      border-radius: 100px;
+      outline: none;
+      margin-top: 0.5rem;
     }
 
-    .input-suffix {
-      position: absolute;
-      right: 1rem;
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.85rem;
-      pointer-events: none;
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 12px var(--accent);
+      transition: transform 0.15s ease;
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
     }
 
     input[type="number"], select {
       width: 100%;
-      background: #0a0a0c;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
       padding: 0.75rem 1rem;
       color: var(--text-primary);
       font-size: 0.95rem;
@@ -282,924 +236,939 @@
       transition: border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
-    input[type="number"].has-prefix {
-      padding-left: 2.25rem;
-    }
-
-    input[type="number"].has-suffix {
-      padding-right: 2.5rem;
-    }
-
     input[type="number"]:focus, select:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 2px var(--accent-glow);
+      box-shadow: 0 0 0 3px var(--accent-glow);
     }
 
-    .divider {
-      height: 1px;
-      background: var(--border-color);
-      margin: 1.5rem 0;
+    .inline-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
     }
 
-    .jurisdiction-us {
-      display: none;
-    }
-
-    /* Output Display Panel */
-    .display-panel {
+    .analytics-panel {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
     }
 
-    .metrics-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1.25rem;
-    }
-
-    .metric-card {
+    .primary-card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.25rem;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
       position: relative;
       overflow: hidden;
     }
 
-    .metric-card.primary {
-      border-color: rgba(16, 185, 129, 0.4);
-      background: linear-gradient(180deg, rgba(16, 185, 129, 0.05) 0%, var(--card-bg) 100%);
+    .primary-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
     }
 
-    .metric-title {
+    .metric-label {
       font-size: 0.75rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.1em;
       color: var(--text-muted);
       margin-bottom: 0.5rem;
     }
 
-    .metric-value {
-      font-size: 1.6rem;
+    .metric-value-huge {
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
       font-weight: 800;
-      letter-spacing: -0.02em;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .real-value-sub {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+      font-weight: 500;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+
+    .sub-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      padding: 1.25rem;
+      border-radius: 12px;
+    }
+
+    .sub-card .val {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 0.25rem;
       color: var(--text-primary);
     }
 
-    .metric-value.accent {
-      color: var(--accent);
-    }
-
-    .metric-sub {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 0.35rem;
-    }
-
-    /* Dashboard & Breakdown Cards */
-    .dashboard-card {
+    /* Breakdown Visual Bar */
+    .breakdown-card {
       background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 14px;
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
       padding: 1.5rem;
     }
 
-    .card-title-bar {
+    .bar-container {
+      display: flex;
+      height: 12px;
+      width: 100%;
+      background: var(--input-bg);
+      border-radius: 100px;
+      overflow: hidden;
+      margin: 0.75rem 0;
+    }
+
+    .bar-principal { background: #3b82f6; height: 100%; }
+    .bar-deposits { background: #6366f1; height: 100%; }
+    .bar-interest { background: var(--accent); height: 100%; }
+
+    .bar-legend {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      margin-right: 4px;
+    }
+
+    /* Action / Export Buttons */
+    .actions-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      flex: 1;
+      min-width: 120px;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--card-border);
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-muted);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #000;
+      border: none;
+      font-weight: 700;
+    }
+
+    .btn-primary:hover {
+      background: #0ea5e9;
+      color: #fff;
+    }
+
+    /* SVG Curve Chart */
+    .chart-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+    }
+
+    .chart-container {
+      width: 100%;
+      height: 200px;
+      position: relative;
+      margin-top: 1rem;
+    }
+
+    svg.growth-chart {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+
+    /* Table Styling */
+    .table-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 2rem;
+      overflow-x: auto;
+    }
+
+    .table-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 1.25rem;
     }
 
-    .card-title {
-      font-size: 1rem;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-    }
-
-    .chart-container {
-      position: relative;
-      height: 260px;
-      width: 100%;
-    }
-
-    /* Breakdown List */
-    .data-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .data-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.875rem;
-      padding-bottom: 0.6rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-    }
-
-    .data-row:last-child {
-      border-bottom: none;
-      padding-bottom: 0;
-    }
-
-    .data-label {
-      color: var(--text-muted);
-    }
-
-    .data-val {
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-
-    /* Stress Matrix Table */
-    .table-responsive {
-      overflow-x: auto;
-    }
-
-    .stress-table {
+    table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-      min-width: 500px;
-    }
-
-    .stress-table th, .stress-table td {
-      padding: 0.75rem;
       text-align: left;
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .stress-table th {
-      color: var(--text-muted);
-      font-weight: 600;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-    }
-
-    .stress-table td {
-      font-weight: 600;
-    }
-
-    .text-negative {
-      color: var(--accent-alert);
-    }
-
-    .text-positive {
-      color: var(--accent);
-    }
-
-    /* Information Section */
-    .info-section {
-      line-height: 1.6;
-      color: var(--text-muted);
       font-size: 0.875rem;
     }
 
-    .info-section h3 {
-      color: var(--text-primary);
-      font-size: 0.95rem;
-      margin-top: 1rem;
-      margin-bottom: 0.3rem;
-    }
-
-    .info-section p {
-      margin-bottom: 0.8rem;
-    }
-
-    .info-section ul {
-      margin-left: 1.2rem;
-      margin-bottom: 0.8rem;
-    }
-
-    footer {
-      border-top: 1px solid var(--border-color);
-      padding: 2.5rem 5%;
-      text-align: center;
+    th {
       color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-top: 4rem;
+      font-weight: 600;
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid var(--card-border);
     }
 
-    .disclaimer {
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+      font-weight: 500;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .toggle-table-btn {
       margin-top: 1rem;
-      font-size: 0.75rem;
-      color: #71717a;
-      max-width: 800px;
-      margin-left: auto;
-      margin-right: auto;
+      width: 100%;
+      background: transparent;
+      border: 1px dashed var(--card-border);
+      color: var(--text-muted);
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .toggle-table-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
+    }
+
+    /* Collapsible Details / Assumptions */
+    details {
+      margin-top: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1rem 1.5rem;
+    }
+
+    summary {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    summary:hover {
+      color: var(--text-primary);
+    }
+
+    details p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
       line-height: 1.5;
+    }
+
+    .disclaimer-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.75rem;
+      text-align: center;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 4rem 0;
+    }
+
+    .explanation-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .explanation-header p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .explanation-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .explanation-card h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .explanation-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Comparison Drawer / Section */
+    .compare-card {
+      background: var(--card-bg);
+      border: 1px dashed var(--accent-secondary);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+      display: none;
+    }
+
+    .compare-card.active {
+      display: block;
     }
   </style>
 </head>
 <body>
 
-  <!-- Suite Header Navigation Bar -->
-  <header>
-    <nav>
-      <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
-      
-      <div class="nav-links">
-        <a href="index.html" class="nav-link">Overview</a>
-        <a href="suite.html" class="nav-link active">Engines & Suite</a>
-        <a href="portfolio.html" class="nav-link">Portfolio Tracker</a>
-        <a href="analytics.html" class="nav-link">Market Intelligence</a>
-        <a href="suite.html" class="nav-back">← Back to Suite</a>
-        <a href="#export" onclick="exportEngineCSV(); return false;" class="nav-cta">Export Report</a>
-      </div>
-    </nav>
-  </header>
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="nav-back">← Back to Suite</a>
+  </nav>
 
-  <main>
-    <div class="header-block">
-      <div>
-        <div class="badge">Engine 07 • Dual Jurisdiction</div>
-        <span class="badge badge-verified">Tax Year 2026/27 Verified</span>
-        <h1>Buy-to-Let Yield Engine</h1>
-        <p class="subtitle">Calculate net operating yields, stress-test interest rate sensitivity, model Section 24 & Corporate tax friction, and evaluate cross-border property performance.</p>
-      </div>
-      <button class="btn-export" onclick="exportEngineCSV()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Export Analysis (CSV)
-      </button>
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Engine 01 • Capital Modelling</span>
+      <h1>Compound Interest Engine</h1>
+      <p class="subtitle">Interactive, high-precision capital growth and inflation modelling.</p>
     </div>
 
     <div class="engine-grid">
       <!-- CONTROL PANEL -->
-      <div class="control-panel">
-        <div class="section-label">00. Jurisdiction & Tax Profile</div>
-
-        <div class="input-group">
-          <label for="jurisdictionSelect">Investment Jurisdiction</label>
-          <select id="jurisdictionSelect">
-            <option value="UK">United Kingdom (GBP £)</option>
-            <option value="US">United States (USD $)</option>
-          </select>
-        </div>
-
-        <div class="input-group" id="taxBandGroup">
-          <label for="taxBandSelect">UK Ownership & Tax Band</label>
-          <select id="taxBandSelect">
-            <option value="basic">Individual: Basic Rate (20%)</option>
-            <option value="higher" selected>Individual: Higher Rate (40% Section 24)</option>
-            <option value="additional">Individual: Additional Rate (45% Section 24)</option>
-            <option value="limited_co">Limited Company / SPV (19% - 25% Corp Tax)</option>
-          </select>
-        </div>
-
-        <div class="input-group jurisdiction-us">
-          <label for="usTaxRate">US Estimated Marginal Income Tax Rate</label>
-          <div class="input-wrapper">
-            <input type="number" id="usTaxRate" value="24" min="0" max="50" step="1" class="has-suffix">
-            <span class="input-suffix">%</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="section-label">01. Acquisition Profile</div>
+      <div class="panel">
         
-        <div class="input-group">
-          <label for="purchasePrice">Purchase Price</label>
-          <div class="input-wrapper">
-            <span class="input-prefix" id="currencyPrefix1">£</span>
-            <input type="number" id="purchasePrice" value="250000" step="5000" class="has-prefix">
+        <!-- Currency Selector -->
+        <div class="control-group">
+          <label>Currency Unit</label>
+          <div class="segmented-control" id="currSymbol">
+            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
+            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
+            <button class="segmented-btn" onclick="setCurrency('€')">€</button>
+            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
+            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
           </div>
         </div>
 
-        <div class="input-group">
-          <label for="depositPercent">Deposit Amount</label>
-          <div class="input-wrapper">
-            <input type="number" id="depositPercent" value="25" min="0" max="100" class="has-suffix">
-            <span class="input-suffix">%</span>
+        <!-- Initial Investment Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderPrincipal">Initial Investment</label>
+            <span class="val-badge" id="badgePrincipal">£10,000</span>
+          </div>
+          <input type="range" id="sliderPrincipal" min="0" max="250000" step="1000" value="10000" oninput="syncPrincipal(this.value)" />
+        </div>
+
+        <!-- Annual Interest Rate Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderRate">Annual Interest Rate (Nominal)</label>
+            <span class="val-badge" id="badgeRate">8.0%</span>
+          </div>
+          <input type="range" id="sliderRate" min="0.0" max="25" step="0.1" value="8.0" oninput="syncRate(this.value)" />
+        </div>
+
+        <!-- Expected Inflation Rate -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderInflation">Expected Inflation Rate</label>
+            <span class="val-badge" id="badgeInflation">2.5%</span>
+          </div>
+          <input type="range" id="sliderInflation" min="0.0" max="15" step="0.1" value="2.5" oninput="syncInflation(this.value)" />
+        </div>
+
+        <!-- Time Horizon Slider -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderYears">Investment Horizon</label>
+            <span class="val-badge" id="badgeYears">15 Years</span>
+          </div>
+          <input type="range" id="sliderYears" min="1" max="50" step="1" value="15" oninput="syncYears(this.value)" />
+        </div>
+
+        <!-- Regular Contribution & Frequency -->
+        <div class="inline-inputs">
+          <div class="control-group">
+            <div class="label-row">
+              <label for="sliderDeposit">Recurring Deposit</label>
+              <span class="val-badge" id="badgeDeposit">£500</span>
+            </div>
+            <input type="range" id="sliderDeposit" min="0" max="10000" step="50" value="500" oninput="syncDeposit(this.value)" />
+          </div>
+
+          <div class="control-group">
+            <label for="depositFreq">Deposit Frequency</label>
+            <select id="depositFreq" onchange="calculate()">
+              <option value="12" selected>Monthly</option>
+              <option value="4">Quarterly</option>
+              <option value="1">Annually</option>
+            </select>
           </div>
         </div>
 
-        <div class="input-group jurisdiction-uk">
-          <label for="sdltBuyerType">UK SDLT / LTT Rate Profile</label>
-          <select id="sdltBuyerType">
-            <option value="additional" selected>Additional Property / BTL (Include Surcharges)</option>
-            <option value="first">First Time Buyer</option>
-            <option value="standard">Standard Residential Replacement</option>
-          </select>
-        </div>
+        <!-- Timing & Compounding Frequency -->
+        <div class="inline-inputs">
+          <div class="control-group">
+            <label for="compoundFreq">Compounding</label>
+            <select id="compoundFreq" onchange="calculate()">
+              <option value="365">Daily (365/yr)</option>
+              <option value="52">Weekly (52/yr)</option>
+              <option value="12" selected>Monthly (12/yr)</option>
+              <option value="4">Quarterly (4/yr)</option>
+              <option value="1">Annual (1/yr)</option>
+            </select>
+          </div>
 
-        <div class="input-group">
-          <label for="legalCosts">Refurb, Legal & Setup Fees</label>
-          <div class="input-wrapper">
-            <span class="input-prefix" id="currencyPrefix2">£</span>
-            <input type="number" id="legalCosts" value="5000" step="500" class="has-prefix">
+          <div class="control-group">
+            <label for="depositTiming">Deposit Timing</label>
+            <select id="depositTiming" onchange="calculate()">
+              <option value="end" selected>End of Period</option>
+              <option value="beginning">Beginning of Period</option>
+            </select>
           </div>
         </div>
 
-        <div class="divider"></div>
-        <div class="section-label">02. Financing Structure</div>
-
-        <div class="input-group">
-          <label for="mortgageType">Mortgage Structure</label>
-          <select id="mortgageType">
-            <option value="interest_only" selected>Interest-Only</option>
-            <option value="repayment">Capital Repayment</option>
-          </select>
-        </div>
-
-        <div class="input-group">
-          <label for="interestRate">Mortgage Interest Rate</label>
-          <div class="input-wrapper">
-            <input type="number" id="interestRate" value="4.5" step="0.1" class="has-suffix">
-            <span class="input-suffix">%</span>
+        <!-- Annual Step Increase -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="annualStep">Annual Step Increase (%)</label>
+            <span class="val-badge" id="badgeStep">2.0%</span>
           </div>
-        </div>
-
-        <div class="input-group">
-          <label for="mortgageTerm">Mortgage Term (Years)</label>
-          <div class="input-wrapper">
-            <input type="number" id="mortgageTerm" value="25" step="1" class="has-suffix">
-            <span class="input-suffix">Yrs</span>
-          </div>
-        </div>
-
-        <div class="divider"></div>
-        <div class="section-label">03. Income & Operating Friction</div>
-
-        <div class="input-group">
-          <label for="monthlyRent">Gross Monthly Rent</label>
-          <div class="input-wrapper">
-            <span class="input-prefix" id="currencyPrefix3">£</span>
-            <input type="number" id="monthlyRent" value="1350" step="25" class="has-prefix">
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label for="managementFee">Lettings Management Fee</label>
-          <div class="input-wrapper">
-            <input type="number" id="managementFee" value="10" step="1" class="has-suffix">
-            <span class="input-suffix">%</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label for="maintenanceBuffer">Maintenance & Repairs</label>
-          <div class="input-wrapper">
-            <input type="number" id="maintenanceBuffer" value="8" step="1" class="has-suffix">
-            <span class="input-suffix">%</span>
-          </div>
-        </div>
-
-        <div class="input-group">
-          <label for="voidWeeks">Annual Void Allowance</label>
-          <div class="input-wrapper">
-            <input type="number" id="voidWeeks" value="2" min="0" max="52" class="has-suffix">
-            <span class="input-suffix">Wks</span>
-          </div>
-        </div>
-
-        <div class="input-group jurisdiction-us">
-          <label for="propertyTaxRate">US Property Tax (Annual Rate)</label>
-          <div class="input-wrapper">
-            <input type="number" id="propertyTaxRate" value="1.2" step="0.1" class="has-suffix">
-            <span class="input-suffix">%</span>
-          </div>
-        </div>
-
-        <div class="input-group jurisdiction-us">
-          <label for="propertyInsurance">US Landlord Insurance (Annual)</label>
-          <div class="input-wrapper">
-            <span class="input-prefix">$</span>
-            <input type="number" id="propertyInsurance" value="1200" step="100" class="has-prefix">
-          </div>
+          <input type="range" id="annualStep" min="0" max="15" step="0.5" value="2.0" oninput="syncStep(this.value)" />
         </div>
 
       </div>
 
-      <!-- DISPLAY PANEL -->
-      <div class="display-panel">
+      <!-- ANALYTICS PANEL -->
+      <div class="analytics-panel">
         
-        <!-- Key Metrics -->
+        <!-- Primary Output Card -->
+        <div class="primary-card">
+          <div class="metric-label">Future Portfolio Value (Nominal)</div>
+          <div class="metric-value-huge" id="resFutureVal">£201,106</div>
+          <div class="real-value-sub" id="resRealVal">Real Purchasing Power: £138,858 (Inflation Adjusted)</div>
+
+          <div class="metrics-grid">
+            <div class="sub-card">
+              <div class="metric-label">Interest Earned</div>
+              <div class="val" id="resInterest" style="color: var(--accent);">£101,106</div>
+            </div>
+            <div class="sub-card">
+              <div class="metric-label">Total Invested</div>
+              <div class="val" id="resTotalInvested">£100,000</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Capital Breakdown Bar -->
+        <div class="breakdown-card">
+          <div class="metric-label">Portfolio Composition</div>
+          <div class="bar-container">
+            <div class="bar-principal" id="barPrincipal" style="width: 10%;"></div>
+            <div class="bar-deposits" id="barDeposits" style="width: 40%;"></div>
+            <div class="bar-interest" id="barInterest" style="width: 50%;"></div>
+          </div>
+          <div class="bar-legend">
+            <span><span class="dot" style="background:#3b82f6;"></span>Initial</span>
+            <span><span class="dot" style="background:#6366f1;"></span>Deposits</span>
+            <span><span class="dot" style="background:var(--accent);"></span>Interest</span>
+          </div>
+        </div>
+
+        <!-- Secondary Financial Metrics -->
         <div class="metrics-grid">
-          <div class="metric-card primary">
-            <div class="metric-title" id="roceLabel">Return On Capital (ROCE)</div>
-            <div class="metric-value accent" id="roceVal">0.0%</div>
-            <div class="metric-sub">Net Annual Profit / Total Cash Invested</div>
+          <div class="sub-card">
+            <div class="metric-label">Effective APY</div>
+            <div class="val" id="resApy">8.30%</div>
           </div>
-
-          <div class="metric-card">
-            <div class="metric-title" id="netYieldLabel">Net Operating Yield</div>
-            <div class="metric-value" id="netYieldVal">0.0%</div>
-            <div class="metric-sub">Gross Yield: <span id="grossYieldVal">0.0%</span></div>
+          <div class="sub-card">
+            <div class="metric-label">Rate of Return (RoR)</div>
+            <div class="val" id="resRor">101.11%</div>
           </div>
-
-          <div class="metric-card">
-            <div class="metric-title" id="postTaxProfitLabel">Post-Tax Monthly Profit</div>
-            <div class="metric-value" id="monthlyNetVal">£0</div>
-            <div class="metric-sub">Annual Net: <span id="annualNetVal">£0</span></div>
+          <div class="sub-card">
+            <div class="metric-label">Time to Double</div>
+            <div class="val" id="resDouble">9 yrs, 0 mos</div>
+          </div>
+          <div class="sub-card">
+            <div class="metric-label">Total Deposits</div>
+            <div class="val" id="resDeposits">£90,000</div>
           </div>
         </div>
 
-        <!-- Visual Cashflow Distribution -->
-        <div class="dashboard-card">
-          <div class="card-title-bar">
-            <div class="card-title">Gross Income Allocation</div>
-          </div>
+        <!-- Visual Curve SVG Chart -->
+        <div class="chart-card">
+          <div class="metric-label">Capital Growth Curve</div>
           <div class="chart-container">
-            <canvas id="yieldChart"></canvas>
+            <svg class="growth-chart" id="growthSvg" viewBox="0 0 500 180">
+              <defs>
+                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
+                </linearGradient>
+                <linearGradient id="compareGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0"/>
+                </linearGradient>
+              </defs>
+              <path id="chartAreaCompare" fill="url(#compareGrad)" d="" />
+              <path id="chartLineCompare" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4" d="" />
+              <path id="chartArea" fill="url(#chartGrad)" d="" />
+              <path id="chartLine" fill="none" stroke="#10b981" stroke-width="3" d="" />
+            </svg>
           </div>
         </div>
 
-        <!-- Stress Testing Matrix -->
-        <div class="dashboard-card">
-          <div class="card-title-bar">
-            <div class="card-title">Rate & Tax Sensitivity Stress Matrix</div>
-          </div>
-          <div class="table-responsive">
-            <table class="stress-table">
-              <thead>
-                <tr>
-                  <th>Mortgage Rate</th>
-                  <th>Monthly Interest</th>
-                  <th>Est. Tax Friction</th>
-                  <th>Monthly Net Profit</th>
-                  <th id="stressReturnColHeader">ROCE</th>
-                </tr>
-              </thead>
-              <tbody id="stressTableBody">
-                <!-- Dynamically populated -->
-              </tbody>
-            </table>
+        <!-- Scenario Comparison Panel -->
+        <div class="compare-card" id="compareCard">
+          <div class="metric-label" style="color: var(--accent-secondary);">Saved Scenario Comparison</div>
+          <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem;">
+            <div>Scenario A (Saved): <strong id="compValA">-</strong></div>
+            <div>Current Engine: <strong id="compValB">-</strong></div>
           </div>
         </div>
 
-        <!-- Capital Requirements Breakdown -->
-        <div class="dashboard-card">
-          <div class="card-title-bar">
-            <div class="card-title">Initial Capital Invested</div>
-          </div>
-          <div class="data-list">
-            <div class="data-row">
-              <span class="data-label">Deposit Required</span>
-              <span class="data-val" id="depositAmountVal">£0</span>
-            </div>
-            <div class="data-row jurisdiction-uk">
-              <span class="data-label">Stamp Duty (SDLT Estimate)</span>
-              <span class="data-val" id="sdltVal">£0</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Refurb, Legal & Setup Fees</span>
-              <span class="data-val" id="setupCostsVal">£0</span>
-            </div>
-            <div class="data-row" style="font-weight: 700; color: var(--accent);">
-              <span class="data-label" style="color: var(--text-primary);">Total Cash Required</span>
-              <span class="data-val" id="totalCapitalVal">£0</span>
-            </div>
-          </div>
+        <!-- Export & Save Actions -->
+        <div class="actions-row">
+          <button class="btn" onclick="saveScenario()">Save Scenario</button>
+          <button class="btn" onclick="exportCSV()">Export CSV</button>
+          <button class="btn" onclick="exportJPG()">Export JPG</button>
+          <button class="btn btn-primary" onclick="exportPDF()">Export PDF</button>
         </div>
 
-        <!-- Operating & Tax Breakdown -->
-        <div class="dashboard-card">
-          <div class="card-title-bar">
-            <div class="card-title">Operating & Tax Summary</div>
-          </div>
-          <div class="data-list">
-            <div class="data-row">
-              <span class="data-label">Net Operating Income (NOI)</span>
-              <span class="data-val" id="noiVal">£0</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label">Annual Financing Expense</span>
-              <span class="data-val" id="financingExpenseVal">£0</span>
-            </div>
-            <div class="data-row">
-              <span class="data-label" id="taxRowLabel">Estimated Tax Due</span>
-              <span class="data-val" id="taxDueVal">£0</span>
-            </div>
-            <div class="data-row" id="section24CreditRow" style="display: none;">
-              <span class="data-label">Section 24 Tax Relief Credit (20%)</span>
-              <span class="data-val text-positive" id="taxCreditVal">£0</span>
-            </div>
-          </div>
-        </div>
+        <p class="disclaimer-note">Figures are illustrative and do not include fees or taxes.</p>
 
-        <!-- Analytical Overview / Methodology Section -->
-        <div class="dashboard-card">
-          <div class="card-title-bar">
-            <div class="card-title">Assumptions & Methodology</div>
-          </div>
-          <div class="info-section" id="methodologyText">
-            <!-- Dynamically populated based on jurisdiction -->
-          </div>
-        </div>
+        <!-- Methodologies & Assumptions -->
+        <details>
+          <summary>Assumptions & Calculations Methodology</summary>
+          <p>
+            • <strong>Compounding:</strong> Calculated using standard periodic rate equations based on selected compounding frequency.<br>
+            • <strong>Inflation Adjustment:</strong> Real purchasing power is derived via <code>Real = Nominal / (1 + i)^n</code>, where <code>i</code> is the inflation rate.<br>
+            • <strong>Step Increases:</strong> Monthly deposits adjust upward at the end of every 12-month cycle.
+          </p>
+        </details>
 
       </div>
     </div>
-  </main>
 
-  <footer>
-    <p>© Whorton Estate. Professional Real Estate Analytics Engine.</p>
-    <p class="disclaimer">
-      Disclaimer: This engine provides computational models for informational purposes only and does not constitute formal tax, legal, or financial advice. UK Section 24 relief, Corporation Tax, and US Cap Rate metrics are estimates based on standardized rules. Consult a certified accountant before executing acquisitions.
-    </p>
-  </footer>
+    <!-- ACCRUAL SCHEDULE TABLE -->
+    <div class="table-card">
+      <div class="table-header">
+        <div>
+          <h3 style="font-size: 1.1rem; font-weight: 700;">Accrual Schedule</h3>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">Yearly portfolio breakdown.</p>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Year</th>
+            <th>Interest Accrued</th>
+            <th>Total Interest</th>
+            <th>Annual Deposits</th>
+            <th>Ending Balance (Nominal)</th>
+            <th>Real Value (Adjusted)</th>
+          </tr>
+        </thead>
+        <tbody id="scheduleBody"></tbody>
+      </table>
+      <button class="toggle-table-btn" id="toggleTableBtn" onclick="toggleSchedule()">Show Full Schedule</button>
+    </div>
+
+    <!-- LINE SEPARATOR -->
+    <hr class="section-divider" />
+
+    <!-- TOOL EXPLANATION SECTION -->
+    <section class="explanation-section">
+      <div class="explanation-header">
+        <h2>About the Compound Interest Engine</h2>
+        <p>The Compound Interest Engine simulates long-term wealth expansion by projecting how initial capital and recurring deposits grow over time. Unlike simple interest, compounding calculates earnings on both the original principal and accumulated interest, generating exponential capital growth.</p>
+      </div>
+
+      <div class="explanation-grid">
+        <div class="explanation-card">
+          <h3><span>•</span> Compounding Frequency</h3>
+          <p>Determines how often accrued interest is credited back to the principal balance. More frequent compounding intervals (e.g. daily or monthly) yield slightly higher overall returns due to faster reinvestment cycles.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Annual Step Increase</h3>
+          <p>Simulates real-world salary progression or inflation adjustments by increasing your monthly deposit amount by a fixed percentage each year, significantly accelerating portfolio acceleration.</p>
+        </div>
+
+        <div class="explanation-card">
+          <h3><span>•</span> Inflation Adjustments</h3>
+          <p>Calculates the true future purchasing power of your portfolio by discounting future total balances against projected annual inflation rates.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
 
   <script>
-    let yieldChart = null;
+    let currencySymbol = '£';
+    let fullScheduleData = [];
+    let showAllRows = false;
+    let savedScenarioData = null;
 
-    const currencySymbols = {
-      UK: '£',
-      US: '$'
-    };
-
-    // SDLT Calculator Engine (UK 2026 Bandings)
-    function calculateUKSDLT(purchasePrice, buyerType) {
-      if (purchasePrice <= 0) return 0;
-      let sdlt = 0;
-
-      // Base Bands for Residential
-      if (buyerType === 'first' && purchasePrice <= 625000) {
-        if (purchasePrice > 425000) {
-          sdlt += (purchasePrice - 425000) * 0.05;
-        }
-        return sdlt;
-      }
-
-      // Standard / Additional Residential Bands
-      const surcharge = (buyerType === 'additional') ? 0.05 : 0.0;
-
-      if (purchasePrice > 1500000) {
-        sdlt += (purchasePrice - 1500000) * (0.12 + surcharge);
-        sdlt += (1500000 - 925000) * (0.10 + surcharge);
-        sdlt += (925000 - 250000) * (0.05 + surcharge);
-        sdlt += (250000) * surcharge;
-      } else if (purchasePrice > 925000) {
-        sdlt += (purchasePrice - 925000) * (0.10 + surcharge);
-        sdlt += (925000 - 250000) * (0.05 + surcharge);
-        sdlt += (250000) * surcharge;
-      } else if (purchasePrice > 250000) {
-        sdlt += (purchasePrice - 250000) * (0.05 + surcharge);
-        sdlt += (250000) * surcharge;
-      } else {
-        sdlt += purchasePrice * surcharge;
-      }
-
-      return sdlt;
-    }
-
-    // UK Tax Engine with Section 24 and Corporation Tax marginal relief
-    function calculateUKTax({ grossAnnualRent, totalOperatingExpenses, annualMortgageInterest, taxBand }) {
-      const taxableProfitBeforeInterest = grossAnnualRent - totalOperatingExpenses;
-
-      if (taxBand === 'limited_co') {
-        const netProfit = taxableProfitBeforeInterest - annualMortgageInterest;
-        if (netProfit <= 0) return { taxDue: 0, taxCredit: 0 };
-
-        let corpTaxRate = 0.19;
-        if (netProfit > 250000) {
-          corpTaxRate = 0.25;
-        } else if (netProfit > 50000) {
-          corpTaxRate = 0.19 + (0.06 * (netProfit - 50000) / 200000);
-        }
-        
-        const taxDue = netProfit * corpTaxRate;
-        return { taxDue, taxCredit: 0 };
-      }
-
-      // Personal Ownership (Section 24)
-      let incomeTaxRate = 0.20;
-      if (taxBand === 'higher') incomeTaxRate = 0.40;
-      if (taxBand === 'additional') incomeTaxRate = 0.45;
-
-      const grossTax = Math.max(0, taxableProfitBeforeInterest * incomeTaxRate);
-      
-      const eligibleInterest = Math.min(annualMortgageInterest, Math.max(0, taxableProfitBeforeInterest));
-      const taxCredit = eligibleInterest * 0.20;
-
-      const finalTaxDue = Math.max(0, grossTax - taxCredit);
-      return { taxDue: finalTaxDue, taxCredit };
-    }
-
-    function formatCurrency(val, jurisdiction) {
-      const symbol = currencySymbols[jurisdiction] || '£';
-      return symbol + Math.round(val).toLocaleString();
-    }
-
-    function toggleJurisdictionFields() {
-      const jurisdiction = document.getElementById('jurisdictionSelect').value;
-      const isUK = jurisdiction === 'UK';
-
-      document.querySelectorAll('.jurisdiction-uk').forEach(el => el.style.display = isUK ? 'block' : 'none');
-      document.querySelectorAll('.jurisdiction-us').forEach(el => el.style.display = isUK ? 'none' : 'block');
-      document.getElementById('taxBandGroup').style.display = isUK ? 'block' : 'none';
-
-      // Dynamic Metrics Labeling
-      document.getElementById('roceLabel').innerText = isUK ? 'Return On Capital (ROCE)' : 'Cash-on-Cash Return';
-      document.getElementById('netYieldLabel').innerText = isUK ? 'Net Yield' : 'Cap Rate (NOI / Price)';
-      document.getElementById('stressReturnColHeader').innerText = isUK ? 'ROCE' : 'Cash-on-Cash';
-
-      // Update prefixes
-      const symbol = currencySymbols[jurisdiction];
-      document.getElementById('currencyPrefix1').innerText = symbol;
-      document.getElementById('currencyPrefix2').innerText = symbol;
-      document.getElementById('currencyPrefix3').innerText = symbol;
-
-      // Update Methodology Text
-      const methodContainer = document.getElementById('methodologyText');
-      if (isUK) {
-        methodContainer.innerHTML = `
-          <p><strong>Section 24 Tax Regime:</strong> For personal UK landlords, finance costs (mortgage interest) are not deductible from rental income to calculate taxable profit. Instead, tax is calculated on Gross Income minus Operating Expenses, and a 20% basic-rate tax reduction is applied based on interest paid.</p>
-          <p><strong>Corporation Tax (SPV):</strong> Limited Companies deduct 100% of mortgage interest as a business expense before tax. Profit is taxed at 19% up to £50k, sliding up to 25% for profits over £250k.</p>
-          <p><strong>ROCE Formula:</strong> <code>(Net Post-Tax Annual Cashflow / Total Initial Capital Invested) × 100</code></p>
-        `;
-      } else {
-        methodContainer.innerHTML = `
-          <p><strong>Cap Rate (Capitalization Rate):</strong> Evaluates property yield independent of financing structure. Formula: <code>Net Operating Income (NOI) / Purchase Price</code>.</p>
-          <p><strong>US Operating Expenses & Tax:</strong> Operating expenses include property taxes, landlord insurance, management, maintenance, and vacancy reserves. Income tax is calculated after deducting operating expenses and mortgage interest (subject to individual tax situation/depreciation).</p>
-          <p><strong>Cash-on-Cash Return:</strong> <code>Annual Post-Tax Net Cash Flow / Total Cash Invested (Deposit + Setup Costs)</code>.</p>
-        `;
-      }
-    }
-
-    function renderChart(operatingExp, mortgagePayment, taxDue, netProfit, jurisdiction) {
-      const ctx = document.getElementById('yieldChart').getContext('2d');
-      const symbol = currencySymbols[jurisdiction];
-
-      if (yieldChart) {
-        yieldChart.destroy();
-      }
-
-      yieldChart = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: ['Operating Friction', 'Mortgage Payment', 'Est. Income Tax', 'Net Cash Profit'],
-          datasets: [{
-            data: [
-              Math.max(0, operatingExp),
-              Math.max(0, mortgagePayment),
-              Math.max(0, taxDue),
-              Math.max(0, netProfit)
-            ],
-            backgroundColor: ['#3f3f46', '#2563eb', '#f43f5e', '#10b981'],
-            borderWidth: 0
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              position: 'bottom',
-              labels: {
-                color: '#a1a1aa',
-                font: { family: 'Plus Jakarta Sans', size: 12 }
-              }
-            },
-            tooltip: {
-              callbacks: {
-                label: function(context) {
-                  return ` ${context.label}: ${symbol}${Math.round(context.raw).toLocaleString()}`;
-                }
-              }
-            }
-          },
-          cutout: '70%'
-        }
+    function setCurrency(symbol) {
+      currencySymbol = symbol;
+      document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.innerText === symbol);
       });
+      syncPrincipal(document.getElementById('sliderPrincipal').value);
+      syncDeposit(document.getElementById('sliderDeposit').value);
+      calculate();
     }
 
-    function calculateEngine() {
-      const jurisdiction = document.getElementById('jurisdictionSelect').value;
-      const isUK = jurisdiction === 'UK';
+    function formatCurr(val) {
+      return currencySymbol + Math.round(val).toLocaleString('en-GB');
+    }
 
-      // Inputs
-      const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
-      const depositPercent = parseFloat(document.getElementById('depositPercent').value) || 0;
-      const legalCosts = parseFloat(document.getElementById('legalCosts').value) || 0;
-      const monthlyRent = parseFloat(document.getElementById('monthlyRent').value) || 0;
-      const interestRate = parseFloat(document.getElementById('interestRate').value) || 0;
-      const mortgageTerm = parseFloat(document.getElementById('mortgageTerm').value) || 25;
-      const mortgageType = document.getElementById('mortgageType').value;
-      const managementFee = parseFloat(document.getElementById('managementFee').value) || 0;
-      const maintenanceBuffer = parseFloat(document.getElementById('maintenanceBuffer').value) || 0;
-      const voidWeeks = parseFloat(document.getElementById('voidWeeks').value) || 0;
-      const taxBand = document.getElementById('taxBandSelect').value;
-      const sdltBuyerType = document.getElementById('sdltBuyerType').value;
+    function syncPrincipal(val) {
+      document.getElementById('badgePrincipal').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
+      calculate();
+    }
 
-      const propertyTaxRate = parseFloat(document.getElementById('propertyTaxRate').value) || 0;
-      const propertyInsurance = parseFloat(document.getElementById('propertyInsurance').value) || 0;
-      const usTaxRate = parseFloat(document.getElementById('usTaxRate').value) || 0;
+    function syncRate(val) {
+      document.getElementById('badgeRate').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
 
-      // Base Capital Calculations
-      const depositAmount = purchasePrice * (depositPercent / 100);
-      const mortgageAmount = purchasePrice - depositAmount;
-      const sdltAmount = isUK ? calculateUKSDLT(purchasePrice, sdltBuyerType) : 0;
-      const totalCapitalInvested = depositAmount + legalCosts + sdltAmount;
+    function syncInflation(val) {
+      document.getElementById('badgeInflation').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
 
-      // Income & Operating Expense Calculations
-      const potentialGrossAnnualRent = monthlyRent * 12;
-      const voidLoss = (monthlyRent / 4.33) * voidWeeks;
-      const effectiveAnnualRent = potentialGrossAnnualRent - voidLoss;
+    function syncYears(val) {
+      document.getElementById('badgeYears').innerText = val + (parseInt(val) === 1 ? ' Year' : ' Years');
+      calculate();
+    }
 
-      const annualManagement = effectiveAnnualRent * (managementFee / 100);
-      const annualMaintenance = effectiveAnnualRent * (maintenanceBuffer / 100);
-      const annualUSPropTax = isUK ? 0 : purchasePrice * (propertyTaxRate / 100);
-      const annualUSInsurance = isUK ? 0 : propertyInsurance;
+    function syncDeposit(val) {
+      document.getElementById('badgeDeposit').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
+      calculate();
+    }
 
-      const totalOperatingExpenses = annualManagement + annualMaintenance + voidLoss + annualUSPropTax + annualUSInsurance;
-      
-      const NOI = potentialGrossAnnualRent - totalOperatingExpenses;
+    function syncStep(val) {
+      document.getElementById('badgeStep').innerText = parseFloat(val).toFixed(1) + '%';
+      calculate();
+    }
 
-      // Mortgage Payment Calculation
-      let annualMortgageInterest = 0;
-      let annualMortgagePayment = 0;
+    function calculate() {
+      const P = parseFloat(document.getElementById('sliderPrincipal').value) || 0;
+      const rAnnual = (parseFloat(document.getElementById('sliderRate').value) || 0) / 100;
+      const rInflation = (parseFloat(document.getElementById('sliderInflation').value) || 0) / 100;
+      const years = parseInt(document.getElementById('sliderYears').value) || 1;
+      const baseDeposit = parseFloat(document.getElementById('sliderDeposit').value) || 0;
+      const depFreq = parseInt(document.getElementById('depositFreq').value) || 12;
+      const nComp = parseInt(document.getElementById('compoundFreq').value) || 12;
+      const timing = document.getElementById('depositTiming').value;
+      const annualStepPct = (parseFloat(document.getElementById('annualStep').value) || 0) / 100;
 
-      if (mortgageType === 'interest_only') {
-        annualMortgageInterest = mortgageAmount * (interestRate / 100);
-        annualMortgagePayment = annualMortgageInterest;
-      } else {
-        const monthlyRate = (interestRate / 100) / 12;
-        const totalPayments = mortgageTerm * 12;
-        const monthlyPayment = monthlyRate > 0 
-          ? (mortgageAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / (Math.pow(1 + monthlyRate, totalPayments) - 1)
-          : mortgageAmount / totalPayments;
-        
-        annualMortgagePayment = monthlyPayment * 12;
-        annualMortgageInterest = mortgageAmount * (interestRate / 100);
-      }
+      let currentBalance = P;
+      let totalInterest = 0;
+      let totalDeposits = 0;
+      let currentDeposit = baseDeposit;
 
-      // Tax Calculations
-      let annualTaxDue = 0;
-      let taxCredit = 0;
+      let points = [P];
+      fullScheduleData = [];
 
-      if (isUK) {
-        const taxRes = calculateUKTax({
-          grossAnnualRent: potentialGrossAnnualRent,
-          totalOperatingExpenses,
-          annualMortgageInterest,
-          taxBand
+      for (let y = 1; y <= years; y++) {
+        let yearInterest = 0;
+        let yearDeposits = 0;
+
+        for (let period = 1; period <= depFreq; period++) {
+          if (timing === 'beginning') {
+            currentBalance += currentDeposit;
+            yearDeposits += currentDeposit;
+          }
+
+          let periodInterest = currentBalance * (Math.pow(1 + rAnnual / nComp, nComp / depFreq) - 1);
+          currentBalance += periodInterest;
+          yearInterest += periodInterest;
+
+          if (timing === 'end') {
+            currentBalance += currentDeposit;
+            yearDeposits += currentDeposit;
+          }
+        }
+
+        totalInterest += yearInterest;
+        totalDeposits += yearDeposits;
+        points.push(currentBalance);
+
+        const realVal = currentBalance / Math.pow(1 + rInflation, y);
+
+        fullScheduleData.push({
+          year: y,
+          interestAccrued: yearInterest,
+          totalInterest: totalInterest,
+          annualDeposits: yearDeposits,
+          balance: currentBalance,
+          realBalance: realVal
         });
-        annualTaxDue = taxRes.taxDue;
-        taxCredit = taxRes.taxCredit;
-        document.getElementById('postTaxProfitLabel').innerText = "Post-Tax Monthly Profit";
-      } else {
-        const taxableIncomeUS = Math.max(0, NOI - annualMortgageInterest);
-        annualTaxDue = taxableIncomeUS * (usTaxRate / 100);
-        document.getElementById('postTaxProfitLabel').innerText = usTaxRate > 0 ? "Post-Tax Monthly Profit" : "Pre-Tax Monthly Profit";
+
+        currentDeposit *= (1 + annualStepPct);
       }
 
-      // Net Cash Flow Calculations
-      const annualNetProfit = NOI - annualMortgagePayment - annualTaxDue;
-      const monthlyNetProfit = annualNetProfit / 12;
+      const totalInvested = P + totalDeposits;
 
-      // Performance Yield Metrics
-      const grossYield = purchasePrice > 0 ? (potentialGrossAnnualRent / purchasePrice) * 100 : 0;
-      const netYield = purchasePrice > 0 ? (NOI / purchasePrice) * 100 : 0;
-      const roce = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
+      // Update UI Metrics
+      document.getElementById('resFutureVal').innerText = formatCurr(currentBalance);
+      const realFinalVal = currentBalance / Math.pow(1 + rInflation, years);
+      document.getElementById('resRealVal').innerText = `Real Purchasing Power: ${formatCurr(realFinalVal)} (Inflation Adjusted)`;
 
-      // Update UI Display Elements
-      document.getElementById('roceVal').innerText = roce.toFixed(2) + '%';
-      document.getElementById('netYieldVal').innerText = netYield.toFixed(2) + '%';
-      document.getElementById('grossYieldVal').innerText = grossYield.toFixed(2) + '%';
-      document.getElementById('monthlyNetVal').innerText = formatCurrency(monthlyNetProfit, jurisdiction);
-      document.getElementById('annualNetVal').innerText = formatCurrency(annualNetProfit, jurisdiction);
+      document.getElementById('resInterest').innerText = formatCurr(totalInterest);
+      document.getElementById('resTotalInvested').innerText = formatCurr(totalInvested);
+      document.getElementById('resDeposits').innerText = formatCurr(totalDeposits);
 
-      // Capital Breakdown Update
-      document.getElementById('depositAmountVal').innerText = formatCurrency(depositAmount, jurisdiction);
-      document.getElementById('sdltVal').innerText = formatCurrency(sdltAmount, jurisdiction);
-      document.getElementById('setupCostsVal').innerText = formatCurrency(legalCosts, jurisdiction);
-      document.getElementById('totalCapitalVal').innerText = formatCurrency(totalCapitalInvested, jurisdiction);
+      // Composition Bar
+      const totalVal = Math.max(currentBalance, 1);
+      const pPct = (P / totalVal) * 100;
+      const dPct = (totalDeposits / totalVal) * 100;
+      const iPct = (totalInterest / totalVal) * 100;
+      document.getElementById('barPrincipal').style.width = pPct + '%';
+      document.getElementById('barDeposits').style.width = dPct + '%';
+      document.getElementById('barInterest').style.width = iPct + '%';
 
-      // Operating Summary Update
-      document.getElementById('noiVal').innerText = formatCurrency(NOI, jurisdiction);
-      document.getElementById('financingExpenseVal').innerText = formatCurrency(annualMortgagePayment, jurisdiction);
-      document.getElementById('taxDueVal').innerText = formatCurrency(annualTaxDue, jurisdiction);
+      const apy = (Math.pow(1 + rAnnual / nComp, nComp) - 1) * 100;
+      const ror = totalInvested > 0 ? (totalInterest / totalInvested) * 100 : 0;
 
-      const section24Row = document.getElementById('section24CreditRow');
-      if (isUK && taxBand !== 'limited_co') {
-        section24Row.style.display = 'flex';
-        document.getElementById('taxCreditVal').innerText = formatCurrency(taxCredit, jurisdiction);
+      document.getElementById('resApy').innerText = apy.toFixed(2) + '%';
+      document.getElementById('resRor').innerText = ror.toFixed(1) + '%';
+
+      if (rAnnual > 0) {
+        const doubleYears = Math.log(2) / Math.log(1 + rAnnual / nComp) / nComp;
+        const dY = Math.floor(doubleYears);
+        const dM = Math.round((doubleYears - dY) * 12);
+        document.getElementById('resDouble').innerText = `${dY} yrs, ${dM} mos`;
       } else {
-        section24Row.style.display = 'none';
+        document.getElementById('resDouble').innerText = 'N/A';
       }
 
-      // Render Visual Cashflow Chart
-      renderChart(totalOperatingExpenses, annualMortgagePayment, annualTaxDue, annualNetProfit, jurisdiction);
+      renderChart(points);
+      renderTable();
 
-      // Populate Stress Testing Matrix
-      populateStressMatrix({
-        mortgageAmount,
-        NOI,
-        totalOperatingExpenses,
-        potentialGrossAnnualRent,
-        taxBand,
-        usTaxRate,
-        totalCapitalInvested,
-        currentRate: interestRate,
-        jurisdiction
-      });
+      if (savedScenarioData) {
+        document.getElementById('compValB').innerText = formatCurr(currentBalance);
+      }
     }
 
-    function populateStressMatrix({ mortgageAmount, NOI, totalOperatingExpenses, potentialGrossAnnualRent, taxBand, usTaxRate, totalCapitalInvested, currentRate, jurisdiction }) {
-      const isUK = jurisdiction === 'UK';
-      const tbody = document.getElementById('stressTableBody');
+    function renderChart(points) {
+      if (points.length < 2) return;
+      let allPoints = [...points];
+      if (savedScenarioData) allPoints = allPoints.concat(savedScenarioData.points);
+
+      const maxVal = Math.max(...allPoints) * 1.05;
+      const minVal = Math.min(...allPoints) * 0.95;
+      const width = 500;
+      const height = 180;
+
+      function createPath(pts) {
+        let pathD = '';
+        pts.forEach((val, i) => {
+          const x = (i / (pts.length - 1)) * width;
+          const y = height - ((val - minVal) / Math.max(maxVal - minVal, 1)) * height;
+          pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
+        });
+        return pathD;
+      }
+
+      const pathD = createPath(points);
+      const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
+
+      document.getElementById('chartLine').setAttribute('d', pathD);
+      document.getElementById('chartArea').setAttribute('d', areaD);
+
+      if (savedScenarioData) {
+        const pathDC = createPath(savedScenarioData.points);
+        const areaDC = pathDC + ` L ${width} ${height} L 0 ${height} Z`;
+        document.getElementById('chartLineCompare').setAttribute('d', pathDC);
+        document.getElementById('chartAreaCompare').setAttribute('d', areaDC);
+      }
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('scheduleBody');
       tbody.innerHTML = '';
 
-      const ratesToTest = [
-        Math.max(1, currentRate - 1.5),
-        Math.max(1, currentRate - 0.5),
-        currentRate,
-        currentRate + 1.0,
-        currentRate + 2.0,
-        currentRate + 3.0
-      ];
+      const displayData = showAllRows ? fullScheduleData : fullScheduleData.slice(0, 5);
 
-      // Remove duplicate rounded values
-      const uniqueRates = [...new Set(ratesToTest.map(r => parseFloat(r.toFixed(1))))].sort((a,b) => a - b);
-
-      uniqueRates.forEach(rate => {
-        const annualInterest = mortgageAmount * (rate / 100);
-        const monthlyInterest = annualInterest / 12;
-
-        let taxDue = 0;
-        if (isUK) {
-          const res = calculateUKTax({
-            grossAnnualRent: potentialGrossAnnualRent,
-            totalOperatingExpenses,
-            annualMortgageInterest: annualInterest,
-            taxBand
-          });
-          taxDue = res.taxDue;
-        } else {
-          const taxableIncome = Math.max(0, NOI - annualInterest);
-          taxDue = taxableIncome * (usTaxRate / 100);
-        }
-
-        const monthlyTax = taxDue / 12;
-        const annualNetProfit = NOI - annualInterest - taxDue;
-        const monthlyNet = annualNetProfit / 12;
-        const stressROCE = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
-
+      displayData.forEach(d => {
         const tr = document.createElement('tr');
-        if (rate === parseFloat(currentRate.toFixed(1))) {
-          tr.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
-        }
-
-        const profitClass = monthlyNet >= 0 ? 'text-positive' : 'text-negative';
-
         tr.innerHTML = `
-          <td><strong>${rate.toFixed(1)}%</strong> ${rate === parseFloat(currentRate.toFixed(1)) ? '(Current)' : ''}</td>
-          <td>${formatCurrency(monthlyInterest, jurisdiction)}</td>
-          <td>${formatCurrency(monthlyTax, jurisdiction)}</td>
-          <td class="${profitClass}">${formatCurrency(monthlyNet, jurisdiction)}</td>
-          <td class="${profitClass}">${stressROCE.toFixed(2)}%</td>
+          <td>Year ${d.year}</td>
+          <td style="color: var(--accent);">${formatCurr(d.interestAccrued)}</td>
+          <td>${formatCurr(d.totalInterest)}</td>
+          <td>${formatCurr(d.annualDeposits)}</td>
+          <td style="font-weight: 700;">${formatCurr(d.balance)}</td>
+          <td style="color: var(--text-muted);">${formatCurr(d.realBalance)}</td>
         `;
-
         tbody.appendChild(tr);
       });
+
+      const btn = document.getElementById('toggleTableBtn');
+      if (fullScheduleData.length <= 5) {
+        btn.style.display = 'none';
+      } else {
+        btn.style.display = 'block';
+        btn.innerText = showAllRows ? 'Show Less' : `Show Full Schedule (${fullScheduleData.length} Years)`;
+      }
     }
 
-    function exportEngineCSV() {
-      const jurisdiction = document.getElementById('jurisdictionSelect').value;
-      const price = document.getElementById('purchasePrice').value;
-      const rent = document.getElementById('monthlyRent').value;
-      const roce = document.getElementById('roceVal').innerText;
-      const netYield = document.getElementById('netYieldVal').innerText;
-      const monthlyNet = document.getElementById('monthlyNetVal').innerText;
+    function toggleSchedule() {
+      showAllRows = !showAllRows;
+      renderTable();
+    }
 
-      const csvContent = "data:text/csv;charset=utf-8," 
-        + "Metric,Value\n"
-        + `Jurisdiction,${jurisdiction}\n`
-        + `Purchase Price,${price}\n`
-        + `Monthly Rent,${rent}\n`
-        + `Net Operating Yield,${netYield}\n`
-        + `ROCE / Cash-on-Cash,${roce}\n`
-        + `Monthly Net Profit,${monthlyNet}\n`;
+    function saveScenario() {
+      const currentVal = fullScheduleData[fullScheduleData.length - 1]?.balance || 0;
+      const P = parseFloat(document.getElementById('sliderPrincipal').value) || 0;
+      
+      let points = [P];
+      fullScheduleData.forEach(d => points.push(d.balance));
+
+      savedScenarioData = { points, balance: currentVal };
+      document.getElementById('compareCard').classList.add('active');
+      document.getElementById('compValA').innerText = formatCurr(currentVal);
+      calculate();
+    }
+
+    function exportCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,Year,Interest Accrued,Total Interest,Annual Deposits,Ending Balance,Real Balance\n";
+      fullScheduleData.forEach(d => {
+        csvContent += `${d.year},${d.interestAccrued.toFixed(2)},${d.totalInterest.toFixed(2)},${d.annualDeposits.toFixed(2)},${d.balance.toFixed(2)},${d.realBalance.toFixed(2)}\n`;
+      });
 
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `Whorton_BTL_Analysis_${jurisdiction}.csv`);
+      link.setAttribute("download", "compound_interest_schedule.csv");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // Attach Event Listeners
-    document.querySelectorAll('input, select').forEach(element => {
-      element.addEventListener('input', calculateEngine);
-      element.addEventListener('change', calculateEngine);
-    });
+    // Export high-res JPG snapshot
+    async function exportJPG() {
+      const container = document.querySelector('.container');
+      
+      const canvas = await html2canvas(container, {
+        backgroundColor: '#0a0a0c',
+        scale: 2,
+        useCORS: true
+      });
 
-    document.getElementById('jurisdictionSelect').addEventListener('change', () => {
-      toggleJurisdictionFields();
-      calculateEngine();
-    });
+      const imageURI = canvas.toDataURL('image/jpeg', 0.95);
+      const link = document.createElement('a');
+      link.download = 'compound_interest_report.jpg';
+      link.href = imageURI;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
 
-    // Initialize Page State
-    window.addEventListener('DOMContentLoaded', () => {
-      toggleJurisdictionFields();
-      calculateEngine();
-    });
+    // Export PDF document snapshot
+    async function exportPDF() {
+      const container = document.querySelector('.container');
+
+      const canvas = await html2canvas(container, {
+        backgroundColor: '#0a0a0c',
+        scale: 2,
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const { jsPDF } = window.jspdf;
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+      }
+
+      pdf.save('compound_interest_report.pdf');
+    }
+
+    // Initial calculation run
+    calculate();
   </script>
 </body>
 </html>
