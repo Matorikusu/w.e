@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whorton Estate | Buy-to-Let Yield Engine</title>
+  <title>Whorton Estate | Real Estate Yield Engine</title>
   
   <!-- Modern Geometric Sans Typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -97,6 +97,13 @@
       margin-bottom: 2.5rem;
     }
 
+    .badge-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
     .badge {
       display: inline-block;
       padding: 0.35rem 0.85rem;
@@ -105,7 +112,6 @@
       border-radius: 100px;
       font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 600;
@@ -121,8 +127,42 @@
     p.subtitle {
       color: var(--text-muted);
       font-size: 1rem;
-      max-width: 650px;
+      max-width: 700px;
       line-height: 1.6;
+    }
+
+    /* Segmented Control for Jurisdiction */
+    .jurisdiction-picker {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: #0a0a0c;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 1.5rem;
+    }
+
+    .jurisdiction-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.6rem 1rem;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 7px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .jurisdiction-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
 
     /* Engine Layout Grid */
@@ -232,6 +272,28 @@
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+    }
+
+    .action-bar {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
     }
 
     .metrics-grid {
@@ -385,6 +447,14 @@
       margin-bottom: 0;
     }
 
+    .disclaimer-box {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      border-left: 2px solid var(--border-color);
+      padding-left: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
     footer {
       border-top: 1px solid var(--border-color);
       padding: 2.5rem 5%;
@@ -399,36 +469,55 @@
 
   <!-- Navigation -->
   <nav>
-    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
-    <a href="index.html" class="back-link">← Back to Suite</a>
+    <a href="#" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="#" class="back-link">← Back to Suite</a>
   </nav>
 
   <main>
     <div class="header-block">
-      <div class="badge">Engine 07 • Real Estate Model</div>
-      <h1>Buy-to-Let Yield Engine</h1>
-      <p class="subtitle">Calculate true net yields, stress-test interest rate sensitivity, model void risks, and evaluate total return on invested capital.</p>
+      <div class="badge-group">
+        <div class="badge">Engine 07 • Real Estate Model</div>
+        <div class="badge" style="color: var(--text-muted);">Tax Year 2026/27 Verified</div>
+      </div>
+      <h1>Buy-to-Let & Investment Yield Engine</h1>
+      <p class="subtitle">Evaluate real estate transactions across both UK (Section 24 Tax Restricted) and US tax regimes with interest rate stress testing, operating friction modelling, and ROCE / Cash-on-Cash projections.</p>
     </div>
 
     <div class="engine-grid">
       <!-- CONTROL PANEL -->
       <div class="control-panel">
-        <div class="section-label">00. Engine Configuration</div>
+        <div class="section-label">00. Jurisdiction & Setup</div>
 
-        <div class="input-group">
-          <label for="currencySelect">Display Currency</label>
-          <select id="currencySelect">
-            <option value="GBP">GBP (£)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
+        <div class="jurisdiction-picker">
+          <button type="button" class="jurisdiction-btn active" id="btnUK" onclick="setJurisdiction('UK')">🇬🇧 United Kingdom</button>
+          <button type="button" class="jurisdiction-btn" id="btnUS" onclick="setJurisdiction('US')">🇺🇸 United States</button>
+        </div>
+
+        <!-- UK Specific Options -->
+        <div id="ukTaxOptions" class="input-group">
+          <label for="ukTaxBand">Landlord Income Tax Band (Section 24)</label>
+          <select id="ukTaxBand">
+            <option value="basic">Basic Rate (20%)</option>
+            <option value="higher" selected>Higher Rate (40%)</option>
+            <option value="additional">Additional Rate (45%)</option>
+            <option value="spv">Limited Company / SPV (19%-25% Corp Tax)</option>
           </select>
+        </div>
+
+        <!-- US Specific Options -->
+        <div id="usTaxOptions" class="input-group" style="display: none;">
+          <label for="usTaxBracket">Federal + State Tax Rate (Marginal)</label>
+          <div class="input-wrapper">
+            <input type="number" id="usTaxBracket" value="28" min="0" max="50" class="has-suffix">
+            <span class="input-suffix">%</span>
+          </div>
         </div>
 
         <div class="divider"></div>
         <div class="section-label">01. Acquisition Profile</div>
         
         <div class="input-group">
-          <label for="purchasePrice">Purchase Price</label>
+          <label for="purchasePrice" id="lblPurchasePrice">Purchase Price</label>
           <div class="input-wrapper">
             <span class="input-prefix" id="currencyPrefix1">£</span>
             <input type="number" id="purchasePrice" value="250000" step="5000" class="has-prefix">
@@ -444,22 +533,30 @@
         </div>
 
         <div class="input-group">
-          <label for="legalCosts">Refurb, Legal & Surcharges</label>
+          <label for="legalCosts">Refurb, Legal & Acquisition Stamp Duty/Costs</label>
           <div class="input-wrapper">
             <span class="input-prefix" id="currencyPrefix2">£</span>
-            <input type="number" id="legalCosts" value="5000" step="500" class="has-prefix">
+            <input type="number" id="legalCosts" value="8500" step="500" class="has-prefix">
           </div>
         </div>
 
         <div class="divider"></div>
-        <div class="section-label">02. Financing & Income</div>
+        <div class="section-label">02. Financing & Operating Income</div>
 
         <div class="input-group">
-          <label for="monthlyRent">Gross Monthly Rent</label>
+          <label for="monthlyRent" id="lblMonthlyRent">Gross Monthly Rent</label>
           <div class="input-wrapper">
             <span class="input-prefix" id="currencyPrefix3">£</span>
             <input type="number" id="monthlyRent" value="1350" step="25" class="has-prefix">
           </div>
+        </div>
+
+        <div class="input-group">
+          <label for="mortgageType">Mortgage Payment Structure</label>
+          <select id="mortgageType">
+            <option value="interestOnly" selected>Interest-Only</option>
+            <option value="repayment">Repayment (Capital + Interest)</option>
+          </select>
         </div>
 
         <div class="input-group">
@@ -470,11 +567,16 @@
           </div>
         </div>
 
+        <div class="input-group" id="termGroup" style="display: none;">
+          <label for="mortgageTerm">Mortgage Term (Years)</label>
+          <input type="number" id="mortgageTerm" value="25" min="5" max="40">
+        </div>
+
         <div class="divider"></div>
-        <div class="section-label">03. Operating Friction</div>
+        <div class="section-label">03. Operating Friction & Reserves</div>
 
         <div class="input-group">
-          <label for="managementFee">Lettings Management Fee</label>
+          <label for="managementFee" id="lblManagementFee">Property Management Fee</label>
           <div class="input-wrapper">
             <input type="number" id="managementFee" value="10" step="1" class="has-suffix">
             <span class="input-suffix">%</span>
@@ -482,15 +584,33 @@
         </div>
 
         <div class="input-group">
-          <label for="maintenanceBuffer">Maintenance & Service Charge</label>
+          <label for="maintenanceBuffer">Maintenance Reserve & Service Charge</label>
           <div class="input-wrapper">
             <input type="number" id="maintenanceBuffer" value="8" step="1" class="has-suffix">
             <span class="input-suffix">%</span>
           </div>
         </div>
 
+        <!-- US Property Tax / Insurance Extra Fields -->
+        <div id="usExtraExpenses" style="display: none;">
+          <div class="input-group">
+            <label for="propertyTaxRate">Annual Property Tax Rate</label>
+            <div class="input-wrapper">
+              <input type="number" id="propertyTaxRate" value="1.2" step="0.1" class="has-suffix">
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+          <div class="input-group">
+            <label for="annualInsurance">Annual Property Insurance</label>
+            <div class="input-wrapper">
+              <span class="input-prefix" id="currencyPrefix4">$</span>
+              <input type="number" id="annualInsurance" value="1200" step="100" class="has-prefix">
+            </div>
+          </div>
+        </div>
+
         <div class="input-group">
-          <label for="voidWeeks">Annual Void Allowance</label>
+          <label for="voidWeeks" id="lblVoidWeeks">Annual Vacancy Allowance</label>
           <div class="input-wrapper">
             <input type="number" id="voidWeeks" value="2" min="0" max="52" class="has-suffix">
             <span class="input-suffix">Wks</span>
@@ -501,31 +621,35 @@
       <!-- DISPLAY PANEL -->
       <div class="display-panel">
         
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="exportCSV()">📥 Export Data (CSV)</button>
+        </div>
+
         <!-- Key Metrics -->
         <div class="metrics-grid">
           <div class="metric-card primary">
-            <div class="metric-title">Return On Equity (ROCE)</div>
+            <div class="metric-title" id="lblPrimaryReturn">ROCE (Return On Capital Employed)</div>
             <div class="metric-value accent" id="roceVal">0.0%</div>
-            <div class="metric-sub">Net Annual Cashflow / Invested Capital</div>
+            <div class="metric-sub" id="subPrimaryReturn">Net Annual Profit / Total Cash Invested</div>
           </div>
 
           <div class="metric-card">
-            <div class="metric-title">Net Yield</div>
+            <div class="metric-title" id="lblSecondaryYield">Net Operating Yield</div>
             <div class="metric-value" id="netYieldVal">0.0%</div>
             <div class="metric-sub">Gross Yield: <span id="grossYieldVal">0.0%</span></div>
           </div>
 
           <div class="metric-card">
-            <div class="metric-title">Monthly Net Profit</div>
+            <div class="metric-title">Monthly Post-Tax Profit</div>
             <div class="metric-value" id="monthlyNetVal">£0</div>
-            <div class="metric-sub">Annual: <span id="annualNetVal">£0</span></div>
+            <div class="metric-sub">Annual Post-Tax: <span id="annualNetVal">£0</span></div>
           </div>
         </div>
 
         <!-- Visual Cashflow Distribution -->
         <div class="dashboard-card">
           <div class="card-title-bar">
-            <div class="card-title">Gross Revenue Breakdown</div>
+            <div class="card-title">Gross Annual Income Allocation</div>
           </div>
           <div class="chart-container">
             <canvas id="yieldChart"></canvas>
@@ -535,15 +659,15 @@
         <!-- Stress Testing Matrix -->
         <div class="dashboard-card">
           <div class="card-title-bar">
-            <div class="card-title">Interest Rate Stress Matrix</div>
+            <div class="card-title">Interest Rate Sensitivity & Stress Matrix</div>
           </div>
           <table class="stress-table">
             <thead>
               <tr>
                 <th>Mortgage Rate</th>
-                <th>Monthly Interest</th>
-                <th>Monthly Net Profit</th>
-                <th>ROCE</th>
+                <th>Monthly Financing</th>
+                <th>Monthly Net (Post-Tax)</th>
+                <th id="lblStressReturnHeader">ROCE</th>
               </tr>
             </thead>
             <tbody id="stressTableBody">
@@ -555,19 +679,19 @@
         <!-- Capital Requirements Breakdown -->
         <div class="dashboard-card">
           <div class="card-title-bar">
-            <div class="card-title">Initial Capital Invested</div>
+            <div class="card-title">Total Capital Required To Complete</div>
           </div>
           <div class="data-list">
             <div class="data-row">
-              <span class="data-label">Deposit Required</span>
+              <span class="data-label">Deposit Requirement</span>
               <span class="data-val" id="depositAmountVal">£0</span>
             </div>
             <div class="data-row">
-              <span class="data-label">Refurb, Legal & Setup Fees</span>
+              <span class="data-label">Refurb, Legal & Setup / Stamp Duty Fees</span>
               <span class="data-val" id="setupCostsVal">£0</span>
             </div>
             <div class="data-row" style="font-weight: 700; color: var(--accent);">
-              <span class="data-label" style="color: var(--text-primary);">Total Cash Required</span>
+              <span class="data-label" style="color: var(--text-primary);">Total Invested Cash</span>
               <span class="data-val" id="totalCapitalVal">£0</span>
             </div>
           </div>
@@ -576,11 +700,20 @@
         <!-- Analytical Overview / Info Section -->
         <div class="dashboard-card">
           <div class="card-title-bar">
-            <div class="card-title">Investment Analysis & Overview</div>
+            <div class="card-title">Assumptions & Methodology</div>
           </div>
           <div class="info-section">
-            <p><strong>Yield vs. Return on Capital Employed (ROCE):</strong> While Gross and Net Yield measure return relative to the property's total valuation, ROCE measures performance against the physical cash deployed. Leveraging through a mortgage amplifies your ROCE when rental income outpaces financing costs.</p>
-            <p><strong>Managing Operating Friction:</strong> Profit margins in residential property depend heavily on controlling fixed friction costs. Accounting for property management fees, routine maintenance, and expected vacancy periods ensures realistic net income projections before acquisition.</p>
+            <div id="ukTaxNotes">
+              <p><strong>Section 24 Tax Restriction (UK):</strong> For personal name Buy-to-Let properties in the UK, mortgage interest is no longer an allowable expense to deduct from rental income before tax. Instead, individual landlords pay tax on total gross revenue minus operating expenses, and receive a basic-rate 20% tax credit for mortgage interest costs. For higher-rate (40%) and additional-rate (45%) taxpayers, this creates tax liabilities that exceed real net cashflow.</p>
+            </div>
+            <div id="usTaxNotes" style="display: none;">
+              <p><strong>US Operating Structure:</strong> Under standard IRS rules for residential rental property, mortgage interest, property taxes, insurance, and operating friction remain fully deductible expenses against gross rental income. Cap Rate measures unleveraged property performance (NOI / Purchase Price), while Cash-on-Cash Return measures leveraged yield on deployed equity.</p>
+            </div>
+            <p><strong>Net Operating Yield vs. ROCE / Cash-on-Cash:</strong> Net Yield evaluates property performance prior to debt, while ROCE / Cash-on-Cash measures the performance of the actual cash capital deployed into the deal after mortgage interest and tax friction.</p>
+
+            <div class="disclaimer-box">
+              <strong>Disclaimer:</strong> This model is designed for preliminary analysis and illustrative strategic planning only. It does not constitute legal, tax, or financial advice. Figures do not account for individual personal allowances, capital gains tax, or future statutory regulatory alterations. Consult a qualified accountant or mortgage specialist before committing capital.
+            </div>
           </div>
         </div>
 
@@ -589,39 +722,76 @@
   </main>
 
   <footer>
-    <p>© Whorton Estate. Clean execution tools.</p>
+    <p>© Whorton Estate. Real estate analytical tools.</p>
   </footer>
 
   <script>
+    let currentJurisdiction = 'UK';
     let yieldChart = null;
 
     const currencySymbols = {
-      GBP: '£',
-      USD: '$',
-      EUR: '€'
+      UK: '£',
+      US: '$'
     };
 
-    function formatCurrency(val, currencyCode) {
-      return new Intl.NumberFormat('en-GB', { 
-        style: 'currency', 
-        currency: currencyCode, 
-        maximumFractionDigits: 0 
-      }).format(val);
-    }
+    function setJurisdiction(jur) {
+      currentJurisdiction = jur;
+      
+      document.getElementById('btnUK').classList.toggle('active', jur === 'UK');
+      document.getElementById('btnUS').classList.toggle('active', jur === 'US');
 
-    function updateCurrencyPrefixes(symbol) {
+      const symbol = currencySymbols[jur];
       document.getElementById('currencyPrefix1').innerText = symbol;
       document.getElementById('currencyPrefix2').innerText = symbol;
       document.getElementById('currencyPrefix3').innerText = symbol;
+      if (document.getElementById('currencyPrefix4')) {
+        document.getElementById('currencyPrefix4').innerText = symbol;
+      }
+
+      // UI Text Changes based on Jurisdiction
+      if (jur === 'UK') {
+        document.getElementById('ukTaxOptions').style.display = 'block';
+        document.getElementById('usTaxOptions').style.display = 'none';
+        document.getElementById('usExtraExpenses').style.display = 'none';
+        document.getElementById('ukTaxNotes').style.display = 'block';
+        document.getElementById('usTaxNotes').style.display = 'none';
+
+        document.getElementById('lblPrimaryReturn').innerText = 'ROCE (Return On Capital Employed)';
+        document.getElementById('subPrimaryReturn').innerText = 'Net Annual Post-Tax Profit / Invested Cash';
+        document.getElementById('lblSecondaryYield').innerText = 'Net Operating Yield';
+        document.getElementById('lblVoidWeeks').innerText = 'Annual Void Allowance';
+        document.getElementById('lblManagementFee').innerText = 'Lettings Management Fee';
+        document.getElementById('lblStressReturnHeader').innerText = 'ROCE';
+      } else {
+        document.getElementById('ukTaxOptions').style.display = 'none';
+        document.getElementById('usTaxOptions').style.display = 'block';
+        document.getElementById('usExtraExpenses').style.display = 'block';
+        document.getElementById('ukTaxNotes').style.display = 'none';
+        document.getElementById('usTaxNotes').style.display = 'block';
+
+        document.getElementById('lblPrimaryReturn').innerText = 'Cash-on-Cash Return';
+        document.getElementById('subPrimaryReturn').innerText = 'Pre-Tax / Post-Tax Cashflow / Invested Equity';
+        document.getElementById('lblSecondaryYield').innerText = 'Cap Rate (NOI Yield)';
+        document.getElementById('lblVoidWeeks').innerText = 'Annual Vacancy Allowance';
+        document.getElementById('lblManagementFee').innerText = 'Property Management Fee';
+        document.getElementById('lblStressReturnHeader').innerText = 'CoC Return';
+      }
+
+      calculateYields();
+    }
+
+    function formatCurrency(val, symbol) {
+      return new Intl.NumberFormat('en-GB', { 
+        style: 'currency', 
+        currency: currentJurisdiction === 'UK' ? 'GBP' : 'USD', 
+        maximumFractionDigits: 0 
+      }).format(val).replace('GBP', '£').replace('USD', '$');
     }
 
     function calculateYields() {
-      const selectedCurrency = document.getElementById('currencySelect').value;
-      const currencySymbol = currencySymbols[selectedCurrency] || '£';
-      
-      updateCurrencyPrefixes(currencySymbol);
+      const symbol = currencySymbols[currentJurisdiction];
 
-      // Inputs
+      // Primary Inputs
       const purchasePrice = parseFloat(document.getElementById('purchasePrice').value) || 0;
       const depositPercent = parseFloat(document.getElementById('depositPercent').value) || 0;
       const legalCosts = parseFloat(document.getElementById('legalCosts').value) || 0;
@@ -630,48 +800,109 @@
       const managementFee = parseFloat(document.getElementById('managementFee').value) || 0;
       const maintenanceBuffer = parseFloat(document.getElementById('maintenanceBuffer').value) || 0;
       const voidWeeks = parseFloat(document.getElementById('voidWeeks').value) || 0;
+      const mortgageType = document.getElementById('mortgageType').value;
+      const mortgageTerm = parseFloat(document.getElementById('mortgageTerm').value) || 25;
 
-      // Calculations
+      // Toggle Term Visibility
+      document.getElementById('termGroup').style.display = mortgageType === 'repayment' ? 'block' : 'none';
+
+      // Calculations Basics
       const depositAmount = purchasePrice * (depositPercent / 100);
       const mortgageAmount = purchasePrice - depositAmount;
       const totalCapitalInvested = depositAmount + legalCosts;
 
-      const potentialGrossAnnualRent = monthlyRent * 12;
-      const voidLoss = (monthlyRent / 4.33) * voidWeeks;
-      const effectiveAnnualRent = potentialGrossAnnualRent - voidLoss;
+      const grossAnnualRent = monthlyRent * 12;
+      const voidLoss = (monthlyRent / 4.333) * voidWeeks;
+      const effectiveGrossRent = grossAnnualRent - voidLoss;
 
-      const annualMortgageInterest = mortgageAmount * (interestRate / 100);
+      const annualManagement = effectiveGrossRent * (managementFee / 100);
+      const annualMaintenance = effectiveGrossRent * (maintenanceBuffer / 100);
 
-      const annualManagement = effectiveAnnualRent * (managementFee / 100);
-      const annualMaintenance = effectiveAnnualRent * (maintenanceBuffer / 100);
+      // Jurisdiction specific operating costs (US Taxes & Insurance)
+      let annualPropertyTax = 0;
+      let annualInsurance = 0;
+      if (currentJurisdiction === 'US') {
+        const propTaxRate = parseFloat(document.getElementById('propertyTaxRate').value) || 0;
+        annualPropertyTax = purchasePrice * (propTaxRate / 100);
+        annualInsurance = parseFloat(document.getElementById('annualInsurance').value) || 0;
+      }
 
-      const totalAnnualExpenses = annualMortgageInterest + annualManagement + annualMaintenance + voidLoss;
-      const annualNetProfit = potentialGrossAnnualRent - totalAnnualExpenses;
+      const totalOperatingExpenses = annualManagement + annualMaintenance + voidLoss + annualPropertyTax + annualInsurance;
+      const netOperatingIncome (NOI) = grossAnnualRent - totalOperatingExpenses;
+
+      // Mortgage Payment Calculation
+      let annualMortgagePayment = 0;
+      let annualInterestOnlyExpense = mortgageAmount * (interestRate / 100);
+
+      if (mortgageType === 'interestOnly') {
+        annualMortgagePayment = annualInterestOnlyExpense;
+      } else {
+        const monthlyRate = (interestRate / 100) / 12;
+        const totalPayments = mortgageTerm * 12;
+        if (monthlyRate > 0) {
+          const monthlyPayment = (mortgageAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / (Math.pow(1 + monthlyRate, totalPayments) - 1);
+          annualMortgagePayment = monthlyPayment * 12;
+        } else {
+          annualMortgagePayment = mortgageAmount / mortgageTerm;
+        }
+      }
+
+      // TAXATION LOGIC
+      let annualTaxLiability = 0;
+
+      if (currentJurisdiction === 'UK') {
+        const ukTaxBand = document.getElementById('ukTaxBand').value;
+        if (ukTaxBand === 'spv') {
+          // Limited Company SPV: Full interest deduction, taxed at Corp Tax (~19%-25%)
+          const taxableProfit = Math.max(0, grossAnnualRent - totalOperatingExpenses - annualInterestOnlyExpense);
+          annualTaxLiability = taxableProfit * 0.19; 
+        } else {
+          // Personal Name Section 24 Rules
+          let marginalRate = 0.20;
+          if (ukTaxBand === 'higher') marginalRate = 0.40;
+          if (ukTaxBand === 'additional') marginalRate = 0.45;
+
+          // Taxable profit BEFORE mortgage interest deduction
+          const grossTaxableProfit = Math.max(0, grossAnnualRent - totalOperatingExpenses);
+          const initialTax = grossTaxableProfit * marginalRate;
+          
+          // Basic rate tax relief credit on mortgage interest (20%)
+          const taxCredit = annualInterestOnlyExpense * 0.20;
+          annualTaxLiability = Math.max(0, initialTax - taxCredit);
+        }
+      } else {
+        // US Rules: Mortgage interest is fully deductible expense
+        const usTaxBracket = (parseFloat(document.getElementById('usTaxBracket').value) || 0) / 100;
+        const taxableIncome = Math.max(0, grossAnnualRent - totalOperatingExpenses - annualInterestOnlyExpense);
+        annualTaxLiability = taxableIncome * usTaxBracket;
+      }
+
+      // Final Cashflows
+      const annualNetProfit = grossAnnualRent - totalOperatingExpenses - annualMortgagePayment - annualTaxLiability;
       const monthlyNetProfit = annualNetProfit / 12;
 
-      const grossYield = purchasePrice > 0 ? (potentialGrossAnnualRent / purchasePrice) * 100 : 0;
-      const netYield = purchasePrice > 0 ? ((potentialGrossAnnualRent - (annualManagement + annualMaintenance + voidLoss)) / purchasePrice) * 100 : 0;
+      // Yield Metrics
+      const grossYield = purchasePrice > 0 ? (grossAnnualRent / purchasePrice) * 100 : 0;
+      const netYield = purchasePrice > 0 ? (NOI / purchasePrice) * 100 : 0; // Cap Rate in US
       const roce = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
 
-      // Update UI Metrics
+      // UI Outputs
       document.getElementById('roceVal').innerText = roce.toFixed(2) + '%';
       document.getElementById('netYieldVal').innerText = netYield.toFixed(2) + '%';
       document.getElementById('grossYieldVal').innerText = grossYield.toFixed(2) + '%';
-      document.getElementById('monthlyNetVal').innerText = formatCurrency(monthlyNetProfit, selectedCurrency);
-      document.getElementById('annualNetVal').innerText = formatCurrency(annualNetProfit, selectedCurrency);
+      document.getElementById('monthlyNetVal').innerText = formatCurrency(monthlyNetProfit, symbol);
+      document.getElementById('annualNetVal').innerText = formatCurrency(annualNetProfit, symbol);
 
-      document.getElementById('depositAmountVal').innerText = formatCurrency(depositAmount, selectedCurrency);
-      document.getElementById('setupCostsVal').innerText = formatCurrency(legalCosts, selectedCurrency);
-      document.getElementById('totalCapitalVal').innerText = formatCurrency(totalCapitalInvested, selectedCurrency);
+      document.getElementById('depositAmountVal').innerText = formatCurrency(depositAmount, symbol);
+      document.getElementById('setupCostsVal').innerText = formatCurrency(legalCosts, symbol);
+      document.getElementById('totalCapitalVal').innerText = formatCurrency(totalCapitalInvested, symbol);
 
-      // Render Stress Matrix
-      renderStressMatrix(mortgageAmount, totalCapitalInvested, potentialGrossAnnualRent, annualManagement + annualMaintenance + voidLoss, interestRate, selectedCurrency);
-
-      // Update Doughnut Chart
-      updateChart(annualMortgageInterest, annualManagement, annualMaintenance, voidLoss, Math.max(0, annualNetProfit));
+      // Render Tables & Visuals
+      renderStressMatrix(mortgageAmount, totalCapitalInvested, grossAnnualRent, totalOperatingExpenses, interestRate, symbol, mortgageType, mortgageTerm);
+      updateChart(annualMortgagePayment, totalOperatingExpenses, annualTaxLiability, Math.max(0, annualNetProfit));
     }
 
-    function renderStressMatrix(mortgage, totalInvested, grossRent, nonInterestCosts, currentRate, currencyCode) {
+    function renderStressMatrix(mortgage, totalInvested, grossRent, operatingCosts, currentRate, symbol, mType, mTerm) {
       const ratesToTest = [
         currentRate - 1.0,
         currentRate,
@@ -684,9 +915,31 @@
       tableBody.innerHTML = '';
 
       ratesToTest.forEach(rate => {
-        const annualInterest = mortgage * (rate / 100);
-        const monthlyInterest = annualInterest / 12;
-        const annualNet = grossRent - nonInterestCosts - annualInterest;
+        let annualFinancing = 0;
+        let interestExpense = mortgage * (rate / 100);
+
+        if (mType === 'interestOnly') {
+          annualFinancing = interestExpense;
+        } else {
+          const rMonthly = (rate / 100) / 12;
+          const nPayments = mTerm * 12;
+          annualFinancing = ((mortgage * rMonthly * Math.pow(1 + rMonthly, nPayments)) / (Math.pow(1 + rMonthly, nPayments) - 1)) * 12;
+        }
+
+        // Simplified Section 24 / Tax adjustment for stress matrix
+        let estTax = 0;
+        if (currentJurisdiction === 'UK') {
+          const ukTaxBand = document.getElementById('ukTaxBand').value;
+          if (ukTaxBand === 'higher') {
+            estTax = Math.max(0, (grossRent - operatingCosts) * 0.40 - (interestExpense * 0.20));
+          } else {
+            estTax = Math.max(0, (grossRent - operatingCosts) * 0.20 - (interestExpense * 0.20));
+          }
+        } else {
+          estTax = Math.max(0, (grossRent - operatingCosts - interestExpense) * 0.28);
+        }
+
+        const annualNet = grossRent - operatingCosts - annualFinancing - estTax;
         const monthlyNet = annualNet / 12;
         const roce = totalInvested > 0 ? (annualNet / totalInvested) * 100 : 0;
 
@@ -695,24 +948,23 @@
         
         row.innerHTML = `
           <td>${rate.toFixed(1)}% ${Math.abs(rate - currentRate) < 0.05 ? '(Current)' : ''}</td>
-          <td>${formatCurrency(monthlyInterest, currencyCode)}</td>
-          <td class="${monthlyNet >= 0 ? 'text-positive' : 'text-negative'}">${formatCurrency(monthlyNet, currencyCode)}</td>
+          <td>${formatCurrency(annualFinancing / 12, symbol)}</td>
+          <td class="${monthlyNet >= 0 ? 'text-positive' : 'text-negative'}">${formatCurrency(monthlyNet, symbol)}</td>
           <td class="${roce >= 0 ? 'text-positive' : 'text-negative'}">${roce.toFixed(2)}%</td>
         `;
         tableBody.appendChild(row);
       });
     }
 
-    function updateChart(interest, mgmt, maint, voidLoss, netProfit) {
+    function updateChart(financing, friction, tax, netProfit) {
       const ctx = document.getElementById('yieldChart').getContext('2d');
       
       const data = {
-        labels: ['Mortgage Interest', 'Management', 'Maintenance', 'Void Reserve', 'Net Profit'],
+        labels: ['Financing / Mortgage', 'Operating Friction', 'Tax Liability', 'Net Post-Tax Profit'],
         datasets: [{
-          data: [interest, mgmt, maint, voidLoss, netProfit],
+          data: [financing, friction, tax, netProfit],
           backgroundColor: [
             '#3b82f6',
-            '#a855f7',
             '#f59e0b',
             '#f43f5e',
             '#10b981'
@@ -744,6 +996,26 @@
           }
         });
       }
+    }
+
+    function exportCSV() {
+      const price = document.getElementById('purchasePrice').value;
+      const rent = document.getElementById('monthlyRent').value;
+      const roce = document.getElementById('roceVal').innerText;
+      const netYield = document.getElementById('netYieldVal').innerText;
+      const monthlyNet = document.getElementById('monthlyNetVal').innerText;
+
+      const csvContent = "data:text/csv;charset=utf-8," 
+        + "Jurisdiction,Purchase Price,Monthly Rent,Net Yield,ROCE / Cash-on-Cash,Monthly Net Profit\n"
+        + `${currentJurisdiction},${price},${rent},${netYield},${roce},${monthlyNet}`;
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Whorton_Estate_Yield_Model_${currentJurisdiction}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // Attach Event Listeners
