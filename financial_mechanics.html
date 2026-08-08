@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Financial Mechanics & Capital Concepts | Whorton Estate</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+      --accent-secondary: #6366f1;
+      --accent-secondary-glow: rgba(99, 102, 241, 0.15);
+      --accent-warning: #f59e0b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 5rem;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 1280px;
+      margin: 2.5rem auto 0 auto;
+      padding: 0 5%;
+    }
+
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 1rem;
+      max-width: 700px;
+      line-height: 1.6;
+    }
+
+    /* QUICK NAVIGATION BAR */
+    .quick-nav {
+      display: flex;
+      gap: 0.75rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+      margin-bottom: 2.5rem;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .quick-nav-link {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .quick-nav-link:hover {
+      color: var(--text-primary);
+      border-color: var(--accent);
+    }
+
+    /* MODULAR SECTION CONTAINER */
+    .knowledge-sections {
+      display: flex;
+      flex-direction: column;
+      gap: 2.5rem;
+    }
+
+    /* SECTION CARD BASE */
+    .info-section {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 2rem;
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-tag {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--accent);
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-lead {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    /* COMPARISON GRID (e.g. Interest vs Debasement) */
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .comparison-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .comp-card {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .comp-card.accent-border {
+      border-top: 3px solid var(--accent);
+    }
+
+    .comp-card.warning-border {
+      border-top: 3px solid var(--accent-warning);
+    }
+
+    .comp-card.secondary-border {
+      border-top: 3px solid var(--accent-secondary);
+    }
+
+    .comp-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .comp-body {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .comp-body p {
+      margin-bottom: 0.75rem;
+    }
+
+    .comp-body p:last-child {
+      margin-bottom: 0;
+    }
+
+    .key-takeaway {
+      margin-top: 1.5rem;
+      padding: 1rem 1.25rem;
+      background: var(--input-bg);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+
+    .key-takeaway strong {
+      color: var(--accent);
+    }
+
+    /* FEATURE GRID (3 Column Layout) */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.25rem;
+      margin-top: 1rem;
+    }
+
+    .feature-item {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .feature-item h4 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-item p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* CODE & MATH CALLOUT */
+    .formula-box {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      font-family: monospace;
+      font-size: 0.9rem;
+      color: var(--accent);
+      margin: 1rem 0;
+    }
+
+    .section-divider {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
+      margin: 3rem 0;
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="nav-back">← Back to Suite</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Knowledge Base • Monetary Theory</span>
+      <h1>Financial Mechanics & Capital Concepts</h1>
+      <p class="subtitle">A clear breakdown of fundamental monetary forces: how capital expands, how currency degrades, and how purchasing power is retained over time.</p>
+    </div>
+
+    <!-- QUICK NAV LINKS -->
+    <div class="quick-nav">
+      <a href="#interest-vs-debasement" class="quick-nav-link">Interest vs. Debasement</a>
+      <a href="#compound-growth" class="quick-nav-link">Compound Mechanics</a>
+      <a href="#real-vs-nominal" class="quick-nav-link">Nominal vs. Real Returns</a>
+      <a href="#inflation-drivers" class="quick-nav-link">Inflation Forces</a>
+      <a href="#template-section" class="quick-nav-link">+ Add New Topic</a>
+    </div>
+
+    <div class="knowledge-sections">
+
+      <!-- SECTION 1: INTEREST VS DEBASEMENT -->
+      <section class="info-section" id="interest-vs-debasement">
+        <div class="section-header">
+          <span class="section-tag">Core Concept</span>
+          <h2 class="section-title">Interest vs. Currency Debasement</h2>
+        </div>
+        <p class="section-lead">While interest represents the growth rate of deployed capital, debasement represents the systemic erosion of the currency unit itself. Understanding this dynamic is crucial for evaluating true investment performance.</p>
+
+        <div class="comparison-grid">
+          <div class="comp-card accent-border">
+            <div class="comp-title">
+              <span>What is Interest?</span>
+              <span style="color: var(--accent); font-size: 0.8rem;">Expansion</span>
+            </div>
+            <div class="comp-body">
+              <p><strong>Interest</strong> is the compensation paid by a borrower to a lender for using their capital over time. It reflects the time-value of money, credit risk, and opportunity cost.</p>
+              <p>When you earn interest on savings or bonds, your total balance increases numerically, compounding over successive time periods.</p>
+            </div>
+          </div>
+
+          <div class="comp-card warning-border">
+            <div class="comp-title">
+              <span>What is Currency Debasement?</span>
+              <span style="color: var(--accent-warning); font-size: 0.8rem;">Erosion</span>
+            </div>
+            <div class="comp-body">
+              <p><strong>Debasement</strong> occurs when a central bank or government increases the total supply of money, diluting the purchasing power of each individual unit of currency.</p>
+              <p>Historically achieved by reducing precious metal content in coins, modern debasement occurs through rapid expansion of the monetary base (M2 money supply).</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="key-takeaway">
+          <strong>The Interplay:</strong> If your capital earns 5% nominal interest per year, but the currency supply expands by 8% annually, your real purchasing power is actually declining despite nominal growth.
+        </div>
+      </section>
+
+      <!-- SECTION 2: COMPOUND GROWTH MECHANICS -->
+      <section class="info-section" id="compound-growth">
+        <div class="section-header">
+          <span class="section-tag" style="color: var(--accent-secondary);">Growth Mechanics</span>
+          <h2 class="section-title">The Power of Compounding</h2>
+        </div>
+        <p class="section-lead">Compounding occurs when interest or investment earnings generate their own additional returns over subsequent time periods—creating an exponential growth curve rather than a linear one.</p>
+
+        <div class="formula-box">
+          A = P × (1 + r/n)^(n × t)
+        </div>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h4>P — Principal Capital</h4>
+            <p>The initial amount of money deposited or invested before any earnings begin to accumulate.</p>
+          </div>
+
+          <div class="feature-item">
+            <h4>r — Annual Rate</h4>
+            <p>The nominal annual rate of return or interest expressed as a decimal (e.g. 8% = 0.08).</p>
+          </div>
+
+          <div class="feature-item">
+            <h4>n & t — Frequency & Time</h4>
+            <p><code>n</code> represents compounding cycles per year (monthly, daily), while <code>t</code> is total years elapsed.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: NOMINAL VS REAL RETURNS -->
+      <section class="info-section" id="real-vs-nominal">
+        <div class="section-header">
+          <span class="section-tag">Valuation</span>
+          <h2 class="section-title">Nominal vs. Real Purchasing Power</h2>
+        </div>
+        <p class="section-lead">The face-value number on your bank account is a nominal figure. What matters for wealth retention is real purchasing power—the actual volume of goods and services that money can buy.</p>
+
+        <div class="comparison-grid">
+          <div class="comp-card secondary-border">
+            <div class="comp-title">
+              <span>Nominal Return</span>
+            </div>
+            <div class="comp-body">
+              <p>The percentage gain or return on an investment unadjusted for inflation or taxes. It represents the numerical dollar or pound growth in your portfolio.</p>
+            </div>
+          </div>
+
+          <div class="comp-card accent-border">
+            <div class="comp-title">
+              <span>Real Return</span>
+            </div>
+            <div class="comp-body">
+              <p>The actual gain after removing the effects of inflation. Calculated approximately as: <code>Real Rate ≈ Nominal Rate - Inflation Rate</code>.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: INFLATION DRIVERS -->
+      <section class="info-section" id="inflation-drivers">
+        <div class="section-header">
+          <span class="section-tag" style="color: var(--accent-warning);">Macroeconomics</span>
+          <h2 class="section-title">Primary Drivers of Inflation</h2>
+        </div>
+        <p class="section-lead">Inflation is a sustained increase in the general price level of goods and services over time. It stems from three distinct macro economic mechanisms:</p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h4>1. Demand-Pull Inflation</h4>
+            <p>Occurs when consumer demand for goods and services outpaces total supply, driving up prices as buyers compete for limited inventory.</p>
+          </div>
+
+          <div class="feature-item">
+            <h4>2. Cost-Push Inflation</h4>
+            <p>Arises when production costs rise (raw materials, energy, labor), forcing businesses to pass higher expenses onto end consumers.</p>
+          </div>
+
+          <div class="feature-item">
+            <h4>3. Built-In / Monetary Inflation</h4>
+            <p>Triggered by systemic monetary expansion and wage-price spirals, where expectations of future price increases drive current wage demands.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION TEMPLATE: COPY & PASTE TO ADD MORE TOPICS -->
+      <section class="info-section" id="template-section" style="border-style: dashed;">
+        <div class="section-header">
+          <span class="section-tag" style="color: var(--text-muted);">Modular Template</span>
+          <h2 class="section-title">New Section Title Here</h2>
+        </div>
+        <p class="section-lead">Add your introductory text or question summary here. You can copy this structure to expand your knowledge base effortlessly.</p>
+
+        <div class="feature-grid">
+          <div class="feature-item">
+            <h4>Sub-Topic A</h4>
+            <p>Describe your concept or explanation here.</p>
+          </div>
+          <div class="feature-item">
+            <h4>Sub-Topic B</h4>
+            <p>Describe your concept or explanation here.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+</body>
+</html>
