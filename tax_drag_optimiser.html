@@ -666,7 +666,7 @@
             </ul>
 
             <h3>Model Simplifications & Computational Notes</h3>
-            <p>Monthly compounding applies dividend yields and capital returns smoothly across the year. Rebalancing turnover generates monthly realised gains against estimated cost bases, while remaining unrealised gains trigger a full CGT event upon horizon termination.</p>
+            <p>Monthly compounding applies dividend yields and capital returns smoothly across the year. Annual dividend and CGT allowances are evaluated once per year. On final liquidation, the £3,000 annual CGT allowance is applied against remaining unrealised gains as a single-year exit event.</p>
           </div>
 
           <div class="disclaimer-box">
@@ -734,10 +734,18 @@
       document.getElementById('dividendYieldVal').innerText = divYieldPct.toFixed(1) + '%';
       document.getElementById('portfolioTurnoverVal').innerText = turnoverPct + '%';
 
-      // Annual ISA Check
-      const annualContrib = (monthlyContrib * 12) + (horizonYears === 1 ? initialLumpSum : 0);
+      // Annual ISA Check across multi-year timeline
+      let exceedsIsaLimit = false;
+      for (let yr = 1; yr <= horizonYears; yr++) {
+        const annualContrib = (monthlyContrib * 12) + (yr === 1 ? initialLumpSum : 0);
+        if (annualContrib > 20000) {
+          exceedsIsaLimit = true;
+          break;
+        }
+      }
+
       const isaFlagElem = document.getElementById('isaLimitFlagVal');
-      if (annualContrib > 20000) {
+      if (exceedsIsaLimit) {
         isaFlagElem.innerText = 'Exceeds £20,000/yr Cap';
         isaFlagElem.style.color = 'var(--accent-alert)';
       } else {
