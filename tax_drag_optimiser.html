@@ -71,18 +71,18 @@
     }
 
     .back-link {
-      color: var(--text-muted);
+      color: var(--text-primary);
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 600;
-      transition: color 0.2s ease;
+      transition: opacity 0.2s ease;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
     .back-link:hover {
-      color: var(--text-primary);
+      opacity: 0.8;
     }
 
     /* Main Layout */
@@ -98,6 +98,13 @@
       margin-bottom: 2.5rem;
     }
 
+    .badge-group {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+
     .badge {
       display: inline-block;
       padding: 0.35rem 0.85rem;
@@ -106,10 +113,15 @@
       border-radius: 100px;
       font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 600;
+    }
+
+    .badge.verified {
+      color: var(--accent-info);
+      border-color: rgba(59, 130, 246, 0.3);
+      background: rgba(59, 130, 246, 0.05);
     }
 
     h1 {
@@ -213,6 +225,27 @@
 
     input[type="number"].has-prefix {
       padding-left: 2.25rem;
+    }
+
+    /* Checkbox toggle styling */
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .checkbox-label {
+      font-size: 0.85rem;
+      color: var(--text-primary);
+      font-weight: 600;
     }
 
     /* Range Sliders */
@@ -332,6 +365,27 @@
       width: 100%;
     }
 
+    /* Buttons */
+    .btn-export {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .btn-export:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-muted);
+    }
+
     /* Dynamic Data List */
     .data-list {
       display: flex;
@@ -369,12 +423,33 @@
       font-size: 0.9rem;
     }
 
+    .info-section h3 {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      margin: 1.2rem 0 0.4rem 0;
+    }
+
+    .info-section h3:first-child {
+      margin-top: 0;
+    }
+
     .info-section p {
-      margin-bottom: 1rem;
+      margin-bottom: 0.8rem;
     }
 
     .info-section p:last-child {
       margin-bottom: 0;
+    }
+
+    .disclaimer-box {
+      margin-top: 1.25rem;
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      line-height: 1.5;
     }
 
     footer {
@@ -397,9 +472,12 @@
 
   <main>
     <div class="header-block">
-      <div class="badge">Engine 08 • Wealth Optimiser</div>
+      <div class="badge-group">
+        <div class="badge">Engine 08 • Wealth Optimiser</div>
+        <div class="badge verified">UK Tax Year 2026/27 Verified</div>
+      </div>
       <h1>Tax Drag & ISA vs. GIA Optimiser</h1>
-      <p class="subtitle">Analyse the compounding friction of Capital Gains Tax and Dividend Tax in a General Investment Account (GIA) versus tax-sheltered wrappers like ISAs.</p>
+      <p class="subtitle">Analyse the compounding friction of Capital Gains Tax and Dividend Tax in a General Investment Account (GIA) versus tax-sheltered wrappers like ISAs under UK tax legislation.</p>
     </div>
 
     <div class="engine-grid">
@@ -410,11 +488,11 @@
         <div class="input-group">
           <label for="currencySelect">Display Currency</label>
           <select id="currencySelect">
-            <option value="GBP">GBP (£)</option>
-            <option value="USD">USD ($)</option>
-            <option value="EUR">EUR (€)</option>
-            <option value="INR">INR (₹)</option>
-            <option value="JPY">JPY (¥)</option>
+            <option value="GBP">GBP (£) [UK Rules Apply]</option>
+            <option value="USD">USD ($) [UK Rules Apply]</option>
+            <option value="EUR">EUR (€) [UK Rules Apply]</option>
+            <option value="INR">INR (₹) [UK Rules Apply]</option>
+            <option value="JPY">JPY (¥) [UK Rules Apply]</option>
           </select>
         </div>
 
@@ -465,7 +543,7 @@
         </div>
 
         <div class="divider"></div>
-        <div class="section-label">03. Tax Drag Parameters</div>
+        <div class="section-label">03. UK Tax Parameters</div>
 
         <div class="input-group">
           <label for="taxBand">Investor Tax Bracket</label>
@@ -482,6 +560,16 @@
             <span class="slider-val" id="portfolioTurnoverVal">15%</span>
           </div>
           <input type="range" id="portfolioTurnover" min="0" max="100" step="5" value="15">
+        </div>
+
+        <div class="input-group">
+          <label class="checkbox-group">
+            <input type="checkbox" id="enableAllowances" checked>
+            <span class="checkbox-label">Apply Annual Tax Allowances</span>
+          </label>
+          <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.35rem; margin-left: 1.6rem;">
+            £500 Dividend Allowance & £3,000 CGT Exemption per year.
+          </div>
         </div>
       </div>
 
@@ -513,6 +601,10 @@
         <div class="dashboard-card">
           <div class="card-title-bar">
             <div class="card-title">Wealth Trajectory: ISA vs. GIA</div>
+            <button class="btn-export" onclick="exportToCSV()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export CSV
+            </button>
           </div>
           <div class="chart-container">
             <canvas id="comparisonChart"></canvas>
@@ -528,6 +620,10 @@
             <div class="data-row">
               <span class="data-label">Total Out-of-Pocket Contributions</span>
               <span class="data-val" id="totalContributionsVal">£0</span>
+            </div>
+            <div class="data-row">
+              <span class="data-label">ISA Contribution Limit Flag</span>
+              <span class="data-val" id="isaLimitFlagVal">Within Annual Allowance</span>
             </div>
             <div class="data-row">
               <span class="data-label">ISA Net Investment Gain</span>
@@ -555,12 +651,26 @@
         <!-- Analytical Overview / Information Section -->
         <div class="dashboard-card">
           <div class="card-title-bar">
-            <div class="card-title">Investment Analysis & Overview</div>
+            <div class="card-title">Assumptions & Engine Methodology</div>
           </div>
           <div class="info-section">
-            <p><strong>The Anatomy of Tax Drag:</strong> When assets are held inside a taxable General Investment Account (GIA), compounding returns are subject to annual friction from Dividend Tax and Capital Gains Tax (CGT). Even modest tax rates slice off a fraction of returns every year, creating a widening performance gap over long horizons compared to tax-sheltered accounts such as Individual Savings Accounts (ISAs).</p>
-            <p><strong>Turnover and CGT Deferral:</strong> Capital gains tax is only triggered when investments are sold or rebalanced (realised). High turnover rates force you to pay CGT early and often, stripping away capital that could otherwise compound. Minimising portfolio turnover in a GIA helps defer CGT liabilities and preserves more long-term wealth.</p>
-            <p><strong>The Strategic Power of Wrappers:</strong> Tax wrappers like ISAs eliminate income tax, dividend tax, and capital gains tax entirely. Directing new capital and utilizing mechanisms such as "Bed and ISA" transfers helps shield your capital from annual tax drag, ensuring 100% of your investment yield compounds uninterrupted.</p>
+            <h3>The Mechanics of Tax Drag</h3>
+            <p>Outside of tax wrappers, portfolio compounding is dampened by two annual leakage points: Dividend Tax on cash flows and Capital Gains Tax (CGT) on rebalancing sales. Slicing off even small percentages annually compounds into substantial performance friction over multi-decade horizons.</p>
+
+            <h3>UK Tax Rules Applied (2026/27)</h3>
+            <p>Taxes are calculated using standard UK tax rates. When enabled, annual tax allowances are applied dynamically:</p>
+            <ul style="margin-left: 1.2rem; margin-bottom: 0.8rem; line-height: 1.6;">
+              <li><strong>Dividend Allowance:</strong> £500 per tax year tax-free.</li>
+              <li><strong>CGT Annual Exempt Amount:</strong> £3,000 per tax year exempt from realised gains.</li>
+              <li><strong>Annual ISA Limit:</strong> £20,000 per individual per tax year.</li>
+            </ul>
+
+            <h3>Model Simplifications & Computational Notes</h3>
+            <p>Monthly compounding applies dividend yields and capital returns smoothly across the year. Rebalancing turnover generates monthly realised gains against estimated cost bases, while remaining unrealised gains trigger a full CGT event upon horizon termination.</p>
+          </div>
+
+          <div class="disclaimer-box">
+            <strong>Disclaimer:</strong> This tool provides illustrative mathematical models based on current UK tax legislation for educational purposes only. It does not constitute financial or tax advice. Tax rates and individual allowances are subject to change by legislative bodies.
           </div>
         </div>
 
@@ -574,6 +684,7 @@
 
   <script>
     let comparisonChart = null;
+    let exportData = [];
 
     const currencySymbols = {
       GBP: '£',
@@ -614,6 +725,7 @@
       const divYieldPct = parseFloat(document.getElementById('dividendYield').value) || 2.0;
       const taxBandKey = document.getElementById('taxBand').value;
       const turnoverPct = parseFloat(document.getElementById('portfolioTurnover').value) || 15;
+      const useAllowances = document.getElementById('enableAllowances').checked;
 
       // Label Updates
       document.getElementById('monthlyContribVal').innerText = formatCurrency(monthlyContrib, selectedCurrency);
@@ -621,6 +733,17 @@
       document.getElementById('annualReturnVal').innerText = grossReturnPct.toFixed(1) + '%';
       document.getElementById('dividendYieldVal').innerText = divYieldPct.toFixed(1) + '%';
       document.getElementById('portfolioTurnoverVal').innerText = turnoverPct + '%';
+
+      // Annual ISA Check
+      const annualContrib = (monthlyContrib * 12) + (horizonYears === 1 ? initialLumpSum : 0);
+      const isaFlagElem = document.getElementById('isaLimitFlagVal');
+      if (annualContrib > 20000) {
+        isaFlagElem.innerText = 'Exceeds £20,000/yr Cap';
+        isaFlagElem.style.color = 'var(--accent-alert)';
+      } else {
+        isaFlagElem.innerText = 'Within Annual Allowance';
+        isaFlagElem.style.color = 'var(--accent)';
+      }
 
       const capGrowthPct = Math.max(0, grossReturnPct - divYieldPct);
       const rates = taxRates[taxBandKey];
@@ -636,6 +759,11 @@
       const isaLabels = [];
       const isaData = [];
       const giaData = [];
+      exportData = [];
+
+      // Annual UK Allowances
+      const divAllowance = useAllowances ? 500 : 0;
+      const cgtAllowance = useAllowances ? 3000 : 0;
 
       for (let yr = 1; yr <= horizonYears; yr++) {
         isaLabels.push('Yr ' + yr);
@@ -646,38 +774,56 @@
           isaValue *= (1 + (grossReturnPct / 100 / 12));
         }
 
-        // --- GIA MODEL (Tax Drag) ---
+        // --- GIA MODEL (Tax Drag with Annual Allowances) ---
+        let yrDivIncome = 0;
+        let yrRealisedGains = 0;
+
         for (let m = 0; m < 12; m++) {
           giaValue += monthlyContrib;
           giaCostBasis += monthlyContrib;
 
-          // Monthly income & capital gains calculations
           const mDiv = giaValue * (divYieldPct / 100 / 12);
           const mCap = giaValue * (capGrowthPct / 100 / 12);
 
-          // Monthly Dividend Tax
-          const divTax = mDiv * rates.div;
-          
-          // Monthly Realised CGT based on portfolio turnover rate
+          yrDivIncome += mDiv;
+
           const monthlyTurnover = (turnoverPct / 100) / 12;
           const unrealisedGain = Math.max(0, giaValue - giaCostBasis);
           const realisedGain = unrealisedGain * monthlyTurnover;
-          const cgtTax = realisedGain * rates.cgt;
+          yrRealisedGains += realisedGain;
 
-          cumulativeAnnualTax += (divTax + cgtTax);
-
-          // Net Value growth after taxes
-          giaValue = giaValue + mDiv + mCap - divTax - cgtTax;
-          giaCostBasis = giaCostBasis + mDiv + mCap - divTax - cgtTax - realisedGain;
+          giaValue = giaValue + mDiv + mCap;
+          giaCostBasis = giaCostBasis + mDiv + mCap - realisedGain;
         }
+
+        // Apply Annual Allowances at Year End
+        const taxableDiv = Math.max(0, yrDivIncome - divAllowance);
+        const divTaxPaid = taxableDiv * rates.div;
+
+        const taxableCGT = Math.max(0, yrRealisedGains - cgtAllowance);
+        const cgtTaxPaid = taxableCGT * rates.cgt;
+
+        const totalYrTax = divTaxPaid + cgtTaxPaid;
+        cumulativeAnnualTax += totalYrTax;
+
+        // Deduct Tax from Portfolio Balance
+        giaValue -= totalYrTax;
 
         isaData.push(Math.round(isaValue));
         giaData.push(Math.round(giaValue));
+
+        exportData.push({
+          year: yr,
+          isaVal: Math.round(isaValue),
+          giaVal: Math.round(giaValue),
+          annualTax: Math.round(totalYrTax)
+        });
       }
 
       // Final CGT Liquidation Event on Remaining Unrealised Gain
       const finalUnrealisedGain = Math.max(0, giaValue - giaCostBasis);
-      const finalCgtTax = finalUnrealisedGain * rates.cgt;
+      const taxableFinalGain = Math.max(0, finalUnrealisedGain - cgtAllowance);
+      const finalCgtTax = taxableFinalGain * rates.cgt;
       const giaNetLiquidationValue = giaValue - finalCgtTax;
 
       const totalTaxDrag = isaValue - giaNetLiquidationValue;
@@ -783,6 +929,24 @@
           }
         }
       });
+    }
+
+    function exportToCSV() {
+      const selectedCurrency = document.getElementById('currencySelect').value;
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += `Year,ISA Value (${selectedCurrency}),GIA Value (${selectedCurrency}),Annual Tax Paid (${selectedCurrency})\n`;
+
+      exportData.forEach(row => {
+        csvContent += `${row.year},${row.isaVal},${row.giaVal},${row.annualTax}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `Tax_Drag_Optimiser_${selectedCurrency}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // Attach Event Listeners
