@@ -9,6 +9,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
+  <!-- html2canvas for DOM image snapshots -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
   <style>
     :root {
       --bg-dark: #0a0a0c;
@@ -352,12 +357,14 @@
     /* Action / Export Buttons */
     .actions-row {
       display: flex;
+      flex-wrap: wrap;
       gap: 0.75rem;
       margin-top: 1rem;
     }
 
     .btn {
       flex: 1;
+      min-width: 120px;
       padding: 0.75rem 1rem;
       border-radius: 10px;
       border: 1px solid var(--card-border);
@@ -786,6 +793,8 @@
         <div class="actions-row">
           <button class="btn" onclick="saveScenario()">Save Scenario</button>
           <button class="btn" onclick="exportCSV()">Export CSV</button>
+          <button class="btn" onclick="exportJPG()">Export JPG</button>
+          <button class="btn btn-primary" onclick="exportPDF()">Export PDF</button>
         </div>
 
         <p class="disclaimer-note">Figures are illustrative and do not include fees or taxes.</p>
@@ -1079,7 +1088,6 @@
       const currentVal = fullScheduleData[fullScheduleData.length - 1]?.balance || 0;
       const P = parseFloat(document.getElementById('sliderPrincipal').value) || 0;
       
-      // Re-run minimal point generation for scenario curve overlay
       let points = [P];
       fullScheduleData.forEach(d => points.push(d.balance));
 
@@ -1104,7 +1112,62 @@
       document.body.removeChild(link);
     }
 
-    // Run initial calculation
+    // Export high-res JPG snapshot
+    async function exportJPG() {
+      const container = document.querySelector('.container');
+      
+      const canvas = await html2canvas(container, {
+        backgroundColor: '#0a0a0c',
+        scale: 2,
+        useCORS: true
+      });
+
+      const imageURI = canvas.toDataURL('image/jpeg', 0.95);
+      const link = document.createElement('a');
+      link.download = 'compound_interest_report.jpg';
+      link.href = imageURI;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    // Export PDF document snapshot
+    async function exportPDF() {
+      const container = document.querySelector('.container');
+
+      const canvas = await html2canvas(container, {
+        backgroundColor: '#0a0a0c',
+        scale: 2,
+        useCORS: true
+      });
+
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+      const { jsPDF } = window.jspdf;
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = pdf.internal.pageSize.getHeight();
+      
+      const imgWidth = pdfWidth;
+      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pdfHeight;
+
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+        heightLeft -= pdfHeight;
+      }
+
+      pdf.save('compound_interest_report.pdf');
+    }
+
+    // Initial calculation run
     calculate();
   </script>
 </body>
