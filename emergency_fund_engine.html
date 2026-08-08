@@ -72,18 +72,18 @@
     }
 
     .back-link {
-      color: var(--text-muted);
+      color: #ffffff;
       text-decoration: none;
       font-size: 0.875rem;
       font-weight: 600;
-      transition: color 0.2s ease;
+      transition: opacity 0.2s ease;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
     .back-link:hover {
-      color: var(--text-primary);
+      opacity: 0.8;
     }
 
     /* Main Layout */
@@ -99,6 +99,14 @@
       margin-bottom: 2.5rem;
     }
 
+    .badge-container {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
     .badge {
       display: inline-block;
       padding: 0.35rem 0.85rem;
@@ -107,10 +115,14 @@
       border-radius: 100px;
       font-size: 0.75rem;
       color: var(--accent);
-      margin-bottom: 1rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       font-weight: 600;
+    }
+
+    .badge.verified {
+      border-color: rgba(16, 185, 129, 0.4);
+      background: rgba(16, 185, 129, 0.08);
     }
 
     h1 {
@@ -331,6 +343,23 @@
       letter-spacing: -0.01em;
     }
 
+    .btn-export {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.4rem 0.85rem;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-export:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-muted);
+    }
+
     .chart-container {
       position: relative;
       height: 300px;
@@ -382,6 +411,24 @@
       margin-bottom: 0;
     }
 
+    .info-section ul {
+      margin-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+
+    .info-section li {
+      margin-bottom: 0.35rem;
+    }
+
+    .disclaimer {
+      font-size: 0.75rem;
+      color: #71717a;
+      line-height: 1.5;
+      border-top: 1px dashed var(--border-color);
+      padding-top: 1rem;
+      margin-top: 1rem;
+    }
+
     footer {
       border-top: 1px solid var(--border-color);
       padding: 2.5rem 5%;
@@ -402,7 +449,10 @@
 
   <main>
     <div class="header-block">
-      <div class="badge">Engine 09 • Capital Liquidity</div>
+      <div class="badge-container">
+        <div class="badge">Engine 09 • Capital Liquidity</div>
+        <div class="badge verified">Liquidity Model</div>
+      </div>
       <h1>Emergency Fund / Runway Matrix</h1>
       <p class="subtitle">Determine exact liquid capital targets based on fixed versus discretionary burn rates, income stability, dependants, and custom volatility risk factors.</p>
     </div>
@@ -456,10 +506,10 @@
         <div class="input-group">
           <label for="incomeType">Income Profile Stability</label>
           <select id="incomeType">
-            <option value="1.0">Stable Corporate Salary (Base Model)</option>
-            <option value="1.2" selected>Single Income / Specialist Role (+20%)</option>
-            <option value="1.4">Freelancer / Variable Commission (+40%)</option>
-            <option value="1.6">Business Owner / Early Startup (+60%)</option>
+            <option value="1.0">Stable Corporate Salary (Base Model - 1.0x)</option>
+            <option value="1.2" selected>Single Income / Specialist Role (+20% - 1.2x)</option>
+            <option value="1.4">Freelancer / Variable Commission (+40% - 1.4x)</option>
+            <option value="1.6">Business Owner / Early Startup (+60% - 1.6x)</option>
           </select>
         </div>
 
@@ -526,6 +576,7 @@
         <div class="dashboard-card">
           <div class="card-title-bar">
             <div class="card-title">Reserve Analysis & Financial Metrics</div>
+            <button class="btn-export" onclick="exportCSV()">Export CSV</button>
           </div>
           <div class="data-list">
             <div class="data-row">
@@ -555,6 +606,23 @@
           </div>
         </div>
 
+        <!-- Assumptions & Methodology Section -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <div class="card-title">Assumptions & Methodology</div>
+          </div>
+          <div class="info-section">
+            <p><strong>Core Mathematical Formulas:</strong></p>
+            <ul>
+              <li><strong>Risk-Adjusted Monthly Burn:</strong> Calculated as <code>(Fixed Outgoings + 30% of Variable Outgoings) × Income Multiplier × Dependant Uplift</code>.</li>
+              <li><strong>Dependant Uplift:</strong> A 5% increase per dependant (<code>1 + [Dependants × 0.05]</code>) to reflect unavoidable secondary household expenses during liquidity events.</li>
+              <li><strong>30% Baseline Variable Buffer:</strong> Assumes 70% of discretionary spending can be eliminated instantly, while 30% persists (e.g., core groceries, basic transit).</li>
+              <li><strong>Target Capital Reserve:</strong> Calculated as <code>Risk-Adjusted Monthly Burn × Target Coverage Months</code>.</li>
+              <li><strong>Depletion Trajectory:</strong> Models compound monthly yield on remaining liquid cash balances alongside net monthly cash drains.</li>
+            </ul>
+          </div>
+        </div>
+
         <!-- Analytical Overview / Information Section -->
         <div class="dashboard-card">
           <div class="card-title-bar">
@@ -564,6 +632,10 @@
             <p><strong>Fixed vs. Variable Burn Dynamics:</strong> In emergency scenarios, variable outgoings (dining out, subscriptions, travel) can be pruned instantly. However, fixed outgoings (mortgages, rent, utilities, insurance) remain rigid. An optimal emergency fund scales primarily off fixed commitments while providing a realistic buffer for essential living expenses.</p>
             <p><strong>Income Stability & Risk-Weighting:</strong> A traditional 3-to-6-month heuristic fails to account for career volatility. Dual-salaried corporate employees generally require smaller liquid reserves, whereas freelancers, commission-based earners, and business owners face higher revenue variability and extended re-employment cycles, requiring 9 to 12 months of risk-adjusted coverage.</p>
             <p><strong>Liquidity vs. Yield Optimisation:</strong> While emergency capital must remain immediately accessible and insulated from market downturns, leaving reserves in zero-interest accounts causes purchasing power erosion due to inflation. Holding funds in high-yield cash accounts or short-term Treasury bills strikes a balance between instant liquidity and capital preservation.</p>
+            
+            <div class="disclaimer">
+              <strong>Disclaimer:</strong> This tool is provided for educational and illustrative purposes only. It does not constitute formal financial, tax, or legal advice. Capital reserve strategies should be evaluated alongside individual debt obligations, net worth, and personal risk tolerance.
+            </div>
           </div>
         </div>
 
@@ -670,6 +742,7 @@
       const labels = [];
       const survivalSeries = [];
       const fullSpendSeries = [];
+      const targetThresholdSeries = [];
 
       let tempSurvivalBalance = currentReserve;
       let tempFullBalance = currentReserve;
@@ -679,6 +752,7 @@
 
         survivalSeries.push(Math.max(0, Math.round(tempSurvivalBalance)));
         fullSpendSeries.push(Math.max(0, Math.round(tempFullBalance)));
+        targetThresholdSeries.push(Math.round(targetReserve));
 
         // Monthly depletion with interest compounding
         const monthlyInterestSurvival = (tempSurvivalBalance * (savingsYieldPct / 100 / 12));
@@ -688,10 +762,10 @@
         tempFullBalance = Math.max(0, tempFullBalance - totalMonthlyBurn + monthlyInterestFull);
       }
 
-      renderChart(labels, survivalSeries, fullSpendSeries, targetReserve, selectedCurrency);
+      renderChart(labels, survivalSeries, fullSpendSeries, targetThresholdSeries, selectedCurrency);
     }
 
-    function renderChart(labels, survivalData, fullSpendData, targetThreshold, currencyCode) {
+    function renderChart(labels, survivalData, fullSpendData, targetThresholdData, currencyCode) {
       const ctx = document.getElementById('runwayChart').getContext('2d');
 
       if (runwayChart) {
@@ -703,6 +777,15 @@
         data: {
           labels: labels,
           datasets: [
+            {
+              label: 'Optimal Capital Reserve Target',
+              data: targetThresholdData,
+              borderColor: '#f59e0b',
+              backgroundColor: 'transparent',
+              borderWidth: 2,
+              borderDash: [3, 3],
+              pointRadius: 0
+            },
             {
               label: 'Essential Outgoings Only (Survival)',
               data: survivalData,
@@ -774,6 +857,57 @@
           }
         }
       });
+    }
+
+    function exportCSV() {
+      const selectedCurrency = document.getElementById('currencySelect').value;
+      const fixedBurn = document.getElementById('fixedBurn').value;
+      const variableBurn = document.getElementById('variableBurn').value;
+      const currentReserve = document.getElementById('currentReserve').value;
+      const incomeType = document.getElementById('incomeType').value;
+      const dependants = document.getElementById('dependants').value;
+      const targetMonths = document.getElementById('targetMonths').value;
+      const savingsYield = document.getElementById('savingsYield').value;
+
+      const targetReserveVal = document.getElementById('targetReserveVal').innerText.replace(/,/g, '');
+      const runwayMonthsVal = document.getElementById('runwayMonthsVal').innerText;
+      const reserveGapVal = document.getElementById('reserveGapVal').innerText.replace(/,/g, '');
+      const totalBurnVal = document.getElementById('totalBurnVal').innerText.replace(/,/g, '');
+      const survivalBurnVal = document.getElementById('survivalBurnVal').innerText.replace(/,/g, '');
+      const adjustedBurnVal = document.getElementById('adjustedBurnVal').innerText.replace(/,/g, '');
+      const annualInterestVal = document.getElementById('annualInterestVal').innerText.replace(/,/g, '');
+      const fullRunwayVal = document.getElementById('fullRunwayVal').innerText;
+      const bufferEfficiencyVal = document.getElementById('bufferEfficiencyVal').innerText;
+
+      const rows = [
+        ["Metric", "Value"],
+        ["Display Currency", selectedCurrency],
+        ["Fixed Monthly Outgoings", fixedBurn],
+        ["Variable Monthly Outgoings", variableBurn],
+        ["Current Cash Reserves", currentReserve],
+        ["Income Multiplier", incomeType],
+        ["Dependants", dependants],
+        ["Target Runway Months", targetMonths],
+        ["Reserve Account Yield (%)", savingsYield],
+        ["Optimal Target Reserve", targetReserveVal],
+        ["Current Core Runway", runwayMonthsVal],
+        ["Reserve Surplus/Shortfall", reserveGapVal],
+        ["Total Unadjusted Burn", totalBurnVal],
+        ["Survival Burn", survivalBurnVal],
+        ["Risk-Adjusted Monthly Burn", adjustedBurnVal],
+        ["Estimated Annual Interest", annualInterestVal],
+        ["Full Spend Runway", fullRunwayVal],
+        ["Buffer Efficiency Rate", bufferEfficiencyVal]
+      ];
+
+      let csvContent = "data:text/csv;charset=utf-8," + rows.map(e => e.join(",")).join("\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `emergency_fund_matrix_${new Date().toISOString().split('T')[0]}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // Attach Event Listeners
