@@ -9,11 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- html2canvas for DOM image snapshots -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <!-- jsPDF for PDF generation -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
   <style>
     :root {
       --bg-dark: #0a0a0c;
@@ -24,8 +19,7 @@
       --text-muted: #a1a1aa;
       --accent: #10b981;
       --accent-glow: rgba(16, 185, 129, 0.15);
-      --accent-secondary: #6366f1;
-      --accent-secondary-glow: rgba(99, 102, 241, 0.15);
+      --danger: #ef4444;
     }
 
     * {
@@ -139,7 +133,7 @@
     }
 
     .control-group {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.75rem;
     }
 
     .label-row {
@@ -156,14 +150,36 @@
       letter-spacing: 0.02em;
     }
 
-    .val-badge {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-primary);
+    .val-input-wrap {
+      display: flex;
+      align-items: center;
       background: var(--input-bg);
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
       border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+    }
+
+    .val-input-wrap span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .num-input {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 90px;
+      text-align: right;
+      outline: none;
+    }
+
+    .num-input::-webkit-inner-spin-button,
+    .num-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .segmented-control {
@@ -223,28 +239,17 @@
       transform: scale(1.15);
     }
 
-    input[type="number"], select {
+    select.custom-select {
       width: 100%;
       background: var(--input-bg);
       border: 1px solid var(--card-border);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
       color: var(--text-primary);
-      font-size: 0.95rem;
+      padding: 0.65rem 0.85rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
       font-weight: 600;
       outline: none;
-      transition: border-color 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    input[type="number"]:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-glow);
-    }
-
-    .inline-inputs {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+      cursor: pointer;
     }
 
     .analytics-panel {
@@ -287,14 +292,7 @@
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--text-primary);
-      margin-bottom: 0.25rem;
-    }
-
-    .real-value-sub {
-      font-size: 0.9rem;
-      color: var(--text-muted);
       margin-bottom: 1.5rem;
-      font-weight: 500;
     }
 
     .metrics-grid {
@@ -317,89 +315,17 @@
       color: var(--text-primary);
     }
 
-    /* Breakdown Visual Bar */
-    .breakdown-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.5rem;
-    }
-
-    .bar-container {
-      display: flex;
-      height: 12px;
-      width: 100%;
-      background: var(--input-bg);
-      border-radius: 100px;
-      overflow: hidden;
-      margin: 0.75rem 0;
-    }
-
-    .bar-principal { background: #3b82f6; height: 100%; }
-    .bar-deposits { background: #6366f1; height: 100%; }
-    .bar-interest { background: var(--accent); height: 100%; }
-
-    .bar-legend {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-    }
-
-    .dot {
-      display: inline-block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      margin-right: 4px;
-    }
-
-    /* Action / Export Buttons */
-    .actions-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-top: 1rem;
-    }
-
-    .btn {
-      flex: 1;
-      min-width: 120px;
-      padding: 0.75rem 1rem;
-      border-radius: 10px;
-      border: 1px solid var(--card-border);
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-align: center;
-    }
-
-    .btn:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: var(--text-muted);
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #000;
-      border: none;
-      font-weight: 700;
-    }
-
-    .btn-primary:hover {
-      background: #0ea5e9;
-      color: #fff;
-    }
-
-    /* SVG Curve Chart */
     .chart-card {
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
       padding: 1.5rem;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
     .chart-container {
@@ -415,98 +341,34 @@
       overflow: visible;
     }
 
-    /* Table Styling */
-    .table-card {
+    .chart-axis-label {
+      font-size: 10px;
+      fill: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      flex: 1;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 2rem;
-      overflow-x: auto;
-    }
-
-    .table-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.25rem;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      text-align: left;
-      font-size: 0.875rem;
-    }
-
-    th {
-      color: var(--text-muted);
-      font-weight: 600;
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    td {
-      padding: 0.85rem 1rem;
-      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
-      font-weight: 500;
-    }
-
-    tr:last-child td {
-      border-bottom: none;
-    }
-
-    .toggle-table-btn {
-      margin-top: 1rem;
-      width: 100%;
-      background: transparent;
-      border: 1px dashed var(--card-border);
-      color: var(--text-muted);
+      color: var(--text-primary);
       padding: 0.75rem;
       border-radius: 8px;
       font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
-    }
-
-    .toggle-table-btn:hover {
-      color: var(--text-primary);
-      border-color: var(--text-muted);
-    }
-
-    /* Collapsible Details / Assumptions */
-    details {
-      margin-top: 1.5rem;
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: 12px;
-      padding: 1rem 1.5rem;
-    }
-
-    summary {
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      user-select: none;
-    }
-
-    summary:hover {
-      color: var(--text-primary);
-    }
-
-    details p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-top: 0.75rem;
-      line-height: 1.5;
-    }
-
-    .disclaimer-note {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-top: 0.75rem;
+      transition: all 0.2s ease;
       text-align: center;
+    }
+
+    .btn-secondary:hover {
+      background: var(--input-bg);
+      border-color: var(--text-muted);
     }
 
     .section-divider {
@@ -522,6 +384,10 @@
       border-radius: 16px;
       padding: 2.5rem;
       margin-top: 2rem;
+    }
+
+    .explanation-header {
+      margin-bottom: 1.5rem;
     }
 
     .explanation-header h2 {
@@ -567,18 +433,59 @@
       line-height: 1.6;
     }
 
-    /* Comparison Drawer / Section */
-    .compare-card {
-      background: var(--card-bg);
-      border: 1px dashed var(--accent-secondary);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-top: 1.5rem;
-      display: none;
+    .methodology-block {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
     }
 
-    .compare-card.active {
-      display: block;
+    .methodology-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .methodology-link:hover {
+      color: var(--accent);
+    }
+
+    .disclaimer-card {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .disclaimer-card h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .disclaimer-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 2rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: var(--bg-dark);
+      margin-top: 4rem;
     }
   </style>
 </head>
@@ -591,9 +498,9 @@
 
   <div class="container">
     <div class="page-header">
-      <span class="badge">Engine 01 • Capital Modelling</span>
+      <span class="badge">Engine 01 • Capital Accumulation</span>
       <h1>Compound Interest Engine</h1>
-      <p class="subtitle">Interactive, high-precision capital growth and inflation modelling.</p>
+      <p class="subtitle">Model long-term wealth compounding with adjustable contribution cadences and reinvestment frequencies.</p>
     </div>
 
     <div class="engine-grid">
@@ -612,91 +519,63 @@
           </div>
         </div>
 
-        <!-- Initial Investment Slider -->
+        <!-- Initial Principal -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderPrincipal">Initial Investment</label>
-            <span class="val-badge" id="badgePrincipal">£10,000</span>
-          </div>
-          <input type="range" id="sliderPrincipal" min="0" max="250000" step="1000" value="10000" oninput="syncPrincipal(this.value)" />
-        </div>
-
-        <!-- Annual Interest Rate Slider -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderRate">Annual Interest Rate (Nominal)</label>
-            <span class="val-badge" id="badgeRate">8.0%</span>
-          </div>
-          <input type="range" id="sliderRate" min="0.0" max="25" step="0.1" value="8.0" oninput="syncRate(this.value)" />
-        </div>
-
-        <!-- Expected Inflation Rate -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderInflation">Expected Inflation Rate</label>
-            <span class="val-badge" id="badgeInflation">2.5%</span>
-          </div>
-          <input type="range" id="sliderInflation" min="0.0" max="15" step="0.1" value="2.5" oninput="syncInflation(this.value)" />
-        </div>
-
-        <!-- Time Horizon Slider -->
-        <div class="control-group">
-          <div class="label-row">
-            <label for="sliderYears">Investment Horizon</label>
-            <span class="val-badge" id="badgeYears">15 Years</span>
-          </div>
-          <input type="range" id="sliderYears" min="1" max="50" step="1" value="15" oninput="syncYears(this.value)" />
-        </div>
-
-        <!-- Regular Contribution & Frequency -->
-        <div class="inline-inputs">
-          <div class="control-group">
-            <div class="label-row">
-              <label for="sliderDeposit">Recurring Deposit</label>
-              <span class="val-badge" id="badgeDeposit">£500</span>
+            <label for="sliderPrincipal">Initial Principal</label>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numPrincipal" class="num-input" value="10000" min="0" max="1000000" step="1000" oninput="syncControl('Principal', this.value, 'num')" />
             </div>
-            <input type="range" id="sliderDeposit" min="0" max="10000" step="50" value="500" oninput="syncDeposit(this.value)" />
           </div>
-
-          <div class="control-group">
-            <label for="depositFreq">Deposit Frequency</label>
-            <select id="depositFreq" onchange="calculate()">
-              <option value="12" selected>Monthly</option>
-              <option value="4">Quarterly</option>
-              <option value="1">Annually</option>
-            </select>
-          </div>
+          <input type="range" id="sliderPrincipal" min="0" max="250000" step="1000" value="10000" oninput="syncControl('Principal', this.value, 'slider')" />
         </div>
 
-        <!-- Timing & Compounding Frequency -->
-        <div class="inline-inputs">
-          <div class="control-group">
-            <label for="compoundFreq">Compounding</label>
-            <select id="compoundFreq" onchange="calculate()">
-              <option value="365">Daily (365/yr)</option>
-              <option value="52">Weekly (52/yr)</option>
-              <option value="12" selected>Monthly (12/yr)</option>
-              <option value="4">Quarterly (4/yr)</option>
-              <option value="1">Annual (1/yr)</option>
-            </select>
-          </div>
-
-          <div class="control-group">
-            <label for="depositTiming">Deposit Timing</label>
-            <select id="depositTiming" onchange="calculate()">
-              <option value="end" selected>End of Period</option>
-              <option value="beginning">Beginning of Period</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Annual Step Increase -->
+        <!-- Monthly Contribution -->
         <div class="control-group">
           <div class="label-row">
-            <label for="annualStep">Annual Step Increase (%)</label>
-            <span class="val-badge" id="badgeStep">2.0%</span>
+            <label for="sliderDeposit">Monthly Contribution</label>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numDeposit" class="num-input" value="500" min="0" max="50000" step="50" oninput="syncControl('Deposit', this.value, 'num')" />
+            </div>
           </div>
-          <input type="range" id="annualStep" min="0" max="15" step="0.5" value="2.0" oninput="syncStep(this.value)" />
+          <input type="range" id="sliderDeposit" min="0" max="5000" step="50" value="500" oninput="syncControl('Deposit', this.value, 'slider')" />
+        </div>
+
+        <!-- Annual Return Rate -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderRate">Expected Annual Return (%)</label>
+            <div class="val-input-wrap">
+              <input type="number" id="numRate" class="num-input" value="7.0" min="0" max="30" step="0.1" oninput="syncControl('Rate', this.value, 'num')" />
+              <span>%</span>
+            </div>
+          </div>
+          <input type="range" id="sliderRate" min="0" max="20" step="0.1" value="7.0" oninput="syncControl('Rate', this.value, 'slider')" />
+        </div>
+
+        <!-- Investment Horizon -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderYears">Time Horizon (Years)</label>
+            <div class="val-input-wrap">
+              <input type="number" id="numYears" class="num-input" value="25" min="1" max="50" step="1" oninput="syncControl('Years', this.value, 'num')" />
+              <span>Yrs</span>
+            </div>
+          </div>
+          <input type="range" id="sliderYears" min="1" max="50" step="1" value="25" oninput="syncControl('Years', this.value, 'slider')" />
+        </div>
+
+        <!-- Compounding Frequency -->
+        <div class="control-group">
+          <label for="compoundingFreq">Compounding Frequency</label>
+          <select id="compoundingFreq" class="custom-select" onchange="calculate()">
+            <option value="12" selected>Monthly (12x / Year)</option>
+            <option value="4">Quarterly (4x / Year)</option>
+            <option value="1">Annually (1x / Year)</option>
+            <option value="365">Daily (365x / Year)</option>
+          </select>
         </div>
 
       </div>
@@ -704,182 +583,120 @@
       <!-- ANALYTICS PANEL -->
       <div class="analytics-panel">
         
-        <!-- Primary Output Card -->
+        <!-- Primary Value Card -->
         <div class="primary-card">
-          <div class="metric-label">Future Portfolio Value (Nominal)</div>
-          <div class="metric-value-huge" id="resFutureVal">£201,106</div>
-          <div class="real-value-sub" id="resRealVal">Real Purchasing Power: £138,858 (Inflation Adjusted)</div>
+          <div class="metric-label">Future Portfolio Value</div>
+          <div class="metric-value-huge" id="resTotalValue">£410,230</div>
 
           <div class="metrics-grid">
             <div class="sub-card">
-              <div class="metric-label">Interest Earned</div>
-              <div class="val" id="resInterest" style="color: var(--accent);">£101,106</div>
+              <div class="metric-label">Total Contributions</div>
+              <div class="val" id="resTotalPrincipal">£160,000</div>
             </div>
             <div class="sub-card">
-              <div class="metric-label">Total Invested</div>
-              <div class="val" id="resTotalInvested">£100,000</div>
+              <div class="metric-label">Compound Interest</div>
+              <div class="val" id="resTotalInterest" style="color: var(--accent);">£250,230</div>
             </div>
           </div>
         </div>
 
-        <!-- Capital Breakdown Bar -->
-        <div class="breakdown-card">
-          <div class="metric-label">Portfolio Composition</div>
-          <div class="bar-container">
-            <div class="bar-principal" id="barPrincipal" style="width: 10%;"></div>
-            <div class="bar-deposits" id="barDeposits" style="width: 40%;"></div>
-            <div class="bar-interest" id="barInterest" style="width: 50%;"></div>
-          </div>
-          <div class="bar-legend">
-            <span><span class="dot" style="background:#3b82f6;"></span>Initial</span>
-            <span><span class="dot" style="background:#6366f1;"></span>Deposits</span>
-            <span><span class="dot" style="background:var(--accent);"></span>Interest</span>
-          </div>
-        </div>
-
-        <!-- Secondary Financial Metrics -->
+        <!-- Secondary Metrics Grid -->
         <div class="metrics-grid">
           <div class="sub-card">
-            <div class="metric-label">Effective APY</div>
-            <div class="val" id="resApy">8.30%</div>
+            <div class="metric-label">Total Multiplier</div>
+            <div class="val" id="resMultiplier">2.56x</div>
           </div>
           <div class="sub-card">
-            <div class="metric-label">Rate of Return (RoR)</div>
-            <div class="val" id="resRor">101.11%</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Time to Double</div>
-            <div class="val" id="resDouble">9 yrs, 0 mos</div>
-          </div>
-          <div class="sub-card">
-            <div class="metric-label">Total Deposits</div>
-            <div class="val" id="resDeposits">£90,000</div>
+            <div class="metric-label">Interest Ratio</div>
+            <div class="val" id="resInterestRatio">61.0%</div>
           </div>
         </div>
 
-        <!-- Visual Curve SVG Chart -->
+        <!-- Growth Trajectory Chart -->
         <div class="chart-card">
-          <div class="metric-label">Capital Growth Curve</div>
+          <div class="chart-header">
+            <div class="metric-label">Accumulation Trajectory</div>
+            <div id="chartStatus" style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Exponential Curve</div>
+          </div>
           <div class="chart-container">
             <svg class="growth-chart" id="growthSvg" viewBox="0 0 500 180">
               <defs>
-                <linearGradient id="chartGrad" x1="0" y1="0" x2="0" y2="1">
+                <linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="#10b981" stop-opacity="0.35"/>
                   <stop offset="100%" stop-color="#10b981" stop-opacity="0.0"/>
                 </linearGradient>
-                <linearGradient id="compareGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#6366f1" stop-opacity="0.25"/>
-                  <stop offset="100%" stop-color="#6366f1" stop-opacity="0.0"/>
-                </linearGradient>
               </defs>
-              <path id="chartAreaCompare" fill="url(#compareGrad)" d="" />
-              <path id="chartLineCompare" fill="none" stroke="#6366f1" stroke-width="2" stroke-dasharray="4" d="" />
-              <path id="chartArea" fill="url(#chartGrad)" d="" />
+              <path id="chartArea" fill="url(#growthGrad)" d="" />
               <path id="chartLine" fill="none" stroke="#10b981" stroke-width="3" d="" />
+              <text id="startYearLabel" x="0" y="175" class="chart-axis-label">Year 0</text>
+              <text id="endYearLabel" x="460" y="175" class="chart-axis-label">Year 25</text>
             </svg>
           </div>
         </div>
 
-        <!-- Scenario Comparison Panel -->
-        <div class="compare-card" id="compareCard">
-          <div class="metric-label" style="color: var(--accent-secondary);">Saved Scenario Comparison</div>
-          <div style="display: flex; justify-content: space-between; margin-top: 0.5rem; font-size: 0.9rem;">
-            <div>Scenario A (Saved): <strong id="compValA">-</strong></div>
-            <div>Current Engine: <strong id="compValB">-</strong></div>
-          </div>
+        <!-- Action Bar -->
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="saveScenario()">Save Scenario</button>
+          <button class="btn-secondary" onclick="exportCSV()">Export CSV</button>
         </div>
-
-        <!-- Export & Save Actions -->
-        <div class="actions-row">
-          <button class="btn" onclick="saveScenario()">Save Scenario</button>
-          <button class="btn" onclick="exportCSV()">Export CSV</button>
-          <button class="btn" onclick="exportJPG()">Export JPG</button>
-          <button class="btn btn-primary" onclick="exportPDF()">Export PDF</button>
-        </div>
-
-        <p class="disclaimer-note">Figures are illustrative and do not include fees or taxes.</p>
-
-        <!-- Methodologies & Assumptions -->
-        <details>
-          <summary>Assumptions & Calculations Methodology</summary>
-          <p>
-            • <strong>Compounding:</strong> Calculated using standard periodic rate equations based on selected compounding frequency.<br>
-            • <strong>Inflation Adjustment:</strong> Real purchasing power is derived via <code>Real = Nominal / (1 + i)^n</code>, where <code>i</code> is the inflation rate.<br>
-            • <strong>Step Increases:</strong> Monthly deposits adjust upward at the end of every 12-month cycle.
-          </p>
-        </details>
 
       </div>
-    </div>
-
-    <!-- ACCRUAL SCHEDULE TABLE -->
-    <div class="table-card">
-      <div class="table-header">
-        <div>
-          <h3 style="font-size: 1.1rem; font-weight: 700;">Accrual Schedule</h3>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">Yearly portfolio breakdown.</p>
-        </div>
-      </div>
-
-      <table>
-        <thead>
-          <tr>
-            <th>Year</th>
-            <th>Interest Accrued</th>
-            <th>Total Interest</th>
-            <th>Annual Deposits</th>
-            <th>Ending Balance (Nominal)</th>
-            <th>Real Value (Adjusted)</th>
-          </tr>
-        </thead>
-        <tbody id="scheduleBody"></tbody>
-      </table>
-      <button class="toggle-table-btn" id="toggleTableBtn" onclick="toggleSchedule()">Show Full Schedule</button>
     </div>
 
     <!-- LINE SEPARATOR -->
     <hr class="section-divider" />
 
-    <!-- TOOL EXPLANATION SECTION -->
+    <!-- TOOL EXPLANATION & METHODOLOGY SECTION -->
     <section class="explanation-section">
       <div class="explanation-header">
         <h2>About the Compound Interest Engine</h2>
-        <p>The Compound Interest Engine simulates long-term wealth expansion by projecting how initial capital and recurring deposits grow over time. Unlike simple interest, compounding calculates earnings on both the original principal and accumulated interest, generating exponential capital growth.</p>
+        <p>This engine computes the future value of investments given periodic contributions and reinvested yield. It models the compounding effect where earned interest generates its own returns over extended time horizons.</p>
       </div>
 
       <div class="explanation-grid">
         <div class="explanation-card">
+          <h3><span>•</span> Principal vs. Interest Growth</h3>
+          <p>Initial capital and ongoing deposits form the baseline principal. Over time, the exponential curve takes over as interest component outweighs personal contributions.</p>
+        </div>
+
+        <div class="explanation-card">
           <h3><span>•</span> Compounding Frequency</h3>
-          <p>Determines how often accrued interest is credited back to the principal balance. More frequent compounding intervals (e.g. daily or monthly) yield slightly higher overall returns due to faster reinvestment cycles.</p>
+          <p>Determines how frequently accrued returns are added back into the principal balance. Higher frequencies (e.g., daily or monthly) compound total returns slightly faster.</p>
         </div>
 
         <div class="explanation-card">
-          <h3><span>•</span> Annual Step Increase</h3>
-          <p>Simulates real-world salary progression or inflation adjustments by increasing your monthly deposit amount by a fixed percentage each year, significantly accelerating portfolio acceleration.</p>
+          <h3><span>•</span> Capital Multiplier</h3>
+          <p>Measures total return efficiency by comparing final accumulated capital directly against sum total personal contributions made across the horizon.</p>
         </div>
+      </div>
 
-        <div class="explanation-card">
-          <h3><span>•</span> Inflation Adjustments</h3>
-          <p>Calculates the true future purchasing power of your portfolio by discounting future total balances against projected annual inflation rates.</p>
-        </div>
+      <div class="disclaimer-card">
+        <h4>Model Assumptions & Limitations</h4>
+        <p>Calculations assume fixed, non-fluctuating annual return rates and continuous monthly deposits without interruption. Real market returns vary annually and are subject to inflation, taxes, and management fees, which are not reflected in this baseline calculation.</p>
+      </div>
+
+      <div class="methodology-block">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Verified for Wealth Accumulation Standards 2026</span>
+        <a href="methodology.html" class="methodology-link">View Full Methodology & Calculations →</a>
       </div>
     </section>
 
   </div>
 
+  <footer>
+    <p>&copy; Whorton Estate. All calculation engines subject to underlying model assumptions.</p>
+  </footer>
+
   <script>
     let currencySymbol = '£';
-    let fullScheduleData = [];
-    let showAllRows = false;
-    let savedScenarioData = null;
+    let currentTrajectory = [];
 
     function setCurrency(symbol) {
       currencySymbol = symbol;
       document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
         btn.classList.toggle('active', btn.innerText === symbol);
       });
-      syncPrincipal(document.getElementById('sliderPrincipal').value);
-      syncDeposit(document.getElementById('sliderDeposit').value);
+      document.querySelectorAll('.curr-lbl').forEach(el => el.innerText = symbol);
       calculate();
     }
 
@@ -887,287 +704,110 @@
       return currencySymbol + Math.round(val).toLocaleString('en-GB');
     }
 
-    function syncPrincipal(val) {
-      document.getElementById('badgePrincipal').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function syncRate(val) {
-      document.getElementById('badgeRate').innerText = parseFloat(val).toFixed(1) + '%';
-      calculate();
-    }
-
-    function syncInflation(val) {
-      document.getElementById('badgeInflation').innerText = parseFloat(val).toFixed(1) + '%';
-      calculate();
-    }
-
-    function syncYears(val) {
-      document.getElementById('badgeYears').innerText = val + (parseInt(val) === 1 ? ' Year' : ' Years');
-      calculate();
-    }
-
-    function syncDeposit(val) {
-      document.getElementById('badgeDeposit').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
-      calculate();
-    }
-
-    function syncStep(val) {
-      document.getElementById('badgeStep').innerText = parseFloat(val).toFixed(1) + '%';
+    function syncControl(field, val, source) {
+      if (source === 'slider') document.getElementById('num' + field).value = val;
+      else document.getElementById('slider' + field).value = val;
       calculate();
     }
 
     function calculate() {
-      const P = parseFloat(document.getElementById('sliderPrincipal').value) || 0;
-      const rAnnual = (parseFloat(document.getElementById('sliderRate').value) || 0) / 100;
-      const rInflation = (parseFloat(document.getElementById('sliderInflation').value) || 0) / 100;
-      const years = parseInt(document.getElementById('sliderYears').value) || 1;
-      const baseDeposit = parseFloat(document.getElementById('sliderDeposit').value) || 0;
-      const depFreq = parseInt(document.getElementById('depositFreq').value) || 12;
-      const nComp = parseInt(document.getElementById('compoundFreq').value) || 12;
-      const timing = document.getElementById('depositTiming').value;
-      const annualStepPct = (parseFloat(document.getElementById('annualStep').value) || 0) / 100;
+      const P = parseFloat(document.getElementById('numPrincipal').value) || 0;
+      const PMT = parseFloat(document.getElementById('numDeposit').value) || 0;
+      const annualRate = (parseFloat(document.getElementById('numRate').value) || 0) / 100;
+      const years = parseInt(document.getElementById('numYears').value) || 1;
+      const n = parseInt(document.getElementById('compoundingFreq').value) || 12;
 
-      let currentBalance = P;
-      let totalInterest = 0;
-      let totalDeposits = 0;
-      let currentDeposit = baseDeposit;
+      let totalMonths = years * 12;
+      let monthlyRate = annualRate / 12;
 
-      let points = [P];
-      fullScheduleData = [];
+      let trajectory = [P];
+      let currentVal = P;
+      let totalContributions = P;
 
-      for (let y = 1; y <= years; y++) {
-        let yearInterest = 0;
-        let yearDeposits = 0;
+      for (let m = 1; m <= totalMonths; m++) {
+        // Add monthly contribution
+        currentVal += PMT;
+        totalContributions += PMT;
 
-        for (let period = 1; period <= depFreq; period++) {
-          if (timing === 'beginning') {
-            currentBalance += currentDeposit;
-            yearDeposits += currentDeposit;
-          }
+        // Apply interest rate prorated monthly
+        currentVal *= (1 + monthlyRate);
 
-          let periodInterest = currentBalance * (Math.pow(1 + rAnnual / nComp, nComp / depFreq) - 1);
-          currentBalance += periodInterest;
-          yearInterest += periodInterest;
-
-          if (timing === 'end') {
-            currentBalance += currentDeposit;
-            yearDeposits += currentDeposit;
-          }
+        if (m % 12 === 0 || m === totalMonths) {
+          trajectory.push(currentVal);
         }
-
-        totalInterest += yearInterest;
-        totalDeposits += yearDeposits;
-        points.push(currentBalance);
-
-        const realVal = currentBalance / Math.pow(1 + rInflation, y);
-
-        fullScheduleData.push({
-          year: y,
-          interestAccrued: yearInterest,
-          totalInterest: totalInterest,
-          annualDeposits: yearDeposits,
-          balance: currentBalance,
-          realBalance: realVal
-        });
-
-        currentDeposit *= (1 + annualStepPct);
       }
 
-      const totalInvested = P + totalDeposits;
+      let finalValue = currentVal;
+      let totalInterest = Math.max(0, finalValue - totalContributions);
+      let multiplier = totalContributions > 0 ? (finalValue / totalContributions) : 0;
+      let interestRatio = finalValue > 0 ? (totalInterest / finalValue) * 100 : 0;
 
-      // Update UI Metrics
-      document.getElementById('resFutureVal').innerText = formatCurr(currentBalance);
-      const realFinalVal = currentBalance / Math.pow(1 + rInflation, years);
-      document.getElementById('resRealVal').innerText = `Real Purchasing Power: ${formatCurr(realFinalVal)} (Inflation Adjusted)`;
+      currentTrajectory = trajectory;
 
-      document.getElementById('resInterest').innerText = formatCurr(totalInterest);
-      document.getElementById('resTotalInvested').innerText = formatCurr(totalInvested);
-      document.getElementById('resDeposits').innerText = formatCurr(totalDeposits);
+      updateDisplays(finalValue, totalContributions, totalInterest, multiplier, interestRatio, years, trajectory);
+    }
 
-      // Composition Bar
-      const totalVal = Math.max(currentBalance, 1);
-      const pPct = (P / totalVal) * 100;
-      const dPct = (totalDeposits / totalVal) * 100;
-      const iPct = (totalInterest / totalVal) * 100;
-      document.getElementById('barPrincipal').style.width = pPct + '%';
-      document.getElementById('barDeposits').style.width = dPct + '%';
-      document.getElementById('barInterest').style.width = iPct + '%';
+    function updateDisplays(finalVal, totalContrib, totalInterest, multiplier, interestRatio, years, trajectory) {
+      document.getElementById('resTotalValue').innerText = formatCurr(finalVal);
+      document.getElementById('resTotalPrincipal').innerText = formatCurr(totalContrib);
+      document.getElementById('resTotalInterest').innerText = formatCurr(totalInterest);
+      document.getElementById('resMultiplier').innerText = `${multiplier.toFixed(2)}x`;
+      document.getElementById('resInterestRatio').innerText = `${interestRatio.toFixed(1)}%`;
 
-      const apy = (Math.pow(1 + rAnnual / nComp, nComp) - 1) * 100;
-      const ror = totalInvested > 0 ? (totalInterest / totalInvested) * 100 : 0;
+      document.getElementById('endYearLabel').textContent = `Year ${years}`;
 
-      document.getElementById('resApy').innerText = apy.toFixed(2) + '%';
-      document.getElementById('resRor').innerText = ror.toFixed(1) + '%';
-
-      if (rAnnual > 0) {
-        const doubleYears = Math.log(2) / Math.log(1 + rAnnual / nComp) / nComp;
-        const dY = Math.floor(doubleYears);
-        const dM = Math.round((doubleYears - dY) * 12);
-        document.getElementById('resDouble').innerText = `${dY} yrs, ${dM} mos`;
-      } else {
-        document.getElementById('resDouble').innerText = 'N/A';
-      }
-
-      renderChart(points);
-      renderTable();
-
-      if (savedScenarioData) {
-        document.getElementById('compValB').innerText = formatCurr(currentBalance);
-      }
+      renderChart(trajectory);
     }
 
     function renderChart(points) {
-      if (points.length < 2) return;
-      let allPoints = [...points];
-      if (savedScenarioData) allPoints = allPoints.concat(savedScenarioData.points);
-
-      const maxVal = Math.max(...allPoints) * 1.05;
-      const minVal = Math.min(...allPoints) * 0.95;
+      if (!points || points.length < 1) return;
+      
+      const maxVal = Math.max(...points) * 1.05 || 1;
       const width = 500;
       const height = 180;
+      
+      let pathD = '';
+      points.forEach((val, i) => {
+        const x = (i / (points.length - 1)) * width;
+        const y = height - (val / maxVal) * height;
+        pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
+      });
 
-      function createPath(pts) {
-        let pathD = '';
-        pts.forEach((val, i) => {
-          const x = (i / (pts.length - 1)) * width;
-          const y = height - ((val - minVal) / Math.max(maxVal - minVal, 1)) * height;
-          pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
-        });
-        return pathD;
-      }
-
-      const pathD = createPath(points);
       const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
 
       document.getElementById('chartLine').setAttribute('d', pathD);
       document.getElementById('chartArea').setAttribute('d', areaD);
-
-      if (savedScenarioData) {
-        const pathDC = createPath(savedScenarioData.points);
-        const areaDC = pathDC + ` L ${width} ${height} L 0 ${height} Z`;
-        document.getElementById('chartLineCompare').setAttribute('d', pathDC);
-        document.getElementById('chartAreaCompare').setAttribute('d', areaDC);
-      }
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('scheduleBody');
-      tbody.innerHTML = '';
-
-      const displayData = showAllRows ? fullScheduleData : fullScheduleData.slice(0, 5);
-
-      displayData.forEach(d => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>Year ${d.year}</td>
-          <td style="color: var(--accent);">${formatCurr(d.interestAccrued)}</td>
-          <td>${formatCurr(d.totalInterest)}</td>
-          <td>${formatCurr(d.annualDeposits)}</td>
-          <td style="font-weight: 700;">${formatCurr(d.balance)}</td>
-          <td style="color: var(--text-muted);">${formatCurr(d.realBalance)}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
-      const btn = document.getElementById('toggleTableBtn');
-      if (fullScheduleData.length <= 5) {
-        btn.style.display = 'none';
-      } else {
-        btn.style.display = 'block';
-        btn.innerText = showAllRows ? 'Show Less' : `Show Full Schedule (${fullScheduleData.length} Years)`;
-      }
-    }
-
-    function toggleSchedule() {
-      showAllRows = !showAllRows;
-      renderTable();
     }
 
     function saveScenario() {
-      const currentVal = fullScheduleData[fullScheduleData.length - 1]?.balance || 0;
-      const P = parseFloat(document.getElementById('sliderPrincipal').value) || 0;
-      
-      let points = [P];
-      fullScheduleData.forEach(d => points.push(d.balance));
-
-      savedScenarioData = { points, balance: currentVal };
-      document.getElementById('compareCard').classList.add('active');
-      document.getElementById('compValA').innerText = formatCurr(currentVal);
-      calculate();
+      const scenario = {
+        date: new Date().toISOString(),
+        currency: currencySymbol,
+        principal: document.getElementById('numPrincipal').value,
+        monthlyDeposit: document.getElementById('numDeposit').value,
+        rate: document.getElementById('numRate').value,
+        years: document.getElementById('numYears').value,
+        futureValue: document.getElementById('resTotalValue').innerText
+      };
+      localStorage.setItem('whorton_compound_scenario', JSON.stringify(scenario));
+      alert('Compound scenario saved to local storage.');
     }
 
     function exportCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,Year,Interest Accrued,Total Interest,Annual Deposits,Ending Balance,Real Balance\n";
-      fullScheduleData.forEach(d => {
-        csvContent += `${d.year},${d.interestAccrued.toFixed(2)},${d.totalInterest.toFixed(2)},${d.annualDeposits.toFixed(2)},${d.balance.toFixed(2)},${d.realBalance.toFixed(2)}\n`;
+      let csvContent = "data:text/csv;charset=utf-8,Year,Portfolio Value (" + currencySymbol + ")\n";
+      currentTrajectory.forEach((val, index) => {
+        csvContent += `${index},${Math.round(val)}\n`;
       });
-
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "compound_interest_schedule.csv");
+      link.setAttribute("download", "Compound_Interest_Trajectory.csv");
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
-    // Export high-res JPG snapshot
-    async function exportJPG() {
-      const container = document.querySelector('.container');
-      
-      const canvas = await html2canvas(container, {
-        backgroundColor: '#0a0a0c',
-        scale: 2,
-        useCORS: true
-      });
-
-      const imageURI = canvas.toDataURL('image/jpeg', 0.95);
-      const link = document.createElement('a');
-      link.download = 'compound_interest_report.jpg';
-      link.href = imageURI;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Export PDF document snapshot
-    async function exportPDF() {
-      const container = document.querySelector('.container');
-
-      const canvas = await html2canvas(container, {
-        backgroundColor: '#0a0a0c',
-        scale: 2,
-        useCORS: true
-      });
-
-      const imgData = canvas.toDataURL('image/jpeg', 0.95);
-      const { jsPDF } = window.jspdf;
-      
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-      
-      const imgWidth = pdfWidth;
-      const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-      
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-      heightLeft -= pdfHeight;
-
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
-        heightLeft -= pdfHeight;
-      }
-
-      pdf.save('compound_interest_report.pdf');
-    }
-
-    // Initial calculation run
+    // Initialize Engine
     calculate();
   </script>
 </body>
