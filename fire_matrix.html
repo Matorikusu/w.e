@@ -149,14 +149,36 @@
       letter-spacing: 0.02em;
     }
 
-    .val-badge {
-      font-size: 0.9rem;
-      font-weight: 700;
-      color: var(--text-primary);
+    .val-input-wrap {
+      display: flex;
+      align-items: center;
       background: var(--input-bg);
-      padding: 0.25rem 0.65rem;
-      border-radius: 6px;
       border: 1px solid var(--card-border);
+      border-radius: 6px;
+      padding: 0.2rem 0.5rem;
+    }
+
+    .val-input-wrap span {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .num-input {
+      background: transparent;
+      border: none;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      font-weight: 700;
+      width: 90px;
+      text-align: right;
+      outline: none;
+    }
+
+    .num-input::-webkit-inner-spin-button,
+    .num-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .segmented-control {
@@ -187,6 +209,30 @@
       color: var(--text-primary);
       border: 1px solid var(--card-border);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .preset-row {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .preset-btn {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 0.4rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .preset-btn:hover {
+      color: var(--text-primary);
+      border-color: var(--text-muted);
     }
 
     input[type="range"] {
@@ -286,6 +332,12 @@
       padding: 1.5rem;
     }
 
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
     .chart-container {
       width: 100%;
       height: 200px;
@@ -297,6 +349,36 @@
       width: 100%;
       height: 100%;
       overflow: visible;
+    }
+
+    .chart-axis-label {
+      font-size: 10px;
+      fill: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .btn-secondary {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      color: var(--text-primary);
+      padding: 0.75rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: center;
+    }
+
+    .btn-secondary:hover {
+      background: var(--input-bg);
+      border-color: var(--text-muted);
     }
 
     .section-divider {
@@ -360,6 +442,61 @@
       color: var(--text-muted);
       line-height: 1.6;
     }
+
+    .methodology-block {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .methodology-link {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .methodology-link:hover {
+      color: var(--accent);
+    }
+
+    .disclaimer-card {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .disclaimer-card h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .disclaimer-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 2rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: var(--bg-dark);
+      margin-top: 4rem;
+    }
   </style>
 </head>
 <body>
@@ -371,9 +508,9 @@
 
   <div class="container">
     <div class="page-header">
-      <span class="badge">Engine 02 • Autonomy Matrix</span>
-      <h1>FIRE Independence Engine</h1>
-      <p class="subtitle">Calculate your target net worth milestone and timeline to complete financial autonomy.</p>
+      <span class="badge">Engine 02 • Capital & Wealth</span>
+      <h1>FIRE Matrix</h1>
+      <p class="subtitle">Calculate your target net-worth milestone and timeline to complete financial autonomy.</p>
     </div>
 
     <div class="engine-grid">
@@ -392,58 +529,92 @@
           </div>
         </div>
 
-        <!-- Current Age Slider -->
+        <!-- Current Age -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderAge">Current Age</label>
-            <span class="val-badge" id="badgeAge">30</span>
+            <div class="val-input-wrap">
+              <input type="number" id="numAge" class="num-input" value="30" min="18" max="70" oninput="syncAge(this.value, 'num')" />
+            </div>
           </div>
-          <input type="range" id="sliderAge" min="18" max="70" step="1" value="30" oninput="syncAge(this.value)" />
+          <input type="range" id="sliderAge" min="18" max="70" step="1" value="30" oninput="syncAge(this.value, 'slider')" />
         </div>
 
-        <!-- Annual Expenses Slider -->
+        <!-- Gross Annual Income -->
         <div class="control-group">
           <div class="label-row">
-            <label for="sliderExpenses">Annual Expenditure (Target Burn)</label>
-            <span class="val-badge" id="badgeExpenses">£35,000</span>
+            <label for="sliderIncome">Gross Annual Income</label>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numIncome" class="num-input" value="50000" min="10000" max="500000" step="1000" oninput="syncIncome(this.value, 'num')" />
+            </div>
           </div>
-          <input type="range" id="sliderExpenses" min="10000" max="250000" step="2500" value="35000" oninput="syncExpenses(this.value)" />
+          <input type="range" id="sliderIncome" min="10000" max="500000" step="2500" value="50000" oninput="syncIncome(this.value, 'slider')" />
         </div>
 
-        <!-- Current Net Worth Slider -->
+        <!-- Annual Expenses -->
+        <div class="control-group">
+          <div class="label-row">
+            <label for="sliderExpenses">Annual Expenses (Target Burn)</label>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numExpenses" class="num-input" value="35000" min="10000" max="250000" step="1000" oninput="syncExpenses(this.value, 'num')" />
+            </div>
+          </div>
+          <input type="range" id="sliderExpenses" min="10000" max="250000" step="2500" value="35000" oninput="syncExpenses(this.value, 'slider')" />
+        </div>
+
+        <!-- Current Net Worth -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderPortfolio">Current Invested Capital</label>
-            <span class="val-badge" id="badgePortfolio">£40,000</span>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numPortfolio" class="num-input" value="40000" min="0" max="2000000" step="5000" oninput="syncPortfolio(this.value, 'num')" />
+            </div>
           </div>
-          <input type="range" id="sliderPortfolio" min="0" max="1000000" step="5000" value="40000" oninput="syncPortfolio(this.value)" />
+          <input type="range" id="sliderPortfolio" min="0" max="1000000" step="5000" value="40000" oninput="syncPortfolio(this.value, 'slider')" />
         </div>
 
-        <!-- Annual Savings Slider -->
+        <!-- Annual Savings -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderSavings">Annual Savings Contribution</label>
-            <span class="val-badge" id="badgeSavings">£15,000</span>
+            <div class="val-input-wrap">
+              <span class="curr-lbl">£</span>
+              <input type="number" id="numSavings" class="num-input" value="15000" min="0" max="200000" step="1000" oninput="syncSavings(this.value, 'num')" />
+            </div>
           </div>
-          <input type="range" id="sliderSavings" min="0" max="200000" step="2500" value="15000" oninput="syncSavings(this.value)" />
+          <input type="range" id="sliderSavings" min="0" max="200000" step="2500" value="15000" oninput="syncSavings(this.value, 'slider')" />
         </div>
 
-        <!-- Safe Withdrawal Rate Slider -->
+        <!-- Safe Withdrawal Rate (SWR) -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderSwr">Safe Withdrawal Rate (SWR)</label>
-            <span class="val-badge" id="badgeSwr">4.0%</span>
+            <div class="val-input-wrap">
+              <input type="number" id="numSwr" class="num-input" value="4.0" min="2.0" max="6.0" step="0.1" oninput="syncSwr(this.value, 'num')" />
+              <span>%</span>
+            </div>
           </div>
-          <input type="range" id="sliderSwr" min="2.5" max="5.0" step="0.1" value="4.0" oninput="syncSwr(this.value)" />
+          <input type="range" id="sliderSwr" min="2.5" max="5.0" step="0.1" value="4.0" oninput="syncSwr(this.value, 'slider')" />
+          <div class="preset-row">
+            <button class="preset-btn" onclick="applySwrPreset(3.25)">Lean (3.25%)</button>
+            <button class="preset-btn" onclick="applySwrPreset(4.0)">Standard (4.0%)</button>
+            <button class="preset-btn" onclick="applySwrPreset(4.5)">Fat (4.5%)</button>
+          </div>
         </div>
 
-        <!-- Expected Investment Return Slider -->
+        <!-- Expected Return -->
         <div class="control-group">
           <div class="label-row">
             <label for="sliderReturn">Expected Real Growth (Post-Inflation)</label>
-            <span class="val-badge" id="badgeReturn">7.0%</span>
+            <div class="val-input-wrap">
+              <input type="number" id="numReturn" class="num-input" value="7.0" min="1.0" max="15.0" step="0.5" oninput="syncReturn(this.value, 'num')" />
+              <span>%</span>
+            </div>
           </div>
-          <input type="range" id="sliderReturn" min="2.0" max="12.0" step="0.5" value="7.0" oninput="syncReturn(this.value)" />
+          <input type="range" id="sliderReturn" min="2.0" max="12.0" step="0.5" value="7.0" oninput="syncReturn(this.value, 'slider')" />
         </div>
 
       </div>
@@ -451,7 +622,7 @@
       <!-- ANALYTICS PANEL -->
       <div class="analytics-panel">
         
-        <!-- Primary FIRE Number Card -->
+        <!-- Primary FIRE Target -->
         <div class="primary-card">
           <div class="metric-label">Target FIRE Net Worth</div>
           <div class="metric-value-huge" id="resFireNumber">£875,000</div>
@@ -463,7 +634,7 @@
             </div>
             <div class="sub-card">
               <div class="metric-label">Autonomy Age</div>
-              <div class="val" id="resFireAge">49 Years Old</div>
+              <div class="val" id="resFireAge">49 Yrs Old</div>
             </div>
           </div>
         </div>
@@ -479,7 +650,7 @@
             <div class="val" id="resMultiplier">25.0x Burn</div>
           </div>
           <div class="sub-card">
-            <div class="metric-label">Monthly Passive Yield</div>
+            <div class="metric-label">Target Monthly Withdrawal</div>
             <div class="val" id="resMonthlyYield">£2,917</div>
           </div>
           <div class="sub-card">
@@ -488,9 +659,12 @@
           </div>
         </div>
 
-        <!-- Visual Trajectory SVG Chart -->
+        <!-- Visual Chart -->
         <div class="chart-card">
-          <div class="metric-label">Autonomy Runway</div>
+          <div class="chart-header">
+            <div class="metric-label">Autonomy Trajectory</div>
+            <div id="chartStatus" style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">In Progress</div>
+          </div>
           <div class="chart-container">
             <svg class="growth-chart" id="growthSvg" viewBox="0 0 500 180">
               <defs>
@@ -500,10 +674,19 @@
                 </linearGradient>
               </defs>
               <line id="targetLine" x1="0" y1="0" x2="500" y2="0" stroke="#a1a1aa" stroke-dasharray="4" stroke-width="1" />
+              <text id="targetLabel" x="5" y="12" class="chart-axis-label">Target</text>
               <path id="chartArea" fill="url(#chartGrad)" d="" />
               <path id="chartLine" fill="none" stroke="#10b981" stroke-width="3" d="" />
+              <text id="startYearLabel" x="0" y="175" class="chart-axis-label">Yr 0</text>
+              <text id="endYearLabel" x="460" y="175" class="chart-axis-label">Yr 18.5</text>
             </svg>
           </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="action-bar">
+          <button class="btn-secondary" onclick="saveScenario()">Save Scenario</button>
+          <button class="btn-secondary" onclick="exportCSV()">Export CSV</button>
         </div>
 
       </div>
@@ -512,32 +695,46 @@
     <!-- LINE SEPARATOR -->
     <hr class="section-divider" />
 
-    <!-- TOOL EXPLANATION SECTION -->
+    <!-- TOOL EXPLANATION & METHODOLOGY SECTION -->
     <section class="explanation-section">
       <div class="explanation-header">
-        <h2>About the FIRE Independence Engine</h2>
-        <p>The FIRE (Financial Independence, Retire Early) Matrix maps out your trajectory to complete financial sovereignty. By balance-matching annual expenditure with target savings contributions and real portfolio yields, it defines the requisite capital baseline needed to sustain ongoing living costs without reliance on conventional earned income.</p>
+        <h2>About the FIRE Matrix</h2>
+        <p>The FIRE (Financial Independence, Retire Early) Matrix models your trajectory to complete financial autonomy. By matching annual expenses against invested portfolio returns and contribution rates, it calculates the net worth required to sustain ongoing living costs without relying on employment income.</p>
       </div>
 
       <div class="explanation-grid">
         <div class="explanation-card">
           <h3><span>•</span> Safe Withdrawal Rate (SWR)</h3>
-          <p>The proportion of accumulated capital drawn down annually. A standard 4.0% SWR assumes an invested portfolio can perpetually support living expenditure through historical compounding returns.</p>
+          <p>The percentage drawn down annually from accumulated portfolio capital. Based on historical capital markets data (such as the Trinity Study), a 4.0% SWR assumes an invested portfolio can perpetually sustain annual withdrawals adjusted for inflation.</p>
         </div>
 
         <div class="explanation-card">
           <h3><span>•</span> Capital Multiplier</h3>
-          <p>Directly derived from the Safe Withdrawal Rate. For example, a 4.0% SWR necessitates a net worth equivalent to 25x annual expenditure (£875,000 portfolio for a £35,000 annual burn).</p>
+          <p>Directly derived as the inverse of the SWR (<code>1 ÷ SWR</code>). A 4.0% SWR requires 25x annual expenditure in invested capital, whereas a conservative 3.25% SWR requires 30.77x annual expenditure.</p>
         </div>
 
         <div class="explanation-card">
-          <h3><span>•</span> Real Post-Inflation Growth</h3>
-          <p>Calculates net returns after accounting for inflation and fund management charges, offering a conservative and realistic representation of real purchasing power growth over time.</p>
+          <h3><span>•</span> Real Return Modeling</h3>
+          <p>Growth rates are calculated using net returns after inflation. This ensures all future portfolio metrics and milestones are expressed in today's real purchasing power terms.</p>
         </div>
+      </div>
+
+      <div class="disclaimer-card">
+        <h4>Model Assumptions & Limitations</h4>
+        <p>This engine assumes constant annual real investment growth and steady contribution rates. It does not model sequence-of-returns risk, fluctuating tax rates, or major life-event expenditure shifts. Results are illustrative and do not constitute financial advice.</p>
+      </div>
+
+      <div class="methodology-block">
+        <span style="font-size: 0.85rem; color: var(--text-muted);">Verified for UK Tax Year 2026/27</span>
+        <a href="methodology.html" class="methodology-link">View Full Methodology & Calculations →</a>
       </div>
     </section>
 
   </div>
+
+  <footer>
+    <p>&copy; Whorton Estate. All calculation engines subject to underlying model assumptions.</p>
+  </footer>
 
   <script>
     let currencySymbol = '£';
@@ -547,9 +744,7 @@
       document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
         btn.classList.toggle('active', btn.innerText === symbol);
       });
-      syncExpenses(document.getElementById('sliderExpenses').value);
-      syncPortfolio(document.getElementById('sliderPortfolio').value);
-      syncSavings(document.getElementById('sliderSavings').value);
+      document.querySelectorAll('.curr-lbl').forEach(el => el.innerText = symbol);
       calculate();
     }
 
@@ -557,85 +752,119 @@
       return currencySymbol + Math.round(val).toLocaleString('en-GB');
     }
 
-    function syncAge(val) {
-      document.getElementById('badgeAge').innerText = val;
+    function syncAge(val, source) {
+      if (source === 'slider') document.getElementById('numAge').value = val;
+      else document.getElementById('sliderAge').value = val;
       calculate();
     }
 
-    function syncExpenses(val) {
-      document.getElementById('badgeExpenses').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
+    function syncIncome(val, source) {
+      if (source === 'slider') document.getElementById('numIncome').value = val;
+      else document.getElementById('sliderIncome').value = val;
       calculate();
     }
 
-    function syncPortfolio(val) {
-      document.getElementById('badgePortfolio').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
+    function syncExpenses(val, source) {
+      if (source === 'slider') document.getElementById('numExpenses').value = val;
+      else document.getElementById('sliderExpenses').value = val;
       calculate();
     }
 
-    function syncSavings(val) {
-      document.getElementById('badgeSavings').innerText = currencySymbol + parseInt(val).toLocaleString('en-GB');
+    function syncPortfolio(val, source) {
+      if (source === 'slider') document.getElementById('numPortfolio').value = val;
+      else document.getElementById('sliderPortfolio').value = val;
       calculate();
     }
 
-    function syncSwr(val) {
-      document.getElementById('badgeSwr').innerText = parseFloat(val).toFixed(1) + '%';
+    function syncSavings(val, source) {
+      if (source === 'slider') document.getElementById('numSavings').value = val;
+      else document.getElementById('sliderSavings').value = val;
       calculate();
     }
 
-    function syncReturn(val) {
-      document.getElementById('badgeReturn').innerText = parseFloat(val).toFixed(1) + '%';
+    function syncSwr(val, source) {
+      if (source === 'slider') document.getElementById('numSwr').value = parseFloat(val).toFixed(1);
+      else document.getElementById('sliderSwr').value = val;
       calculate();
     }
+
+    function applySwrPreset(val) {
+      document.getElementById('numSwr').value = val.toFixed(2);
+      document.getElementById('sliderSwr').value = val;
+      calculate();
+    }
+
+    function syncReturn(val, source) {
+      if (source === 'slider') document.getElementById('numReturn').value = parseFloat(val).toFixed(1);
+      else document.getElementById('sliderReturn').value = val;
+      calculate();
+    }
+
+    let currentTrajectory = [];
 
     function calculate() {
-      const currentAge = parseInt(document.getElementById('sliderAge').value) || 30;
-      const annualExpenses = parseFloat(document.getElementById('sliderExpenses').value) || 35000;
-      let portfolio = parseFloat(document.getElementById('sliderPortfolio').value) || 0;
-      const annualSavings = parseFloat(document.getElementById('sliderSavings').value) || 15000;
-      const swr = (parseFloat(document.getElementById('sliderSwr').value) || 4.0) / 100;
-      const realReturn = (parseFloat(document.getElementById('sliderReturn').value) || 7.0) / 100;
+      const currentAge = parseFloat(document.getElementById('numAge').value) || 30;
+      const income = parseFloat(document.getElementById('numIncome').value) || 0;
+      const annualExpenses = parseFloat(document.getElementById('numExpenses').value) || 35000;
+      let portfolio = parseFloat(document.getElementById('numPortfolio').value) || 0;
+      const annualSavings = parseFloat(document.getElementById('numSavings').value) || 15000;
+      const swr = (parseFloat(document.getElementById('numSwr').value) || 4.0) / 100;
+      const realReturn = (parseFloat(document.getElementById('numReturn').value) || 7.0) / 100;
 
-      const fireTarget = annualExpenses / swr;
-      const multiplier = 1 / swr;
+      const fireTarget = swr > 0 ? annualExpenses / swr : 0;
+      const multiplier = swr > 0 ? 1 / swr : 0;
 
       let years = 0;
-      let trajectory = [portfolio];
+      currentTrajectory = [portfolio];
       const maxYearsLimit = 60;
 
-      while (portfolio < fireTarget && years < maxYearsLimit) {
-        portfolio = (portfolio * (1 + realReturn)) + annualSavings;
-        years++;
-        trajectory.push(portfolio);
+      if (portfolio >= fireTarget) {
+        years = 0;
+        document.getElementById('chartStatus').innerText = 'FIRE Milestone Achieved';
+      } else {
+        document.getElementById('chartStatus').innerText = 'In Progress';
+        while (portfolio < fireTarget && years < maxYearsLimit) {
+          portfolio = (portfolio * (1 + realReturn)) + annualSavings;
+          years++;
+          currentTrajectory.push(portfolio);
+        }
       }
 
-      const totalIncomeEstimate = annualExpenses + annualSavings;
-      const savingsRate = totalIncomeEstimate > 0 ? (annualSavings / totalIncomeEstimate) * 100 : 0;
-      const initialPortfolio = parseFloat(document.getElementById('sliderPortfolio').value) || 0;
-      const progress = Math.min(100, (initialPortfolio / fireTarget) * 100);
+      const savingsRate = income > 0 ? (annualSavings / income) * 100 : 0;
+      const initialPortfolio = parseFloat(document.getElementById('numPortfolio').value) || 0;
+      const progress = fireTarget > 0 ? Math.min(100, (initialPortfolio / fireTarget) * 100) : 0;
 
       document.getElementById('resFireNumber').innerText = formatCurr(fireTarget);
-      document.getElementById('resYearsToFire').innerText = years >= maxYearsLimit ? '60+ Years' : `${years.toFixed(1)} Years`;
-      document.getElementById('resFireAge').innerText = years >= maxYearsLimit ? 'N/A' : `${Math.round(currentAge + years)} Yrs Old`;
+      document.getElementById('resYearsToFire').innerText = portfolio >= fireTarget && years === 0 ? 'Achieved' : (years >= maxYearsLimit ? '60+ Years' : `${years.toFixed(1)} Years`);
+      document.getElementById('resFireAge').innerText = portfolio >= fireTarget && years === 0 ? `${currentAge} Yrs Old` : (years >= maxYearsLimit ? 'N/A' : `${Math.round(currentAge + years)} Yrs Old`);
       document.getElementById('resSavingsRate').innerText = savingsRate.toFixed(1) + '%';
       document.getElementById('resMultiplier').innerText = `${multiplier.toFixed(1)}x Burn`;
       document.getElementById('resMonthlyYield').innerText = formatCurr(annualExpenses / 12);
       document.getElementById('resProgress').innerText = progress.toFixed(1) + '%';
 
-      renderChart(trajectory, fireTarget);
+      document.getElementById('endYearLabel').textContent = `Yr ${years.toFixed(1)}`;
+
+      renderChart(currentTrajectory, fireTarget);
     }
 
     function renderChart(points, target) {
-      if (points.length < 2) return;
+      if (points.length < 1) return;
+      
       const maxVal = Math.max(...points, target) * 1.05;
       const width = 500;
       const height = 180;
       
       let pathD = '';
-      points.forEach((val, i) => {
-        const x = (i / (points.length - 1)) * width;
-        const y = height - (val / maxVal) * height;
-        pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
-      });
+      if (points.length === 1) {
+        const y = height - (points[0] / maxVal) * height;
+        pathD = `M 0 ${y} L ${width} ${y}`;
+      } else {
+        points.forEach((val, i) => {
+          const x = (i / (points.length - 1)) * width;
+          const y = height - (val / maxVal) * height;
+          pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
+        });
+      }
 
       const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
 
@@ -646,6 +875,32 @@
 
       document.getElementById('chartLine').setAttribute('d', pathD);
       document.getElementById('chartArea').setAttribute('d', areaD);
+    }
+
+    function saveScenario() {
+      const scenario = {
+        date: new Date().toISOString(),
+        currency: currencySymbol,
+        target: document.getElementById('resFireNumber').innerText,
+        years: document.getElementById('resYearsToFire').innerText,
+        age: document.getElementById('resFireAge').innerText
+      };
+      localStorage.setItem('whorton_fire_scenario', JSON.stringify(scenario));
+      alert('Scenario saved to local storage.');
+    }
+
+    function exportCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,Year,Invested Capital (" + currencySymbol + ")\n";
+      currentTrajectory.forEach((val, index) => {
+        csvContent += `${index},${Math.round(val)}\n`;
+      });
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "FIRE_Matrix_Trajectory.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
 
     // Run initial calculation
