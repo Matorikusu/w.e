@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Methodology & Verification Dates | Whorton Estate</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+      --accent-glow: rgba(16, 185, 129, 0.15);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 3rem auto;
+      padding: 0 5%;
+      flex: 1;
+    }
+
+    .page-header {
+      margin-bottom: 2.5rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 0.75rem;
+    }
+
+    .lead-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .divider {
+      border: 0;
+      height: 1px;
+      background: var(--card-border);
+      margin: 2.5rem 0;
+    }
+
+    .section {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.25rem;
+      color: var(--text-primary);
+    }
+
+    /* GENERAL PRINCIPLES GRID */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+
+    .principle-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+
+    .principle-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ENGINE METHODOLOGY LIST */
+    .engine-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .engine-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .engine-card h3 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .engine-card p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* VERIFICATION BOX */
+    .verification-box {
+      background: rgba(16, 185, 129, 0.03);
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .verification-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .status-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      background: var(--accent-glow);
+      padding: 0.25rem 0.65rem;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .verification-list {
+      list-style: none;
+    }
+
+    .verification-list li {
+      position: relative;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      line-height: 1.7;
+    }
+
+    .verification-list li::before {
+      content: "✓";
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    /* DISCLAIMER BOX */
+    .disclaimer-card {
+      background: var(--input-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .disclaimer-card h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .disclaimer-card p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 2rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: var(--bg-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="about.html" class="nav-back">← Back to About</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Verification & Transparency</span>
+      <h1>Methodology & Verification Dates</h1>
+      <p class="lead-text">Whorton Estate engines are built for accuracy and transparency. All core calculations run in your browser. Models are updated when UK tax rules change. Below is a summary of the methodology used and the most recent verification dates.</p>
+    </div>
+
+    <hr class="divider" />
+
+    <!-- GENERAL PRINCIPLES -->
+    <div class="section">
+      <h2 class="section-title">General Principles</h2>
+      <div class="principles-grid">
+        <div class="principle-card">
+          <p>Calculations are deterministic and based on standard financial formulas.</p>
+        </div>
+        <div class="principle-card">
+          <p>UK tax parameters (allowances, bands, Section 24 treatment, dividend and CGT rules) are taken from current HMRC rates.</p>
+        </div>
+        <div class="principle-card">
+          <p>No personal data is stored on our servers for core tool use.</p>
+        </div>
+        <div class="principle-card">
+          <p>Results are illustrative and do not constitute financial, tax, or investment advice.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ENGINE METHODOLOGY -->
+    <div class="section">
+      <h2 class="section-title">Engine Methodology Summary</h2>
+      <div class="engine-list">
+        
+        <div class="engine-card">
+          <h3>Compound Interest Engine</h3>
+          <p>Future value of an initial principal with regular contributions, adjustable compounding frequency, and optional annual step-up in contributions. Standard compound interest formula applied. Inflation adjustment (when enabled) converts nominal results to real purchasing power.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>FIRE Matrix</h3>
+          <p>Net-worth target and timeline based on desired annual spending and a chosen safe withdrawal rate. Supports Lean, Standard, and Fat FIRE scenarios.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Debt Payoff Engine</h3>
+          <p>Compares Avalanche (highest interest first) and Snowball (lowest balance first) methods. Calculates total interest paid and time to clear all liabilities under each strategy.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Property / Buy-to-Let Yield</h3>
+          <p>Gross and net yield, cash-on-cash return, and debt service coverage. Section 24 interest restriction modelled for basic-rate and higher-rate taxpayers. Stamp duty and cash-to-complete estimates included where relevant.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Tax Drag & ISA / GIA Optimiser</h3>
+          <p>Side-by-side projection of an identical investment held in a Stocks & Shares ISA versus a General Investment Account, applying current dividend tax and capital gains tax rules and allowances.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Emergency Fund / Runway Matrix</h3>
+          <p>Liquid capital required based on fixed and variable monthly burn rates, with adjustable risk buffer.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Billable Rate Engine</h3>
+          <p>True minimum hourly rate after accounting for non-billable time, overheads, tax, and paid time off.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Break-Even Engine</h3>
+          <p>Unit volume and revenue required to cover fixed and variable costs and reach operating profitability.</p>
+        </div>
+
+        <div class="engine-card">
+          <h3>Dividend / Salary Splitter</h3>
+          <p>Models the tax outcome of different salary and dividend combinations for a limited company director under current UK rates and thresholds.</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- CURRENT VERIFICATION DATES -->
+    <div class="section">
+      <h2 class="section-title">Current Verification Dates</h2>
+      <div class="verification-box">
+        <div class="verification-header">
+          <h3 style="font-size: 1.05rem; font-weight: 700;">HMRC Parameter Audit</h3>
+          <span class="status-tag">Tax Year 2026/27 Verified</span>
+        </div>
+        <ul class="verification-list">
+          <li>All engines last verified: Tax year 2026/27</li>
+          <li>Section 24, dividend allowance, CGT annual exempt amount, and income tax bands checked against current HMRC published rates</li>
+          <li>Next scheduled review: April 2027 (or sooner if mid-year rule changes occur)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DISCLAIMER -->
+    <div class="section">
+      <div class="disclaimer-card">
+        <h3>Important Disclaimer</h3>
+        <p>These tools are provided for informational and educational purposes only. They do not constitute financial, tax, or investment advice. Always verify figures against official sources and consult a qualified professional for decisions that affect your finances.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p>&copy; Whorton Estate. All calculation engines subject to underlying model assumptions.</p>
+  </footer>
+
+</body>
+</html>
