@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About | Whorton Estate</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #0a0a0c;
+      --card-bg: #141417;
+      --card-border: #27272a;
+      --input-bg: #1c1c21;
+      --text-primary: #ffffff;
+      --text-muted: #a1a1aa;
+      --accent: #10b981;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-primary);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem 5%;
+      border-bottom: 1px solid var(--card-border);
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand {
+      font-weight: 800;
+      font-size: 1.1rem;
+      letter-spacing: -0.02em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--text-primary);
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-back {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-back:hover {
+      color: var(--text-primary);
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 4rem auto;
+      padding: 0 5%;
+      flex: 1;
+    }
+
+    .page-header {
+      margin-bottom: 3rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.35rem 0.85rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      border-radius: 100px;
+      font-size: 0.75rem;
+      color: var(--accent);
+      margin-bottom: 0.75rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+    }
+
+    .lead-text {
+      font-size: 1.15rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .divider {
+      border: 0;
+      height: 1px;
+      background: var(--card-border);
+      margin: 2.5rem 0;
+    }
+
+    .about-section {
+      margin-bottom: 2.5rem;
+    }
+
+    .about-section h2 {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.75rem;
+      color: var(--text-primary);
+    }
+
+    .about-section p {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    .about-list {
+      list-style: none;
+      margin-top: 0.5rem;
+    }
+
+    .about-list li {
+      position: relative;
+      padding-left: 1.25rem;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .about-list li::before {
+      content: "•";
+      color: var(--accent);
+      position: absolute;
+      left: 0;
+      font-weight: bold;
+    }
+
+    .closing-block {
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .closing-text {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .methodology-link {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .methodology-link:hover {
+      color: var(--accent);
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 2rem 5%;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      background: var(--bg-dark);
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+    <a href="index.html" class="nav-back">← Back to Toolset</a>
+  </nav>
+
+  <div class="container">
+    <div class="page-header">
+      <span class="badge">Overview</span>
+      <h1>About the Platform</h1>
+      <p class="lead-text">Whorton Estate is a free suite of precision engines for capital growth, tax modelling, and unit economics.</p>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="about-section">
+      <h2>Philosophy</h2>
+      <p>Built for individuals and professionals who require accurate figures without noise. Zero fluff, absolute functional utility, and completely free by design—the core tools remain open and accessible without subscription constraints.</p>
+    </div>
+
+    <div class="about-section">
+      <h2>Technical Approach & Privacy</h2>
+      <p>All engines run client-side where possible to ensure your financial inputs remain private and never touch an external server. Every engine models current UK tax regulations, explicitly displays its underlying mathematical assumptions, and requires no account creation for core utility.</p>
+    </div>
+
+    <div class="about-section">
+      <h2>Operational Principles</h2>
+      <ul class="about-list">
+        <li><strong>No Financial Advice:</strong> Tools provide deterministic calculations, not personal advisory services.</li>
+        <li><strong>No Data Monetisation:</strong> User inputs are never tracked, harvested, or sold.</li>
+        <li><strong>No Friction:</strong> Zero upsell pressure, intrusive pop-ups, or artificial feature gating.</li>
+      </ul>
+    </div>
+
+    <div class="about-section">
+      <h2>Verification & Accuracy</h2>
+      <p>Our computational models are regularly audited against official HMRC rules and published UK tax schedules. Every tool clearly displays its verification date, and engines are updated immediately upon legislative policy shifts.</p>
+    </div>
+
+    <div class="closing-block">
+      <span class="closing-text">Clean execution tools. Nothing more.</span>
+      <a href="methodology.html" class="methodology-link">View Methodology & Verification Dates →</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; Whorton Estate. All calculation engines subject to underlying model assumptions.</p>
+  </footer>
+
+</body>
+</html>
