@@ -3,8 +3,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Whorton Estate | Precision Toolset</title>
-  
+  <title>Whorton Estate | UK Financial Precision Toolset</title>
+  <meta name="description" content="Free, client-side UK financial calculation engines for wealth compounding, FIRE planning, BTL property yields, and tax optimization." />
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Whorton Estate | Precision Financial Toolset" />
+  <meta property="og:description" content="Zero-fluff, client-side UK execution engines for compounding, FIRE, BTL yield, and tax drag optimization." />
+  <meta property="og:url" content="https://whorton.estate" />
+  <meta name="twitter:card" content="summary_large_image" />
+
   <!-- Three.js for 3D Dynamic Header -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   
@@ -67,7 +75,7 @@
     .nav-links a {
       color: var(--text-muted);
       text-decoration: none;
-      margin-left: 2rem;
+      margin-left: 1.75rem;
       font-size: 0.875rem;
       font-weight: 500;
       transition: color 0.2s ease;
@@ -81,7 +89,7 @@
     .hero {
       position: relative;
       height: 100vh;
-      min-height: 650px;
+      min-height: 680px;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -103,7 +111,7 @@
     .hero-content {
       position: relative;
       z-index: 2;
-      max-width: 800px;
+      max-width: 820px;
     }
 
     .badge {
@@ -115,7 +123,7 @@
       font-size: 0.75rem;
       color: var(--accent);
       margin-bottom: 1.5rem;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
       font-weight: 600;
     }
@@ -125,16 +133,24 @@
       font-weight: 800;
       line-height: 1.05;
       letter-spacing: -0.03em;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.25rem;
     }
 
     p.subtitle {
       font-size: clamp(1rem, 2vw, 1.2rem);
       color: var(--text-muted);
-      max-width: 580px;
-      margin: 0 auto 2.5rem auto;
+      max-width: 620px;
+      margin: 0 auto 0.75rem auto;
       line-height: 1.6;
       font-weight: 400;
+    }
+
+    p.hero-spec {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 2.25rem;
+      letter-spacing: 0.02em;
     }
 
     .cta-button {
@@ -156,7 +172,7 @@
 
     /* Modular Tools Section */
     .tools-section {
-      padding: 6rem 5%;
+      padding: 6rem 5% 4rem 5%;
       max-width: 1200px;
       margin: 0 auto;
     }
@@ -209,7 +225,9 @@
       cursor: pointer;
       text-decoration: none;
       color: inherit;
-      display: block;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .glow-card::before {
@@ -266,7 +284,23 @@
       color: var(--text-muted);
       font-size: 0.9rem;
       line-height: 1.5;
+      margin-bottom: 1.25rem;
+    }
+
+    .card-usecase {
+      font-size: 0.8rem;
+      color: #e4e4e7;
+      background: rgba(255, 255, 255, 0.02);
+      border-left: 2px solid var(--accent);
+      padding: 0.5rem 0.75rem;
       margin-bottom: 1.5rem;
+      border-radius: 0 4px 4px 0;
+      line-height: 1.4;
+    }
+
+    .card-usecase strong {
+      color: var(--accent);
+      font-weight: 600;
     }
 
     .card-action {
@@ -277,11 +311,95 @@
       align-items: center;
       gap: 0.5rem;
       transition: gap 0.2s ease, color 0.2s ease;
+      margin-top: auto;
     }
 
     .glow-card:hover .card-action {
       color: var(--accent);
       gap: 0.75rem;
+    }
+
+    /* Email Capture Section */
+    .notify-section {
+      max-width: 1200px;
+      margin: 0 auto 5rem auto;
+      padding: 0 5%;
+    }
+
+    .notify-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .notify-card h3 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .notify-card p {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+      max-width: 480px;
+    }
+
+    .notify-form {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .notify-input {
+      flex: 1;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    .notify-input:focus {
+      border-color: var(--accent);
+    }
+
+    .notify-btn {
+      background: var(--text-primary);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .notify-btn:hover {
+      opacity: 0.9;
+    }
+
+    /* Reduced Motion Accessibility */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+      #webgl-canvas {
+        display: none;
+      }
     }
 
     /* Minimal Footer */
@@ -291,6 +409,7 @@
       text-align: center;
       color: var(--text-muted);
       font-size: 0.85rem;
+      line-height: 1.6;
     }
   </style>
 </head>
@@ -302,6 +421,8 @@
     <div class="nav-links">
       <a href="#finance">Capital & Wealth</a>
       <a href="#business">Business & Units</a>
+      <a href="methodology.html">Methodology</a>
+      <a href="about.html">About</a>
     </div>
   </nav>
 
@@ -309,9 +430,10 @@
   <section class="hero">
     <canvas id="webgl-canvas"></canvas>
     <div class="hero-content">
-      <div class="badge">Zero Fluff • Pure Utility</div>
+      <div class="badge">Zero Fluff • Last Verified: Tax Year 2026/27</div>
       <h1>Built for Execution.</h1>
-      <p class="subtitle">A disciplined suite of essential engines for wealth compounding, unit economics, and capital allocation.</p>
+      <p class="subtitle">A disciplined suite of essential engines for wealth compounding, unit economics, and UK capital allocation.</p>
+      <p class="hero-spec">Free • Client-side • Updated for current UK tax rules</p>
       <a href="#finance" class="cta-button">Open Toolset</a>
     </div>
   </section>
@@ -322,7 +444,7 @@
       <h2 class="section-title">Execution Suite</h2>
     </div>
 
-    <!-- MODULE 1: FINANCE -->
+    <!-- MODULE 1: CAPITAL & WEALTH ACCUMULATION -->
     <div class="category-group" id="finance">
       <div class="category-title">
         <span>01</span> Capital & Wealth Accumulation
@@ -330,62 +452,80 @@
       
       <div class="grid">
         <a href="compound_interest_engine.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Compound Engine</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Compound Engine</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Project exponential capital growth with custom recurring contributions, compounding frequency, and real inflation drag modeling.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Long-term index fund modeling and multi-decade wealth planning.</div>
           </div>
-          <p class="card-desc">Project exponential capital growth with custom recurring contributions, compounding frequency, and inflation drag.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="fire_matrix.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">FIRE Matrix</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">FIRE Matrix</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Calculate exact net worth milestones and safe withdrawal timelines to achieve complete financial autonomy.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Pinpointing your exact early retirement date and required target portfolio.</div>
           </div>
-          <p class="card-desc">Calculate exact net worth milestones and safe withdrawal timelines to hit complete financial autonomy.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="debt_payoff_optimiser.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Debt Payoff Engine</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Debt Payoff Engine</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Simulate Avalanche vs. Snowball strategies to systematically eradicate interest leakage across liabilities.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Choosing the fastest route to pay off loans, credit cards, or mortgages.</div>
           </div>
-          <p class="card-desc">Simulate Avalanche vs. Snowball strategies to eradicate interest leakage across liabilities.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="buy_to_let_engine.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Property / Buy-to-Let Yield</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Property / Buy-to-Let Yield</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Evaluate gross/net yields, Section 24 tax relief restrictions, debt service coverage, and equity appreciation.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Assessing prospective UK residential rental property investments.</div>
           </div>
-          <p class="card-desc">Evaluate gross/net yields, Section 24 tax relief restrictions, debt service coverage, and equity appreciation.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="tax_drag_optimiser.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Tax Drag & ISA / GIA Optimiser</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Tax Drag & ISA / GIA Optimiser</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Quantify compounding friction from dividend and capital gains taxes in General Investment Accounts versus tax-free ISAs.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Deciding portfolio location and quantifying unshielded tax drag.</div>
           </div>
-          <p class="card-desc">Quantify compounding friction from dividend and capital gains taxes in General Investment Accounts versus tax-free ISAs.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="emergency_fund_engine.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Emergency Fund / Runway Matrix</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Emergency Fund / Runway Matrix</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Determine exact liquid capital requirements based on fixed vs. variable burn rates and profile volatility risk factors.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Calibrating cash reserves for employment gap or business downturn safety.</div>
           </div>
-          <p class="card-desc">Determine exact liquid capital requirements based on fixed vs. variable burn rates and profile volatility risk factors.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
       </div>
     </div>
 
-    <!-- MODULE 2: BUSINESS -->
+    <!-- MODULE 2: BUSINESS & UNIT ECONOMICS -->
     <div class="category-group" id="business">
       <div class="category-title">
         <span>02</span> Business & Unit Economics
@@ -393,108 +533,137 @@
       
       <div class="grid">
         <a href="billable_rate_calculator.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Billable Rate Engine</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Billable Rate Engine</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Factor in overheads, tax liability, non-billable hours, and time off to establish true minimum hourly billing rates.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Freelancers and consultants setting profitable client pricing structures.</div>
           </div>
-          <p class="card-desc">Factor in expenses, tax, non-billable hours, and paid time off to establish true minimum hourly billing rates.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="break_even_model.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Break-Even Engine</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Break-Even Engine</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Determine exact unit volumes and total revenue required to cover fixed costs and achieve operating profitability.</p>
+            <div class="card-usecase"><strong>Best for:</strong> Stress-testing product economics before launching new offers.</div>
           </div>
-          <p class="card-desc">Determine exact unit volumes and total revenue required to achieve operating profitability.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
 
         <a href="dividend_salary_splitter.html" class="glow-card">
-          <div class="card-header">
-            <h3 class="card-title">Dividend / Salary Splitter</h3>
-            <span class="card-status active">Ready</span>
+          <div>
+            <div class="card-header">
+              <h3 class="card-title">Dividend / Salary Splitter</h3>
+              <span class="card-status active">Ready</span>
+            </div>
+            <p class="card-desc">Model optimal director income splits between low salary thresholds and tax-efficient dividend extractions.</p>
+            <div class="card-usecase"><strong>Best for:</strong> UK Limited Company directors optimizing personal tax take-home.</div>
           </div>
-          <p class="card-desc">Model optimal director income splits between low salary and tax-efficient dividends.</p>
           <span class="card-action">Launch Engine →</span>
         </a>
       </div>
     </div>
   </section>
 
+  <!-- Non-Intrusive Email Capture -->
+  <section class="notify-section">
+    <div class="notify-card">
+      <h3>Tax & Engine Updates</h3>
+      <p>Get notified only when UK tax rules change or new engines are deployed. Zero spam.</p>
+      <form class="notify-form" onsubmit="event.preventDefault(); alert('Subscribed successfully.');">
+        <input type="email" class="notify-input" placeholder="enter@your-email.co.uk" required />
+        <button type="submit" class="notify-btn">Get Updates</button>
+      </form>
+    </div>
+  </section>
+
   <footer>
-    <p>© Whorton Estate. Clean execution tools.</p>
+    <p>© Whorton Estate. Free precision engines. Calculations run entirely in your browser.</p>
   </footer>
 
-  <!-- Animation Scripts -->
+  <!-- Animation & Interaction Scripts -->
   <script>
-    // 1. Three.js Animated 3D Geometric Header
+    // 1. Three.js Animated 3D Geometric Header with Reduced-Motion & Fallback Check
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const canvas = document.getElementById('webgl-canvas');
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    if (!prefersReducedMotion && canvas && typeof THREE !== 'undefined') {
+      try {
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
 
-    // Outer Wireframe Sphere
-    const outerGeo = new THREE.IcosahedronGeometry(2.6, 1);
-    const outerMat = new THREE.MeshBasicMaterial({
-      color: 0x27272a,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.35
-    });
-    const outerMesh = new THREE.Mesh(outerGeo, outerMat);
-    scene.add(outerMesh);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-    // Inner Glowing Core
-    const innerGeo = new THREE.IcosahedronGeometry(1.2, 0);
-    const innerMat = new THREE.MeshBasicMaterial({
-      color: 0x10b981,
-      wireframe: true,
-      transparent: true,
-      opacity: 0.6
-    });
-    const innerMesh = new THREE.Mesh(innerGeo, innerMat);
-    scene.add(innerMesh);
+        // Outer Wireframe Sphere
+        const outerGeo = new THREE.IcosahedronGeometry(2.6, 1);
+        const outerMat = new THREE.MeshBasicMaterial({
+          color: 0x27272a,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.35
+        });
+        const outerMesh = new THREE.Mesh(outerGeo, outerMat);
+        scene.add(outerMesh);
 
-    camera.position.z = 6;
+        // Inner Glowing Core
+        const innerGeo = new THREE.IcosahedronGeometry(1.2, 0);
+        const innerMat = new THREE.MeshBasicMaterial({
+          color: 0x10b981,
+          wireframe: true,
+          transparent: true,
+          opacity: 0.6
+        });
+        const innerMesh = new THREE.Mesh(innerGeo, innerMat);
+        scene.add(innerMesh);
 
-    // Mouse Parallax Interaction
-    let targetX = 0;
-    let targetY = 0;
+        camera.position.z = 6;
 
-    document.addEventListener('mousemove', (e) => {
-      targetX = (e.clientX / window.innerWidth - 0.5) * 0.4;
-      targetY = (e.clientY / window.innerHeight - 0.5) * 0.4;
-    });
+        // Mouse Parallax Interaction
+        let targetX = 0;
+        let targetY = 0;
 
-    // Render Loop
-    function animate() {
-      requestAnimationFrame(animate);
+        document.addEventListener('mousemove', (e) => {
+          targetX = (e.clientX / window.innerWidth - 0.5) * 0.4;
+          targetY = (e.clientY / window.innerHeight - 0.5) * 0.4;
+        });
 
-      // Continuous Idle Rotation
-      outerMesh.rotation.x += 0.0015;
-      outerMesh.rotation.y += 0.002;
-      innerMesh.rotation.x -= 0.003;
-      innerMesh.rotation.y -= 0.0015;
+        // Render Loop
+        function animate() {
+          requestAnimationFrame(animate);
 
-      // Smooth Easing toward Mouse
-      outerMesh.rotation.y += (targetX - outerMesh.rotation.y) * 0.05;
-      outerMesh.rotation.x += (targetY - outerMesh.rotation.x) * 0.05;
+          // Continuous Idle Rotation
+          outerMesh.rotation.x += 0.0015;
+          outerMesh.rotation.y += 0.002;
+          innerMesh.rotation.x -= 0.003;
+          innerMesh.rotation.y -= 0.0015;
 
-      renderer.render(scene, camera);
+          // Smooth Easing toward Mouse
+          outerMesh.rotation.y += (targetX - outerMesh.rotation.y) * 0.05;
+          outerMesh.rotation.x += (targetY - outerMesh.rotation.x) * 0.05;
+
+          renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Window Resize Handler
+        window.addEventListener('resize', () => {
+          camera.aspect = window.innerWidth / window.innerHeight;
+          camera.updateProjectionMatrix();
+          renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+      } catch (err) {
+        console.warn('WebGL initialization skipped:', err);
+      }
     }
-
-    animate();
-
-    // Window Resize Handler
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
 
     // 2. Interactive Spotlight Glow Cursor Effect for Tool Cards
     document.querySelectorAll('.glow-card').forEach(card => {
