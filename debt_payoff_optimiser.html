@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Debt Payoff Engine | Whorton Estate</title>
-  
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,6 +36,18 @@
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
       padding-bottom: 5rem;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button:focus-visible,
+    input:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
 
     nav {
@@ -110,6 +122,7 @@
     .subtitle {
       color: var(--text-muted);
       font-size: 0.95rem;
+      line-height: 1.6;
     }
 
     .engine-grid {
@@ -140,6 +153,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
       margin-bottom: 0.6rem;
     }
 
@@ -157,6 +171,7 @@
       border: 1px solid var(--card-border);
       border-radius: 6px;
       padding: 0.2rem 0.5rem;
+      flex-shrink: 0;
     }
 
     .val-input-wrap span {
@@ -193,6 +208,7 @@
 
     .segmented-btn {
       flex: 1;
+      min-width: 0;
       background: transparent;
       border: none;
       color: var(--text-muted);
@@ -203,6 +219,10 @@
       cursor: pointer;
       transition: all 0.2s ease;
       text-align: center;
+    }
+
+    .segmented-btn:hover {
+      color: var(--text-primary);
     }
 
     .segmented-btn.active {
@@ -239,6 +259,16 @@
       transform: scale(1.15);
     }
 
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border: none;
+      border-radius: 50%;
+      background: var(--accent);
+      cursor: pointer;
+      box-shadow: 0 0 12px var(--accent);
+    }
+
     .debt-list {
       display: flex;
       flex-direction: column;
@@ -252,21 +282,16 @@
       border-radius: 10px;
       padding: 1rem;
       display: grid;
-      grid-template-columns: 1fr 1fr 1fr 30px;
-      gap: 0.5rem;
-      align-items: center;
-    }
-
-    @media (max-width: 600px) {
-      .debt-item {
-        grid-template-columns: 1fr 1fr;
-      }
+      grid-template-columns: 1.15fr 1fr 1.3fr 30px;
+      gap: 0.75rem;
+      align-items: end;
     }
 
     .debt-field {
       display: flex;
       flex-direction: column;
-      gap: 0.25rem;
+      gap: 0.35rem;
+      min-width: 0;
     }
 
     .debt-field label {
@@ -276,17 +301,31 @@
     }
 
     .debt-field input {
+      width: 100%;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 6px;
-      padding: 0.4rem 0.5rem;
+      padding: 0.45rem 0.5rem;
       color: var(--text-primary);
       font-size: 0.8rem;
       font-weight: 600;
       outline: none;
+      min-width: 0;
+    }
+
+    .debt-field input:focus {
+      border-color: var(--accent);
+    }
+
+    .debt-payment-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.35rem;
     }
 
     .btn-remove {
+      width: 30px;
+      height: 34px;
       background: transparent;
       border: none;
       color: var(--text-muted);
@@ -297,10 +336,16 @@
       align-items: center;
       justify-content: center;
       transition: color 0.2s ease;
+      border-radius: 6px;
     }
 
     .btn-remove:hover {
       color: var(--danger);
+    }
+
+    .btn-remove:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
     }
 
     .btn-add {
@@ -396,6 +441,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 1rem;
     }
 
     .chart-container {
@@ -441,6 +487,15 @@
       border-color: var(--text-muted);
     }
 
+    .save-status {
+      min-height: 1.1rem;
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-align: right;
+      margin-top: -0.75rem;
+    }
+
     .section-divider {
       border: 0;
       height: 1px;
@@ -471,6 +526,7 @@
       color: var(--text-muted);
       font-size: 0.95rem;
       line-height: 1.6;
+      max-width: 900px;
     }
 
     .explanation-grid {
@@ -557,8 +613,96 @@
       background: var(--bg-dark);
       margin-top: 4rem;
     }
+
+    @media (max-width: 700px) {
+      nav {
+        padding: 1.25rem 5%;
+      }
+
+      .nav-back {
+        font-size: 0.78rem;
+      }
+
+      .panel,
+      .primary-card,
+      .explanation-section {
+        padding: 1.5rem;
+      }
+
+      .segmented-control {
+        border-radius: 12px;
+        flex-direction: column;
+      }
+
+      #currSymbol {
+        flex-direction: row;
+        border-radius: 100px;
+      }
+
+      #currSymbol .segmented-btn {
+        padding: 0.5rem 0.25rem;
+      }
+
+      .debt-item {
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+      }
+
+      .debt-field:first-child {
+        grid-column: 1 / -1;
+      }
+
+      .debt-field:nth-child(3) {
+        grid-column: 1 / -1;
+      }
+
+      .btn-remove {
+        justify-self: end;
+      }
+
+      .metrics-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .action-bar {
+        flex-direction: column;
+      }
+
+      .methodology-block {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .save-status {
+        text-align: left;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .label-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .val-input-wrap {
+        width: 100%;
+      }
+
+      .num-input {
+        width: 100%;
+      }
+
+      #currSymbol .segmented-btn {
+        font-size: 0.75rem;
+      }
+
+      .metric-value-huge {
+        font-size: 2.4rem;
+      }
+    }
   </style>
 </head>
+
 <body>
 
   <nav>
@@ -567,34 +711,55 @@
   </nav>
 
   <div class="container">
+
     <div class="page-header">
-      <span class="badge">Engine 03 • Liabilities & Amortisation</span>
+      <span class="badge">Engine 03 • Liabilities &amp; Amortisation</span>
       <h1>Debt Payoff Engine</h1>
-      <p class="subtitle">Simulate accelerated debt elimination strategies using Avalanche or Snowball methodology.</p>
+      <p class="subtitle">
+        Simulate accelerated debt elimination strategies using Avalanche or Snowball methodology.
+      </p>
     </div>
 
     <div class="engine-grid">
+
       <!-- CONTROL PANEL -->
       <div class="panel">
-        
+
         <!-- Currency Selector -->
         <div class="control-group">
           <label>Currency Unit</label>
-          <div class="segmented-control" id="currSymbol">
-            <button class="segmented-btn active" onclick="setCurrency('£')">£</button>
-            <button class="segmented-btn" onclick="setCurrency('$')">$</button>
-            <button class="segmented-btn" onclick="setCurrency('€')">€</button>
-            <button class="segmented-btn" onclick="setCurrency('₹')">₹</button>
-            <button class="segmented-btn" onclick="setCurrency('¥')">¥</button>
+
+          <div class="segmented-control" id="currSymbol" role="group" aria-label="Currency unit">
+            <button type="button" class="segmented-btn active" aria-pressed="true" onclick="setCurrency('£')">£</button>
+            <button type="button" class="segmented-btn" aria-pressed="false" onclick="setCurrency('$')">$</button>
+            <button type="button" class="segmented-btn" aria-pressed="false" onclick="setCurrency('€')">€</button>
+            <button type="button" class="segmented-btn" aria-pressed="false" onclick="setCurrency('₹')">₹</button>
+            <button type="button" class="segmented-btn" aria-pressed="false" onclick="setCurrency('¥')">¥</button>
           </div>
         </div>
 
         <!-- Strategy Selection -->
         <div class="control-group">
           <label>Payoff Strategy</label>
-          <div class="segmented-control" id="strategySelect">
-            <button class="segmented-btn active" onclick="setStrategy('avalanche')">Avalanche (High APR First)</button>
-            <button class="segmented-btn" onclick="setStrategy('snowball')">Snowball (Lowest Balance First)</button>
+
+          <div class="segmented-control" id="strategySelect" role="group" aria-label="Payoff strategy">
+            <button
+              type="button"
+              class="segmented-btn active"
+              aria-pressed="true"
+              onclick="setStrategy('avalanche')"
+            >
+              Avalanche (High APR First)
+            </button>
+
+            <button
+              type="button"
+              class="segmented-btn"
+              aria-pressed="false"
+              onclick="setStrategy('snowball')"
+            >
+              Snowball (Lowest Balance First)
+            </button>
           </div>
         </div>
 
@@ -602,92 +767,151 @@
         <div class="control-group">
           <div class="label-row">
             <label for="sliderExtra">Extra Monthly Payment</label>
+
             <div class="val-input-wrap">
               <span class="curr-lbl">£</span>
-              <input type="number" id="numExtra" class="num-input" value="250" min="0" max="5000" step="50" oninput="syncExtra(this.value, 'num')" />
+              <input
+                type="number"
+                id="numExtra"
+                class="num-input"
+                value="250"
+                min="0"
+                max="5000"
+                step="50"
+                inputmode="decimal"
+                aria-label="Extra monthly payment"
+              />
             </div>
           </div>
-          <input type="range" id="sliderExtra" min="0" max="2000" step="25" value="250" oninput="syncExtra(this.value, 'slider')" />
+
+          <input
+            type="range"
+            id="sliderExtra"
+            min="0"
+            max="5000"
+            step="25"
+            value="250"
+            aria-label="Extra monthly payment slider"
+          />
         </div>
 
         <label style="margin-bottom: 0.75rem; display: block;">Active Liabilities</label>
-        
-        <!-- Dynamic Debt Inputs -->
-        <div class="debt-list" id="debtList">
-          <!-- Populated by JS -->
-        </div>
 
-        <button class="btn-add" onclick="addDebtField()">+ Add Liability</button>
+        <!-- Dynamic Debt Inputs -->
+        <div class="debt-list" id="debtList"></div>
+
+        <button type="button" class="btn-add" onclick="addDebtField()">
+          + Add Liability
+        </button>
 
       </div>
 
       <!-- ANALYTICS PANEL -->
       <div class="analytics-panel">
-        
+
         <!-- Primary Payoff Metric -->
         <div class="primary-card">
           <div class="metric-label">Debt-Free Timeline</div>
           <div class="metric-value-huge" id="resTimeToFree">18 Months</div>
 
           <div class="metrics-grid">
+
             <div class="sub-card">
-              <div class="metric-label">Total Debt Remaining</div>
+              <div class="metric-label">Total Debt</div>
               <div class="val" id="resTotalDebt">£12,500</div>
             </div>
+
             <div class="sub-card">
               <div class="metric-label">Interest Saved</div>
               <div class="val" id="resInterestSaved" style="color: var(--accent);">£1,420</div>
             </div>
+
           </div>
         </div>
 
         <!-- Secondary Metrics Grid -->
         <div class="metrics-grid">
+
           <div class="sub-card">
             <div class="metric-label">Total Interest Paid</div>
             <div class="val" id="resTotalInterest">£850</div>
           </div>
+
           <div class="sub-card">
             <div class="metric-label">Monthly Commitment</div>
             <div class="val" id="resMonthlyTotal">£600</div>
           </div>
+
           <div class="sub-card">
             <div class="metric-label">Months Saved</div>
             <div class="val" id="resMonthsSaved">14 Mos</div>
           </div>
+
           <div class="sub-card">
             <div class="metric-label">Effective APR</div>
             <div class="val" id="resWeightedApr">16.4%</div>
           </div>
+
         </div>
 
         <!-- Amortisation Trajectory Chart -->
         <div class="chart-card">
+
           <div class="chart-header">
             <div class="metric-label">Balance Amortisation</div>
-            <div id="chartStatus" style="font-size: 0.75rem; color: var(--accent); font-weight: 600;">Optimal Curve</div>
+
+            <div
+              id="chartStatus"
+              style="font-size: 0.75rem; color: var(--accent); font-weight: 600;"
+            >
+              Optimal Curve
+            </div>
           </div>
+
           <div class="chart-container">
-            <svg class="growth-chart" id="amortSvg" viewBox="0 0 500 180">
+            <svg
+              class="growth-chart"
+              id="amortSvg"
+              viewBox="0 0 500 180"
+              role="img"
+              aria-label="Debt balance amortisation chart"
+            >
               <defs>
                 <linearGradient id="debtGrad" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="0%" stop-color="#ef4444" stop-opacity="0.35"/>
                   <stop offset="100%" stop-color="#ef4444" stop-opacity="0.0"/>
                 </linearGradient>
               </defs>
+
               <path id="chartArea" fill="url(#debtGrad)" d="" />
               <path id="chartLine" fill="none" stroke="#ef4444" stroke-width="3" d="" />
+
               <text id="startYearLabel" x="0" y="175" class="chart-axis-label">M0</text>
               <text id="endYearLabel" x="460" y="175" class="chart-axis-label">M18</text>
             </svg>
           </div>
+
         </div>
 
         <!-- Action Bar -->
         <div class="action-bar">
-          <button class="btn-secondary" onclick="saveScenario()">Save Scenario</button>
-          <button class="btn-secondary" onclick="exportCSV()">Export CSV</button>
+
+          <button type="button" class="btn-secondary" onclick="saveScenario()">
+            Save Scenario
+          </button>
+
+          <button type="button" class="btn-secondary" onclick="exportCSV()">
+            Export CSV
+          </button>
+
         </div>
+
+        <div
+          id="saveStatus"
+          class="save-status"
+          role="status"
+          aria-live="polite"
+        ></div>
 
       </div>
     </div>
@@ -697,43 +921,84 @@
 
     <!-- TOOL EXPLANATION & METHODOLOGY SECTION -->
     <section class="explanation-section">
+
       <div class="explanation-header">
         <h2>About the Debt Payoff Engine</h2>
-        <p>This engine structures optimal repayment schedules across multiple liabilities. By cascading available excess monthly cash flow into specific debts, it minimizes interest drag and compresses total repayment time.</p>
+
+        <p>
+          This engine structures repayment schedules across multiple liabilities.
+          By cascading available excess monthly cash flow into specific debts,
+          it helps illustrate how repayment strategy can affect total interest
+          and repayment time.
+        </p>
       </div>
 
       <div class="explanation-grid">
+
         <div class="explanation-card">
           <h3><span>•</span> Debt Avalanche Method</h3>
-          <p>Prioritizes debts by highest interest rate (APR) first while paying minimums on others. Mathematically optimal, minimizing total interest paid and clearing balances in the shortest absolute timeframe.</p>
+
+          <p>
+            Prioritises debts by highest interest rate (APR) first while paying
+            minimums on others. This generally minimises total interest when
+            rates, minimums and payments remain constant.
+          </p>
         </div>
 
         <div class="explanation-card">
           <h3><span>•</span> Debt Snowball Method</h3>
-          <p>Prioritizes debts by smallest total balance first. While mathematically paying slightly more in interest, it produces rapid psychological wins by eliminating individual debt accounts quickly.</p>
+
+          <p>
+            Prioritises debts by smallest balance first. This can create quicker
+            individual account wins while maintaining the same overall repayment
+            budget.
+          </p>
         </div>
 
         <div class="explanation-card">
           <h3><span>•</span> Payment Cascading</h3>
-          <p>Once a liability is cleared, its minimum payment along with any excess budget is immediately rolled into the next target liability, accelerating payoff velocity exponentially.</p>
+
+          <p>
+            Once a liability is cleared, its available repayment amount is
+            redirected towards the next target liability, accelerating the
+            repayment schedule.
+          </p>
         </div>
+
       </div>
 
       <div class="disclaimer-card">
-        <h4>Model Assumptions & Limitations</h4>
-        <p>Calculations assume fixed interest rates and consistent monthly contributions. The engine does not account for variable APR increases, late payment fees, or potential balance transfer conditions. Results are for planning purposes and do not constitute formal financial counseling.</p>
+        <h4>Model Assumptions &amp; Limitations</h4>
+
+        <p>
+          Calculations assume fixed interest rates, monthly interest accrual and
+          consistent minimum and additional payments. The engine does not account
+          for variable APR changes, late payment fees, promotional rates, balance
+          transfers or lender-specific repayment rules. Results are for planning
+          purposes only and do not constitute formal financial advice.
+        </p>
       </div>
 
       <div class="methodology-block">
-        <span style="font-size: 0.85rem; color: var(--text-muted);">Verified for UK Amortisation Standards 2026</span>
-        <a href="methodology.html" class="methodology-link">View Full Methodology & Calculations →</a>
+
+        <span style="font-size: 0.85rem; color: var(--text-muted);">
+          Model based on fixed-rate monthly amortisation assumptions
+        </span>
+
+        <a href="methodology.html" class="methodology-link">
+          View Full Methodology &amp; Calculations →
+        </a>
+
       </div>
+
     </section>
 
   </div>
 
   <footer>
-    <p>&copy; Whorton Estate. All calculation engines subject to underlying model assumptions.</p>
+    <p>
+      &copy; Whorton Estate. All calculation engines subject to underlying model assumptions.
+    </p>
   </footer>
 
   <script>
@@ -741,235 +1006,851 @@
     let currentStrategy = 'avalanche';
 
     let debts = [
-      { name: 'Credit Card', balance: 4500, apr: 22.9, minPay: 135 },
-      { name: 'Personal Loan', balance: 8000, apr: 7.5, minPay: 215 }
+      {
+        name: 'Credit Card',
+        balance: 4500,
+        apr: 22.9,
+        minPay: 135
+      },
+      {
+        name: 'Personal Loan',
+        balance: 8000,
+        apr: 7.5,
+        minPay: 215
+      }
     ];
+
+    let currentTrajectory = [];
+
+    /*
+     * -------------------------
+     * Formatting helpers
+     * -------------------------
+     */
+
+    function formatCurr(val) {
+      const safeValue = Number.isFinite(val) ? val : 0;
+
+      return currencySymbol + Math.round(safeValue).toLocaleString('en-GB');
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(Math.max(value, min), max);
+    }
+
+    /*
+     * -------------------------
+     * Currency
+     * -------------------------
+     */
 
     function setCurrency(symbol) {
       currencySymbol = symbol;
-      document.querySelectorAll('#currSymbol .segmented-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.innerText === symbol);
+
+      document
+        .querySelectorAll('#currSymbol .segmented-btn')
+        .forEach(btn => {
+          const active = btn.textContent.trim() === symbol;
+
+          btn.classList.toggle('active', active);
+          btn.setAttribute('aria-pressed', active ? 'true' : 'false');
+        });
+
+      document
+        .querySelectorAll('.curr-lbl')
+        .forEach(el => {
+          el.textContent = symbol;
+        });
+
+      renderDebts();
+      calculate();
+    }
+
+    /*
+     * -------------------------
+     * Strategy
+     * -------------------------
+     */
+
+    function setStrategy(strategy) {
+      currentStrategy = strategy;
+
+      const buttons = document.querySelectorAll(
+        '#strategySelect .segmented-btn'
+      );
+
+      buttons.forEach((button, index) => {
+        const active =
+          (index === 0 && strategy === 'avalanche') ||
+          (index === 1 && strategy === 'snowball');
+
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', active ? 'true' : 'false');
       });
-      document.querySelectorAll('.curr-lbl').forEach(el => el.innerText = symbol);
+
       calculate();
     }
 
-    function setStrategy(strat) {
-      currentStrategy = strat;
-      const btns = document.querySelectorAll('#strategySelect .segmented-btn');
-      btns[0].classList.toggle('active', strat === 'avalanche');
-      btns[1].classList.toggle('active', strat === 'snowball');
+    /*
+     * -------------------------
+     * Extra payment controls
+     * -------------------------
+     */
+
+    function syncExtra(value, source) {
+      let numericValue = parseFloat(value);
+
+      if (!Number.isFinite(numericValue)) {
+        numericValue = 0;
+      }
+
+      numericValue = clamp(numericValue, 0, 5000);
+
+      if (source === 'slider') {
+        document.getElementById('numExtra').value = numericValue;
+      } else {
+        document.getElementById('sliderExtra').value = numericValue;
+      }
+
       calculate();
     }
 
-    function formatCurr(val) {
-      return currencySymbol + Math.round(val).toLocaleString('en-GB');
-    }
+    document.getElementById('sliderExtra').addEventListener('input', function () {
+      syncExtra(this.value, 'slider');
+    });
 
-    function syncExtra(val, source) {
-      if (source === 'slider') document.getElementById('numExtra').value = val;
-      else document.getElementById('sliderExtra').value = val;
-      calculate();
-    }
+    document.getElementById('numExtra').addEventListener('input', function () {
+      syncExtra(this.value, 'num');
+    });
+
+    /*
+     * -------------------------
+     * Debt rendering
+     * -------------------------
+     */
 
     function renderDebts() {
       const container = document.getElementById('debtList');
+
       container.innerHTML = '';
 
       debts.forEach((debt, index) => {
         const item = document.createElement('div');
+
         item.className = 'debt-item';
+
         item.innerHTML = `
           <div class="debt-field">
-            <label>Liability Name</label>
-            <input type="text" value="${debt.name}" onchange="updateDebt(${index}, 'name', this.value)" />
+            <label for="debt-name-${index}">Liability Name</label>
+
+            <input
+              id="debt-name-${index}"
+              type="text"
+              value="${escapeHtml(debt.name)}"
+              autocomplete="off"
+              data-index="${index}"
+              data-field="name"
+            />
           </div>
+
           <div class="debt-field">
-            <label>Balance (${currencySymbol})</label>
-            <input type="number" value="${debt.balance}" step="100" onchange="updateDebt(${index}, 'balance', parseFloat(this.value) || 0)" />
+            <label for="debt-balance-${index}">
+              Balance (${currencySymbol})
+            </label>
+
+            <input
+              id="debt-balance-${index}"
+              type="number"
+              value="${debt.balance}"
+              min="0"
+              step="100"
+              inputmode="decimal"
+              data-index="${index}"
+              data-field="balance"
+            />
           </div>
+
           <div class="debt-field">
-            <label>APR (%) / Min Pay (${currencySymbol})</label>
-            <div style="display:flex; gap:0.25rem;">
-              <input type="number" value="${debt.apr}" step="0.1" style="width: 50%;" onchange="updateDebt(${index}, 'apr', parseFloat(this.value) || 0)" />
-              <input type="number" value="${debt.minPay}" step="5" style="width: 50%;" onchange="updateDebt(${index}, 'minPay', parseFloat(this.value) || 0)" />
+            <label>APR / Minimum Payment</label>
+
+            <div class="debt-payment-fields">
+
+              <input
+                type="number"
+                value="${debt.apr}"
+                min="0"
+                step="0.1"
+                inputmode="decimal"
+                aria-label="${escapeHtml(debt.name)} APR percentage"
+                placeholder="APR %"
+                data-index="${index}"
+                data-field="apr"
+              />
+
+              <input
+                type="number"
+                value="${debt.minPay}"
+                min="0"
+                step="5"
+                inputmode="decimal"
+                aria-label="${escapeHtml(debt.name)} minimum payment in ${currencySymbol}"
+                placeholder="Min Pay"
+                data-index="${index}"
+                data-field="minPay"
+              />
+
             </div>
           </div>
-          <button class="btn-remove" onclick="removeDebtField(${index})">×</button>
+
+          <button
+            type="button"
+            class="btn-remove"
+            aria-label="Remove ${escapeHtml(debt.name)}"
+            title="Remove liability"
+            data-remove-index="${index}"
+            ${debts.length <= 1 ? 'disabled' : ''}
+          >
+            ×
+          </button>
         `;
+
         container.appendChild(item);
       });
+
+      attachDebtListeners();
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function attachDebtListeners() {
+      document
+        .querySelectorAll('#debtList input[data-index]')
+        .forEach(input => {
+          input.addEventListener('input', function () {
+            const index = Number(this.dataset.index);
+            const field = this.dataset.field;
+
+            if (!debts[index]) {
+              return;
+            }
+
+            if (field === 'name') {
+              debts[index][field] = this.value;
+            } else {
+              let value = parseFloat(this.value);
+
+              if (!Number.isFinite(value)) {
+                value = 0;
+              }
+
+              if (field === 'balance' || field === 'minPay' || field === 'apr') {
+                value = Math.max(0, value);
+              }
+
+              debts[index][field] = value;
+            }
+
+            calculate();
+          });
+        });
+
+      document
+        .querySelectorAll('[data-remove-index]')
+        .forEach(button => {
+          button.addEventListener('click', function () {
+            removeDebtField(Number(this.dataset.removeIndex));
+          });
+        });
     }
 
     function addDebtField() {
-      debts.push({ name: `Liability ${debts.length + 1}`, balance: 2500, apr: 15.0, minPay: 75 });
+      debts.push({
+        name: `Liability ${debts.length + 1}`,
+        balance: 2500,
+        apr: 15,
+        minPay: 75
+      });
+
       renderDebts();
       calculate();
     }
 
     function removeDebtField(index) {
-      if (debts.length <= 1) return;
+      if (debts.length <= 1) {
+        return;
+      }
+
       debts.splice(index, 1);
+
       renderDebts();
       calculate();
     }
 
-    function updateDebt(index, field, value) {
-      debts[index][field] = value;
-      calculate();
-    }
-
-    let currentTrajectory = [];
-
-    function calculate() {
-      const extraPay = parseFloat(document.getElementById('numExtra').value) || 0;
-      
-      let totalBalance = debts.reduce((sum, d) => sum + d.balance, 0);
-      let totalMinPay = debts.reduce((sum, d) => sum + d.minPay, 0);
-
-      if (totalBalance === 0) {
-        updateDisplays(0, 0, 0, 0, 0, 0, []);
-        return;
-      }
-
-      let weightedAprSum = debts.reduce((sum, d) => sum + (d.balance * d.apr), 0);
-      let weightedApr = weightedAprSum / totalBalance;
-
-      // Simulate Payoff with Extra Pay
-      let { months: acceleratedMonths, interest: acceleratedInterest, trajectory } = simulatePayoff(debts, extraPay, currentStrategy);
-      
-      // Simulate Minimum Only
-      let { months: baselineMonths, interest: baselineInterest } = simulatePayoff(debts, 0, currentStrategy);
-
-      let interestSaved = Math.max(0, baselineInterest - acceleratedInterest);
-      let monthsSaved = Math.max(0, baselineMonths - acceleratedMonths);
-
-      updateDisplays(totalBalance, acceleratedMonths, acceleratedInterest, interestSaved, totalMinPay + extraPay, monthsSaved, weightedApr, trajectory);
-    }
+    /*
+     * -------------------------
+     * Repayment simulation
+     * -------------------------
+     *
+     * The simulation:
+     * 1. Applies monthly interest.
+     * 2. Calculates minimum payments against the
+     *    current post-interest balance.
+     * 3. Redirects any unused minimum payment caused
+     *    by a debt being cleared.
+     * 4. Applies the additional monthly budget to
+     *    the selected priority debt.
+     * 5. Repeats until all balances reach zero.
+     */
 
     function simulatePayoff(debtList, extraBudget, strategy) {
-      // Deep clone debt list
-      let localDebts = debtList.map(d => ({ ...d }));
+      const localDebts = debtList.map(debt => ({
+        name: debt.name,
+        balance: Math.max(0, Number(debt.balance) || 0),
+        apr: Math.max(0, Number(debt.apr) || 0),
+        minPay: Math.max(0, Number(debt.minPay) || 0)
+      }));
+
       let totalInterest = 0;
       let month = 0;
-      let trajectory = [];
-      
-      const maxMonthsLimit = 600; // 50 years max guard
+      const trajectory = [];
 
-      while (localDebts.some(d => d.balance > 0) && month < maxMonthsLimit) {
+      const maxMonthsLimit = 600;
+
+      const initialBalance = localDebts.reduce(
+        (sum, debt) => sum + debt.balance,
+        0
+      );
+
+      trajectory.push(initialBalance);
+
+      if (initialBalance <= 0) {
+        return {
+          months: 0,
+          interest: 0,
+          trajectory
+        };
+      }
+
+      while (
+        localDebts.some(debt => debt.balance > 0.005) &&
+        month < maxMonthsLimit
+      ) {
         month++;
-        let currentTotal = localDebts.reduce((sum, d) => sum + Math.max(0, d.balance), 0);
-        trajectory.push(currentTotal);
 
-        let monthExtra = extraBudget;
-
-        // Apply interest
-        localDebts.forEach(d => {
-          if (d.balance > 0) {
-            let monthlyInterest = (d.balance * (d.apr / 100)) / 12;
-            totalInterest += monthlyInterest;
-            d.balance += monthlyInterest;
+        /*
+         * Apply interest first.
+         */
+        localDebts.forEach(debt => {
+          if (debt.balance <= 0) {
+            return;
           }
+
+          const monthlyInterest =
+            debt.balance * (debt.apr / 100) / 12;
+
+          debt.balance += monthlyInterest;
+          totalInterest += monthlyInterest;
         });
 
-        // Sort debts based on strategy
-        let activeDebts = localDebts.filter(d => d.balance > 0);
-        if (strategy === 'avalanche') {
-          activeDebts.sort((a, b) => b.apr - a.apr);
-        } else {
-          activeDebts.sort((a, b) => a.balance - b.balance);
+        /*
+         * Determine active debts after interest.
+         */
+        let activeDebts = localDebts.filter(
+          debt => debt.balance > 0.005
+        );
+
+        /*
+         * Sort according to chosen method.
+         */
+        sortDebts(activeDebts, strategy);
+
+        /*
+         * Minimum payments.
+         *
+         * Any amount of a minimum payment that is not
+         * required to clear a debt becomes available
+         * for the cascading payment pool.
+         */
+        let cascadeBudget = Math.max(0, extraBudget);
+
+        activeDebts.forEach(debt => {
+          if (debt.balance <= 0) {
+            return;
+          }
+
+          const payment = Math.min(debt.balance, debt.minPay);
+
+          debt.balance -= payment;
+
+          const unusedMinimum =
+            Math.max(0, debt.minPay - payment);
+
+          cascadeBudget += unusedMinimum;
+        });
+
+        /*
+         * Rebuild active list after minimum payments.
+         */
+        activeDebts = localDebts.filter(
+          debt => debt.balance > 0.005
+        );
+
+        sortDebts(activeDebts, strategy);
+
+        /*
+         * Apply all extra/cascaded money to the priority
+         * debt. If it clears, immediately move to the next.
+         */
+        for (const debt of activeDebts) {
+          if (cascadeBudget <= 0) {
+            break;
+          }
+
+          if (debt.balance <= 0) {
+            continue;
+          }
+
+          const payment = Math.min(
+            debt.balance,
+            cascadeBudget
+          );
+
+          debt.balance -= payment;
+          cascadeBudget -= payment;
         }
 
-        // Pay minimums
-        activeDebts.forEach(d => {
-          let pay = Math.min(d.balance, d.minPay);
-          d.balance -= pay;
+        /*
+         * Prevent tiny floating-point balances.
+         */
+        localDebts.forEach(debt => {
+          if (Math.abs(debt.balance) < 0.005) {
+            debt.balance = 0;
+          }
         });
 
-        // Cascading extra payment
-        for (let d of activeDebts) {
-          if (monthExtra <= 0) break;
-          if (d.balance > 0) {
-            let pay = Math.min(d.balance, monthExtra);
-            d.balance -= pay;
-            monthExtra -= pay;
-          }
+        const remainingBalance = localDebts.reduce(
+          (sum, debt) => sum + Math.max(0, debt.balance),
+          0
+        );
+
+        trajectory.push(remainingBalance);
+
+        /*
+         * If the monthly repayment budget cannot cover
+         * even the interest being generated, the debt will
+         * not amortise. Stop rather than displaying a false
+         * finite payoff date.
+         */
+        const totalMinimums = localDebts
+          .filter(debt => debt.balance > 0)
+          .reduce((sum, debt) => sum + debt.minPay, 0);
+
+        const totalMonthlyInterest = localDebts
+          .filter(debt => debt.balance > 0)
+          .reduce(
+            (sum, debt) =>
+              sum + debt.balance * (debt.apr / 100) / 12,
+            0
+          );
+
+        if (
+          remainingBalance > 0 &&
+          totalMinimums + extraBudget <= totalMonthlyInterest &&
+          month > 12
+        ) {
+          break;
         }
       }
 
-      trajectory.push(0);
+      /*
+       * Always end the trajectory at zero when the
+       * simulation genuinely completed.
+       */
+      if (!localDebts.some(debt => debt.balance > 0.005)) {
+        trajectory[trajectory.length - 1] = 0;
+      }
 
       return {
         months: month,
         interest: totalInterest,
-        trajectory: trajectory
+        trajectory,
+        capped: month >= maxMonthsLimit ||
+          localDebts.some(debt => debt.balance > 0.005)
       };
     }
 
-    function updateDisplays(totalDebt, months, interestPaid, interestSaved, monthlyTotal, monthsSaved, weightedApr, trajectory) {
-      document.getElementById('resTimeToFree').innerText = months >= 600 ? '50+ Years' : `${months} Months`;
-      document.getElementById('resTotalDebt').innerText = formatCurr(totalDebt);
-      document.getElementById('resInterestSaved').innerText = formatCurr(interestSaved);
-      document.getElementById('resTotalInterest').innerText = formatCurr(interestPaid);
-      document.getElementById('resMonthlyTotal').innerText = formatCurr(monthlyTotal);
-      document.getElementById('resMonthsSaved').innerText = `${monthsSaved} Mos`;
-      document.getElementById('resWeightedApr').innerText = `${weightedApr.toFixed(1)}%`;
+    function sortDebts(activeDebts, strategy) {
+      if (strategy === 'avalanche') {
+        activeDebts.sort((a, b) => {
+          if (b.apr !== a.apr) {
+            return b.apr - a.apr;
+          }
 
-      document.getElementById('endYearLabel').textContent = `M${months}`;
+          return b.balance - a.balance;
+        });
+      } else {
+        activeDebts.sort((a, b) => {
+          if (a.balance !== b.balance) {
+            return a.balance - b.balance;
+          }
+
+          return b.apr - a.apr;
+        });
+      }
+    }
+
+    /*
+     * -------------------------
+     * Calculation + display
+     * -------------------------
+     */
+
+    function calculate() {
+      const extraPay =
+        clamp(
+          parseFloat(document.getElementById('numExtra').value) || 0,
+          0,
+          5000
+        );
+
+      document.getElementById('numExtra').value = extraPay;
+      document.getElementById('sliderExtra').value = extraPay;
+
+      const totalBalance = debts.reduce(
+        (sum, debt) =>
+          sum + Math.max(0, Number(debt.balance) || 0),
+        0
+      );
+
+      const totalMinPay = debts.reduce(
+        (sum, debt) =>
+          sum + Math.max(0, Number(debt.minPay) || 0),
+        0
+      );
+
+      if (totalBalance <= 0) {
+        currentTrajectory = [0];
+
+        updateDisplays(
+          0,
+          0,
+          0,
+          0,
+          extraPay,
+          0,
+          0,
+          currentTrajectory,
+          false
+        );
+
+        return;
+      }
+
+      const weightedAprSum = debts.reduce(
+        (sum, debt) =>
+          sum +
+          Math.max(0, Number(debt.balance) || 0) *
+          Math.max(0, Number(debt.apr) || 0),
+        0
+      );
+
+      const weightedApr =
+        weightedAprSum / totalBalance;
+
+      /*
+       * Accelerated scenario.
+       */
+      const accelerated =
+        simulatePayoff(
+          debts,
+          extraPay,
+          currentStrategy
+        );
+
+      /*
+       * Baseline scenario.
+       *
+       * This uses minimum payments only, giving the user
+       * a meaningful comparison against the accelerated
+       * scenario.
+       */
+      const baseline =
+        simulatePayoff(
+          debts,
+          0,
+          currentStrategy
+        );
+
+      const interestSaved =
+        baseline.capped || accelerated.capped
+          ? Math.max(
+              0,
+              baseline.interest - accelerated.interest
+            )
+          : Math.max(
+              0,
+              baseline.interest - accelerated.interest
+            );
+
+      const monthsSaved =
+        baseline.capped || accelerated.capped
+          ? 0
+          : Math.max(
+              0,
+              baseline.months - accelerated.months
+            );
+
+      currentTrajectory =
+        accelerated.trajectory || [totalBalance];
+
+      updateDisplays(
+        totalBalance,
+        accelerated.months,
+        accelerated.interest,
+        interestSaved,
+        totalMinPay + extraPay,
+        monthsSaved,
+        weightedApr,
+        currentTrajectory,
+        accelerated.capped
+      );
+    }
+
+    function updateDisplays(
+      totalDebt,
+      months,
+      interestPaid,
+      interestSaved,
+      monthlyTotal,
+      monthsSaved,
+      weightedApr,
+      trajectory,
+      capped
+    ) {
+      document.getElementById('resTimeToFree').innerText =
+        capped
+          ? '50+ Years'
+          : `${months} ${months === 1 ? 'Month' : 'Months'}`;
+
+      document.getElementById('resTotalDebt').innerText =
+        formatCurr(totalDebt);
+
+      document.getElementById('resInterestSaved').innerText =
+        formatCurr(interestSaved);
+
+      document.getElementById('resTotalInterest').innerText =
+        formatCurr(interestPaid);
+
+      document.getElementById('resMonthlyTotal').innerText =
+        formatCurr(monthlyTotal);
+
+      document.getElementById('resMonthsSaved').innerText =
+        `${monthsSaved} ${monthsSaved === 1 ? 'Mo' : 'Mos'}`;
+
+      document.getElementById('resWeightedApr').innerText =
+        `${Number(weightedApr || 0).toFixed(1)}%`;
+
+      document.getElementById('endYearLabel').textContent =
+        capped ? '50+ Yrs' : `M${months}`;
+
+      document.getElementById('chartStatus').textContent =
+        capped ? 'Extended Curve' : 'Optimal Curve';
 
       renderChart(trajectory);
     }
 
+    /*
+     * -------------------------
+     * Chart
+     * -------------------------
+     */
+
     function renderChart(points) {
-      if (!points || points.length < 1) return;
-      
-      const maxVal = Math.max(...points) * 1.05 || 1;
+      if (!points || points.length === 0) {
+        return;
+      }
+
       const width = 500;
-      const height = 180;
-      
+      const height = 160;
+
+      const cleanPoints = points.map(value =>
+        Math.max(0, Number(value) || 0)
+      );
+
+      const maxVal =
+        Math.max(...cleanPoints) * 1.05 || 1;
+
       let pathD = '';
-      points.forEach((val, i) => {
-        const x = (i / (points.length - 1)) * width;
-        const y = height - (val / maxVal) * height;
-        pathD += (i === 0 ? 'M' : 'L') + ` ${x.toFixed(1)} ${y.toFixed(1)}`;
+
+      cleanPoints.forEach((value, index) => {
+        const x =
+          cleanPoints.length === 1
+            ? 0
+            : (index / (cleanPoints.length - 1)) * width;
+
+        const y =
+          height -
+          (value / maxVal) * height;
+
+        pathD +=
+          (index === 0 ? 'M' : 'L') +
+          ` ${x.toFixed(1)} ${y.toFixed(1)}`;
       });
 
-      const areaD = pathD + ` L ${width} ${height} L 0 ${height} Z`;
+      const areaD =
+        pathD +
+        ` L ${width} ${height} L 0 ${height} Z`;
 
-      document.getElementById('chartLine').setAttribute('d', pathD);
-      document.getElementById('chartArea').setAttribute('d', areaD);
+      document
+        .getElementById('chartLine')
+        .setAttribute('d', pathD);
+
+      document
+        .getElementById('chartArea')
+        .setAttribute('d', areaD);
     }
+
+    /*
+     * -------------------------
+     * Save scenario
+     * -------------------------
+     */
 
     function saveScenario() {
       const scenario = {
         date: new Date().toISOString(),
         currency: currencySymbol,
         strategy: currentStrategy,
-        debts: debts,
-        timeToFree: document.getElementById('resTimeToFree').innerText,
-        interestSaved: document.getElementById('resInterestSaved').innerText
+        extraMonthlyPayment:
+          parseFloat(
+            document.getElementById('numExtra').value
+          ) || 0,
+        debts: debts.map(debt => ({ ...debt })),
+        timeToFree:
+          document.getElementById('resTimeToFree').innerText,
+        interestSaved:
+          document.getElementById('resInterestSaved').innerText
       };
-      localStorage.setItem('whorton_debt_scenario', JSON.stringify(scenario));
-      alert('Debt scenario saved to local storage.');
+
+      try {
+        localStorage.setItem(
+          'whorton_debt_scenario',
+          JSON.stringify(scenario)
+        );
+
+        showSaveStatus('Scenario saved locally.');
+      } catch (error) {
+        showSaveStatus(
+          'Unable to save scenario in this browser.'
+        );
+      }
     }
 
+    function showSaveStatus(message) {
+      const status =
+        document.getElementById('saveStatus');
+
+      status.textContent = message;
+
+      window.clearTimeout(
+        showSaveStatus.timeout
+      );
+
+      showSaveStatus.timeout =
+        window.setTimeout(() => {
+          status.textContent = '';
+        }, 3500);
+    }
+
+    /*
+     * -------------------------
+     * CSV export
+     * -------------------------
+     */
+
     function exportCSV() {
-      let csvContent = "data:text/csv;charset=utf-8,Month,Remaining Debt (" + currencySymbol + ")\n";
-      currentTrajectory.forEach((val, index) => {
-        csvContent += `${index},${Math.round(val)}\n`;
+      if (!currentTrajectory.length) {
+        calculate();
+      }
+
+      const rows = [
+        [
+          'Month',
+          `Remaining Debt (${currencySymbol})`
+        ]
+      ];
+
+      currentTrajectory.forEach((value, index) => {
+        rows.push([
+          index,
+          Math.round(value)
+        ]);
       });
-      const encodedUri = encodeURI(csvContent);
-      const link = document.createElement("a");
-      link.setAttribute("href", encodedUri);
-      link.setAttribute("download", "Debt_Payoff_Trajectory.csv");
+
+      const csvContent =
+        rows
+          .map(row =>
+            row
+              .map(csvEscape)
+              .join(',')
+          )
+          .join('\n');
+
+      const blob = new Blob(
+        [csvContent],
+        {
+          type: 'text/csv;charset=utf-8;'
+        }
+      );
+
+      const url =
+        URL.createObjectURL(blob);
+
+      const link =
+        document.createElement('a');
+
+      link.href = url;
+      link.download =
+        'Debt_Payoff_Trajectory.csv';
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
     }
 
-    // Initialize Page
+    function csvEscape(value) {
+      const stringValue =
+        String(value ?? '');
+
+      if (
+        stringValue.includes(',') ||
+        stringValue.includes('"') ||
+        stringValue.includes('\n')
+      ) {
+        return `"${stringValue.replace(/"/g, '""')}"`;
+      }
+
+      return stringValue;
+    }
+
+    /*
+     * -------------------------
+     * Initialise
+     * -------------------------
+     */
+
     renderDebts();
     calculate();
   </script>
+
 </body>
 </html>
