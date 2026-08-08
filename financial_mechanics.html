@@ -116,34 +116,6 @@
       line-height: 1.6;
     }
 
-    /* QUICK NAVIGATION BAR */
-    .quick-nav {
-      display: flex;
-      gap: 0.75rem;
-      overflow-x: auto;
-      padding-bottom: 1rem;
-      margin-bottom: 2.5rem;
-      border-bottom: 1px solid var(--card-border);
-    }
-
-    .quick-nav-link {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      color: var(--text-muted);
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.2s ease;
-    }
-
-    .quick-nav-link:hover {
-      color: var(--text-primary);
-      border-color: var(--accent);
-    }
-
     /* MODULAR SECTION CONTAINER */
     .knowledge-sections {
       display: flex;
@@ -192,7 +164,7 @@
       margin-bottom: 1.5rem;
     }
 
-    /* COMPARISON GRID (e.g. Interest vs Debasement) */
+    /* COMPARISON GRID */
     .comparison-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -261,7 +233,7 @@
       color: var(--accent);
     }
 
-    /* FEATURE GRID (3 Column Layout) */
+    /* FEATURE GRID */
     .feature-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -300,13 +272,6 @@
       color: var(--accent);
       margin: 1rem 0;
     }
-
-    .section-divider {
-      border: 0;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--card-border) 20%, var(--card-border) 80%, transparent);
-      margin: 3rem 0;
-    }
   </style>
 </head>
 <body>
@@ -321,15 +286,6 @@
       <span class="badge">Knowledge Base • Monetary Theory</span>
       <h1>Financial Mechanics & Capital Concepts</h1>
       <p class="subtitle">A clear breakdown of fundamental monetary forces: how capital expands, how currency degrades, and how purchasing power is retained over time.</p>
-    </div>
-
-    <!-- QUICK NAV LINKS -->
-    <div class="quick-nav">
-      <a href="#interest-vs-debasement" class="quick-nav-link">Interest vs. Debasement</a>
-      <a href="#compound-growth" class="quick-nav-link">Compound Mechanics</a>
-      <a href="#real-vs-nominal" class="quick-nav-link">Nominal vs. Real Returns</a>
-      <a href="#inflation-drivers" class="quick-nav-link">Inflation Forces</a>
-      <a href="#template-section" class="quick-nav-link">+ Add New Topic</a>
     </div>
 
     <div class="knowledge-sections">
@@ -377,7 +333,7 @@
           <span class="section-tag" style="color: var(--accent-secondary);">Growth Mechanics</span>
           <h2 class="section-title">The Power of Compounding</h2>
         </div>
-        <p class="section-lead">Compounding occurs when interest or investment earnings generate their own additional returns over subsequent time periods—creating an exponential growth curve rather than a linear one.</p>
+        <p class="section-lead">Compounding occurs when interest or investment returns generate their own additional returns over subsequent time periods—creating an exponential growth curve rather than a linear one.</p>
 
         <div class="formula-box">
           A = P × (1 + r/n)^(n × t)
@@ -386,7 +342,7 @@
         <div class="feature-grid">
           <div class="feature-item">
             <h4>P — Principal Capital</h4>
-            <p>The initial amount of money deposited or invested before any earnings begin to accumulate.</p>
+            <p>The initial amount of money deposited or invested before any returns begin to accumulate.</p>
           </div>
 
           <div class="feature-item">
@@ -396,7 +352,7 @@
 
           <div class="feature-item">
             <h4>n & t — Frequency & Time</h4>
-            <p><code>n</code> represents compounding cycles per year (monthly, daily), while <code>t</code> is total years elapsed.</p>
+            <p><code>n</code> represents compounding cycles per year (monthly, daily), whilst <code>t</code> is total years elapsed.</p>
           </div>
         </div>
       </section>
@@ -407,7 +363,7 @@
           <span class="section-tag">Valuation</span>
           <h2 class="section-title">Nominal vs. Real Purchasing Power</h2>
         </div>
-        <p class="section-lead">The face-value number on your bank account is a nominal figure. What matters for wealth retention is real purchasing power—the actual volume of goods and services that money can buy.</p>
+        <p class="section-lead">The face-value figure on your bank account is a nominal figure. What matters for wealth retention is real purchasing power—the actual volume of goods and services that money can buy.</p>
 
         <div class="comparison-grid">
           <div class="comp-card secondary-border">
@@ -415,7 +371,7 @@
               <span>Nominal Return</span>
             </div>
             <div class="comp-body">
-              <p>The percentage gain or return on an investment unadjusted for inflation or taxes. It represents the numerical dollar or pound growth in your portfolio.</p>
+              <p>The percentage gain or return on an investment unadjusted for inflation or taxes. It represents the numerical growth in your portfolio.</p>
             </div>
           </div>
 
@@ -436,7 +392,7 @@
           <span class="section-tag" style="color: var(--accent-warning);">Macroeconomics</span>
           <h2 class="section-title">Primary Drivers of Inflation</h2>
         </div>
-        <p class="section-lead">Inflation is a sustained increase in the general price level of goods and services over time. It stems from three distinct macro economic mechanisms:</p>
+        <p class="section-lead">Inflation is a sustained increase in the general price level of goods and services over time. It stems from three distinct macroeconomic mechanisms:</p>
 
         <div class="feature-grid">
           <div class="feature-item">
@@ -446,32 +402,12 @@
 
           <div class="feature-item">
             <h4>2. Cost-Push Inflation</h4>
-            <p>Arises when production costs rise (raw materials, energy, labor), forcing businesses to pass higher expenses onto end consumers.</p>
+            <p>Arises when production costs rise (raw materials, energy, labour), forcing businesses to pass higher expenses onto end consumers.</p>
           </div>
 
           <div class="feature-item">
             <h4>3. Built-In / Monetary Inflation</h4>
             <p>Triggered by systemic monetary expansion and wage-price spirals, where expectations of future price increases drive current wage demands.</p>
-          </div>
-        </div>
-      </section>
-
-      <!-- SECTION TEMPLATE: COPY & PASTE TO ADD MORE TOPICS -->
-      <section class="info-section" id="template-section" style="border-style: dashed;">
-        <div class="section-header">
-          <span class="section-tag" style="color: var(--text-muted);">Modular Template</span>
-          <h2 class="section-title">New Section Title Here</h2>
-        </div>
-        <p class="section-lead">Add your introductory text or question summary here. You can copy this structure to expand your knowledge base effortlessly.</p>
-
-        <div class="feature-grid">
-          <div class="feature-item">
-            <h4>Sub-Topic A</h4>
-            <p>Describe your concept or explanation here.</p>
-          </div>
-          <div class="feature-item">
-            <h4>Sub-Topic B</h4>
-            <p>Describe your concept or explanation here.</p>
           </div>
         </div>
       </section>
