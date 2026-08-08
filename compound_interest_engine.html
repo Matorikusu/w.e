@@ -42,21 +42,27 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* Standardized Suite Header Navigation */
+    header {
+      background: rgba(10, 10, 12, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      width: 100%;
+    }
 
-    .nav-back {
-  color: var(--text-primary);   /* white */
-  text-decoration: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  transition: color 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-back:hover {
-  color: var(--accent);         /* optional: green on hover */
-}
+    nav {
+      max-width: 1380px;
+      margin: 0 auto;
+      padding: 1rem 5%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1.5rem;
+    }
 
     .brand {
       font-weight: 800;
@@ -75,6 +81,7 @@
       display: flex;
       gap: 1.5rem;
       align-items: center;
+      list-style: none;
     }
 
     .nav-link {
@@ -87,6 +94,36 @@
 
     .nav-link:hover, .nav-link.active {
       color: var(--text-primary);
+    }
+
+    .nav-back {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: color 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-back:hover {
+      color: var(--accent);
+    }
+
+    .nav-cta {
+      background: var(--accent);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-cta:hover {
+      opacity: 0.9;
     }
 
     /* Main Container */
@@ -461,11 +498,21 @@
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav>
-    <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
-    <a href="index.html" class="nav-back">← Back to Suite</a>
-  </nav>
+  <!-- Suite Header Navigation Bar -->
+  <header>
+    <nav>
+      <a href="index.html" class="brand">Whorton<span>.</span>Estate</a>
+      
+      <div class="nav-links">
+        <a href="index.html" class="nav-link">Overview</a>
+        <a href="suite.html" class="nav-link active">Engines & Suite</a>
+        <a href="portfolio.html" class="nav-link">Portfolio Tracker</a>
+        <a href="analytics.html" class="nav-link">Market Intelligence</a>
+        <a href="suite.html" class="nav-back">← Back to Suite</a>
+        <a href="#export" onclick="exportEngineCSV(); return false;" class="nav-cta">Export Report</a>
+      </div>
+    </nav>
+  </header>
 
   <main>
     <div class="header-block">
@@ -873,6 +920,53 @@
       }
     }
 
+    function renderChart(operatingExp, mortgagePayment, taxDue, netProfit, jurisdiction) {
+      const ctx = document.getElementById('yieldChart').getContext('2d');
+      const symbol = currencySymbols[jurisdiction];
+
+      if (yieldChart) {
+        yieldChart.destroy();
+      }
+
+      yieldChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Operating Friction', 'Mortgage Payment', 'Est. Income Tax', 'Net Cash Profit'],
+          datasets: [{
+            data: [
+              Math.max(0, operatingExp),
+              Math.max(0, mortgagePayment),
+              Math.max(0, taxDue),
+              Math.max(0, netProfit)
+            ],
+            backgroundColor: ['#3f3f46', '#2563eb', '#f43f5e', '#10b981'],
+            borderWidth: 0
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              position: 'bottom',
+              labels: {
+                color: '#a1a1aa',
+                font: { family: 'Plus Jakarta Sans', size: 12 }
+              }
+            },
+            tooltip: {
+              callbacks: {
+                label: function(context) {
+                  return ` ${context.label}: ${symbol}${Math.round(context.raw).toLocaleString()}`;
+                }
+              }
+            }
+          },
+          cutout: '70%'
+        }
+      });
+    }
+
     function calculateEngine() {
       const jurisdiction = document.getElementById('jurisdictionSelect').value;
       const isUK = jurisdiction === 'UK';
@@ -913,7 +1007,6 @@
 
       const totalOperatingExpenses = annualManagement + annualMaintenance + voidLoss + annualUSPropTax + annualUSInsurance;
       
-      // FIX: Proper assignment without undeclared variable
       const NOI = potentialGrossAnnualRent - totalOperatingExpenses;
 
       // Mortgage Payment Calculation
@@ -949,197 +1042,143 @@
         taxCredit = taxRes.taxCredit;
         document.getElementById('postTaxProfitLabel').innerText = "Post-Tax Monthly Profit";
       } else {
-        // US Tax calculation (NOI minus interest paid)
         const taxableIncomeUS = Math.max(0, NOI - annualMortgageInterest);
         annualTaxDue = taxableIncomeUS * (usTaxRate / 100);
         document.getElementById('postTaxProfitLabel').innerText = usTaxRate > 0 ? "Post-Tax Monthly Profit" : "Pre-Tax Monthly Profit";
       }
 
       // Net Cash Flow Calculations
-      const annualNetProfit = potentialGrossAnnualRent - totalOperatingExpenses - annualMortgagePayment - annualTaxDue;
+      const annualNetProfit = NOI - annualMortgagePayment - annualTaxDue;
       const monthlyNetProfit = annualNetProfit / 12;
 
-      // Key Ratios
+      // Performance Yield Metrics
       const grossYield = purchasePrice > 0 ? (potentialGrossAnnualRent / purchasePrice) * 100 : 0;
       const netYield = purchasePrice > 0 ? (NOI / purchasePrice) * 100 : 0;
       const roce = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
 
-      // Update UI Metrics
+      // Update UI Display Elements
       document.getElementById('roceVal').innerText = roce.toFixed(2) + '%';
       document.getElementById('netYieldVal').innerText = netYield.toFixed(2) + '%';
       document.getElementById('grossYieldVal').innerText = grossYield.toFixed(2) + '%';
       document.getElementById('monthlyNetVal').innerText = formatCurrency(monthlyNetProfit, jurisdiction);
       document.getElementById('annualNetVal').innerText = formatCurrency(annualNetProfit, jurisdiction);
 
+      // Capital Breakdown Update
       document.getElementById('depositAmountVal').innerText = formatCurrency(depositAmount, jurisdiction);
       document.getElementById('sdltVal').innerText = formatCurrency(sdltAmount, jurisdiction);
       document.getElementById('setupCostsVal').innerText = formatCurrency(legalCosts, jurisdiction);
       document.getElementById('totalCapitalVal').innerText = formatCurrency(totalCapitalInvested, jurisdiction);
 
+      // Operating Summary Update
       document.getElementById('noiVal').innerText = formatCurrency(NOI, jurisdiction);
       document.getElementById('financingExpenseVal').innerText = formatCurrency(annualMortgagePayment, jurisdiction);
       document.getElementById('taxDueVal').innerText = formatCurrency(annualTaxDue, jurisdiction);
 
-      if (isUK && taxBand !== 'limited_co' && taxBand !== 'basic') {
-        document.getElementById('section24CreditRow').style.display = 'flex';
+      const section24Row = document.getElementById('section24CreditRow');
+      if (isUK && taxBand !== 'limited_co') {
+        section24Row.style.display = 'flex';
         document.getElementById('taxCreditVal').innerText = formatCurrency(taxCredit, jurisdiction);
       } else {
-        document.getElementById('section24CreditRow').style.display = 'none';
+        section24Row.style.display = 'none';
       }
 
-      // Render Stress Matrix
-      renderStressMatrix({
-        mortgageAmount,
-        totalCapitalInvested,
-        potentialGrossAnnualRent,
-        totalOperatingExpenses,
-        currentRate: interestRate,
-        jurisdiction,
-        taxBand,
-        mortgageType,
-        mortgageTerm,
-        usTaxRate,
-        NOI
-      });
+      // Render Visual Cashflow Chart
+      renderChart(totalOperatingExpenses, annualMortgagePayment, annualTaxDue, annualNetProfit, jurisdiction);
 
-      // Update Chart
-      updateChart(annualMortgagePayment, totalOperatingExpenses, annualTaxDue, Math.max(0, annualNetProfit));
+      // Populate Stress Testing Matrix
+      populateStressMatrix({
+        mortgageAmount,
+        NOI,
+        totalOperatingExpenses,
+        potentialGrossAnnualRent,
+        taxBand,
+        usTaxRate,
+        totalCapitalInvested,
+        currentRate: interestRate,
+        jurisdiction
+      });
     }
 
-    function renderStressMatrix({ mortgageAmount, totalCapitalInvested, potentialGrossAnnualRent, totalOperatingExpenses, currentRate, jurisdiction, taxBand, mortgageType, mortgageTerm, usTaxRate, NOI }) {
+    function populateStressMatrix({ mortgageAmount, NOI, totalOperatingExpenses, potentialGrossAnnualRent, taxBand, usTaxRate, totalCapitalInvested, currentRate, jurisdiction }) {
       const isUK = jurisdiction === 'UK';
+      const tbody = document.getElementById('stressTableBody');
+      tbody.innerHTML = '';
+
       const ratesToTest = [
-        currentRate - 1.0,
+        Math.max(1, currentRate - 1.5),
+        Math.max(1, currentRate - 0.5),
         currentRate,
         currentRate + 1.0,
         currentRate + 2.0,
         currentRate + 3.0
-      ].filter(r => r > 0);
+      ];
 
-      const tableBody = document.getElementById('stressTableBody');
-      tableBody.innerHTML = '';
+      // Remove duplicate rounded values
+      const uniqueRates = [...new Set(ratesToTest.map(r => parseFloat(r.toFixed(1))))].sort((a,b) => a - b);
 
-      ratesToTest.forEach(rate => {
-        let annualInterest = 0;
-        let annualPayment = 0;
-
-        if (mortgageType === 'interest_only') {
-          annualInterest = mortgageAmount * (rate / 100);
-          annualPayment = annualInterest;
-        } else {
-          const monthlyRate = (rate / 100) / 12;
-          const totalPayments = mortgageTerm * 12;
-          const monthlyPayment = monthlyRate > 0 
-            ? (mortgageAmount * monthlyRate * Math.pow(1 + monthlyRate, totalPayments)) / (Math.pow(1 + monthlyRate, totalPayments) - 1)
-            : mortgageAmount / totalPayments;
-          annualPayment = monthlyPayment * 12;
-          annualInterest = mortgageAmount * (rate / 100);
-        }
+      uniqueRates.forEach(rate => {
+        const annualInterest = mortgageAmount * (rate / 100);
+        const monthlyInterest = annualInterest / 12;
 
         let taxDue = 0;
         if (isUK) {
-          const taxRes = calculateUKTax({
+          const res = calculateUKTax({
             grossAnnualRent: potentialGrossAnnualRent,
             totalOperatingExpenses,
             annualMortgageInterest: annualInterest,
             taxBand
           });
-          taxDue = taxRes.taxDue;
+          taxDue = res.taxDue;
         } else {
-          const taxableIncomeUS = Math.max(0, NOI - annualInterest);
-          taxDue = taxableIncomeUS * (usTaxRate / 100);
+          const taxableIncome = Math.max(0, NOI - annualInterest);
+          taxDue = taxableIncome * (usTaxRate / 100);
         }
 
-        const annualNet = potentialGrossAnnualRent - totalOperatingExpenses - annualPayment - taxDue;
-        const monthlyNet = annualNet / 12;
-        const roce = totalCapitalInvested > 0 ? (annualNet / totalCapitalInvested) * 100 : 0;
+        const monthlyTax = taxDue / 12;
+        const annualNetProfit = NOI - annualInterest - taxDue;
+        const monthlyNet = annualNetProfit / 12;
+        const stressROCE = totalCapitalInvested > 0 ? (annualNetProfit / totalCapitalInvested) * 100 : 0;
 
-        const row = document.createElement('tr');
-        row.style.background = (Math.abs(rate - currentRate) < 0.05) ? 'rgba(16, 185, 129, 0.08)' : 'transparent';
-        
-        row.innerHTML = `
-          <td>${rate.toFixed(1)}% ${Math.abs(rate - currentRate) < 0.05 ? '(Current)' : ''}</td>
-          <td>${formatCurrency(annualInterest / 12, jurisdiction)}</td>
-          <td>${formatCurrency(taxDue / 12, jurisdiction)}</td>
-          <td class="${monthlyNet >= 0 ? 'text-positive' : 'text-negative'}">${formatCurrency(monthlyNet, jurisdiction)}</td>
-          <td class="${roce >= 0 ? 'text-positive' : 'text-negative'}">${roce.toFixed(2)}%</td>
+        const tr = document.createElement('tr');
+        if (rate === parseFloat(currentRate.toFixed(1))) {
+          tr.style.backgroundColor = 'rgba(16, 185, 129, 0.08)';
+        }
+
+        const profitClass = monthlyNet >= 0 ? 'text-positive' : 'text-negative';
+
+        tr.innerHTML = `
+          <td><strong>${rate.toFixed(1)}%</strong> ${rate === parseFloat(currentRate.toFixed(1)) ? '(Current)' : ''}</td>
+          <td>${formatCurrency(monthlyInterest, jurisdiction)}</td>
+          <td>${formatCurrency(monthlyTax, jurisdiction)}</td>
+          <td class="${profitClass}">${formatCurrency(monthlyNet, jurisdiction)}</td>
+          <td class="${profitClass}">${stressROCE.toFixed(2)}%</td>
         `;
-        tableBody.appendChild(row);
+
+        tbody.appendChild(tr);
       });
-    }
-
-    function updateChart(financing, operating, tax, netProfit) {
-      const ctx = document.getElementById('yieldChart').getContext('2d');
-      
-      const data = {
-        labels: ['Financing / Mortgage', 'Operating Expenses & Voids', 'Tax Friction', 'Net Profit'],
-        datasets: [{
-          data: [financing, operating, tax, netProfit],
-          backgroundColor: [
-            '#3b82f6',
-            '#f59e0b',
-            '#f43f5e',
-            '#10b981'
-          ],
-          borderWidth: 0
-        }]
-      };
-
-      if (yieldChart) {
-        yieldChart.data = data;
-        yieldChart.update();
-      } else {
-        yieldChart = new Chart(ctx, {
-          type: 'doughnut',
-          data: data,
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-              legend: {
-                position: 'right',
-                labels: {
-                  color: '#a1a1aa',
-                  font: { family: 'Plus Jakarta Sans', size: 12 }
-                }
-              }
-            },
-            cutout: '70%'
-          }
-        });
-      }
     }
 
     function exportEngineCSV() {
       const jurisdiction = document.getElementById('jurisdictionSelect').value;
-      const headers = [
-        "Jurisdiction", "Purchase Price", "Deposit", "SDLT / Closing", "Refurb & Fees",
-        "Total Cash Invested", "Gross Monthly Rent", "NOI", "Financing Cost", 
-        "Tax Profile / Band", "Estimated Tax Due", "Net Monthly Profit", "Net Yield / Cap Rate", "ROCE / Cash-on-Cash"
-      ];
+      const price = document.getElementById('purchasePrice').value;
+      const rent = document.getElementById('monthlyRent').value;
+      const roce = document.getElementById('roceVal').innerText;
+      const netYield = document.getElementById('netYieldVal').innerText;
+      const monthlyNet = document.getElementById('monthlyNetVal').innerText;
 
-      const row = [
-        jurisdiction,
-        document.getElementById('purchasePrice').value,
-        document.getElementById('depositAmountVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('sdltVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('setupCostsVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('totalCapitalVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('monthlyRent').value,
-        document.getElementById('noiVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('financingExpenseVal').innerText.replace(/[^0-9.]/g, ''),
-        jurisdiction === 'UK' ? document.getElementById('taxBandSelect').value : `${document.getElementById('usTaxRate').value}% Marginal`,
-        document.getElementById('taxDueVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('monthlyNetVal').innerText.replace(/[^0-9.]/g, ''),
-        document.getElementById('netYieldVal').innerText,
-        document.getElementById('roceVal').innerText
-      ];
+      const csvContent = "data:text/csv;charset=utf-8," 
+        + "Metric,Value\n"
+        + `Jurisdiction,${jurisdiction}\n`
+        + `Purchase Price,${price}\n`
+        + `Monthly Rent,${rent}\n`
+        + `Net Operating Yield,${netYield}\n`
+        + `ROCE / Cash-on-Cash,${roce}\n`
+        + `Monthly Net Profit,${monthlyNet}\n`;
 
-      const csvContent = "data:text/csv;charset=utf-8," + [headers.join(","), row.join(",")].join("\n");
       const encodedUri = encodeURI(csvContent);
       const link = document.createElement("a");
       link.setAttribute("href", encodedUri);
-      link.setAttribute("download", `yield_engine_export_${jurisdiction.toLowerCase()}.csv`);
+      link.setAttribute("download", `Whorton_BTL_Analysis_${jurisdiction}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -1147,19 +1186,20 @@
 
     // Attach Event Listeners
     document.querySelectorAll('input, select').forEach(element => {
-      element.addEventListener('input', () => {
-        toggleJurisdictionFields();
-        calculateEngine();
-      });
-      element.addEventListener('change', () => {
-        toggleJurisdictionFields();
-        calculateEngine();
-      });
+      element.addEventListener('input', calculateEngine);
+      element.addEventListener('change', calculateEngine);
     });
 
-    // Initial Execution
-    toggleJurisdictionFields();
-    calculateEngine();
+    document.getElementById('jurisdictionSelect').addEventListener('change', () => {
+      toggleJurisdictionFields();
+      calculateEngine();
+    });
+
+    // Initialize Page State
+    window.addEventListener('DOMContentLoaded', () => {
+      toggleJurisdictionFields();
+      calculateEngine();
+    });
   </script>
 </body>
 </html>
