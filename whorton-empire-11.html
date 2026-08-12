@@ -1,0 +1,1760 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Whorton Empire | Paper Empire Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:#0a0a0c; --card:#141417; --panel:#1c1c21; --border:#27272a;
+      --text:#fff; --muted:#a1a1aa; --accent:#10b981; --accent-dim:#0d9668;
+      --glow:rgba(16,185,129,0.15); --red:#ef4444; --amber:#f59e0b; --blue:#3b82f6;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;font-family:'Plus Jakarta Sans',system-ui,sans-serif}
+    body{background:var(--bg);color:var(--text);min-height:100vh;-webkit-font-smoothing:antialiased;line-height:1.5}
+    .hero{position:relative;height:180px;overflow:hidden;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:center}
+    #particleCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+    .hero-content{position:relative;z-index:2;text-align:center;padding:0 1.5rem}
+    .hero-brand{font-weight:800;font-size:1.3rem;letter-spacing:-0.02em;text-transform:uppercase}
+    .hero-brand span{color:var(--accent)}
+    .hero-tag{font-size:0.8rem;color:var(--muted);margin-top:0.25rem;font-weight:500}
+    .topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:0.6rem;padding:0.75rem 3%;border-bottom:1px solid var(--border);background:rgba(10,10,12,0.92);backdrop-filter:blur(10px);position:sticky;top:0;z-index:50}
+    .nav-links{display:flex;gap:0.35rem;flex-wrap:wrap}
+    .stats-row{display:flex;gap:1rem;flex-wrap:wrap}
+    .stat{display:flex;flex-direction:column;align-items:flex-end}
+    .stat-label{font-size:0.58rem;text-transform:uppercase;letter-spacing:0.07em;color:var(--muted);font-weight:600}
+    .stat-value{font-size:0.95rem;font-weight:700;letter-spacing:-0.02em}
+    .stat-value.cash{color:var(--accent)}.stat-value.rep{color:var(--amber)}.stat-value.heat{color:var(--red)}.stat-value.clean{color:var(--blue)}
+    .shell{max-width:1220px;margin:0 auto;padding:1.2rem 3% 3rem;display:grid;grid-template-columns:1fr 360px;gap:1.15rem}
+    @media(max-width:980px){.shell{grid-template-columns:1fr}}
+    .panel{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.05rem;margin-bottom:1rem}
+    .panel-title{font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--accent);margin-bottom:0.75rem;padding-bottom:0.45rem;border-bottom:1px solid var(--border)}
+    .btn{background:var(--accent);color:#0a0a0c;border:none;padding:0.45rem 0.9rem;border-radius:7px;font-weight:700;font-size:0.8rem;cursor:pointer;transition:0.15s}
+    .btn:hover:not(:disabled){transform:translateY(-1px);box-shadow:0 8px 18px rgba(16,185,129,0.25);background:#34d399}
+    .btn:disabled{opacity:0.4;cursor:not-allowed;transform:none;box-shadow:none}
+    .btn.secondary{background:transparent;color:var(--text);border:1px solid var(--border)}
+    .btn.secondary:hover:not(:disabled){border-color:var(--accent);color:var(--accent);background:var(--glow);box-shadow:none}
+    .btn.danger{background:transparent;color:var(--red);border:1px solid rgba(239,68,68,0.4)}
+    .btn.danger:hover:not(:disabled){background:rgba(239,68,68,0.1);border-color:var(--red)}
+    .btn.amber{background:transparent;color:var(--amber);border:1px solid rgba(245,158,11,0.4)}
+    .btn.amber:hover:not(:disabled){background:rgba(245,158,11,0.1);border-color:var(--amber)}
+    .btn.sm{padding:0.26rem 0.55rem;font-size:0.7rem}
+    .card{background:var(--panel);border:1px solid var(--border);border-radius:9px;padding:0.75rem 0.9rem;display:flex;justify-content:space-between;align-items:center;gap:0.55rem;transition:border-color 0.2s}
+    .card:hover{border-color:rgba(16,185,129,0.3)}
+    .card-info h3{font-size:0.88rem;font-weight:700;margin-bottom:0.08rem}
+    .card-meta{font-size:0.7rem;color:var(--muted)}
+    .rank{display:inline-block;padding:0.05rem 0.3rem;border-radius:4px;font-size:0.6rem;font-weight:800;margin-left:0.2rem}
+    .rank-D{background:#3f3f46;color:#d4d4d8}.rank-C{background:#1e3a5f;color:#93c5fd}
+    .rank-B{background:#14532d;color:#86efac}.rank-A{background:#78350f;color:#fcd34d}.rank-S{background:#7f1d1d;color:#fca5a5}
+    .collection-box{text-align:center;padding:0.3rem 0 0.1rem}
+    .timer{font-size:1.65rem;font-weight:800;letter-spacing:-0.03em;color:var(--accent);margin:0.2rem 0;font-variant-numeric:tabular-nums}
+    .progress-bar{height:6px;background:#0a0a0c;border-radius:3px;overflow:hidden;margin:0.6rem 0 0.9rem}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));width:0%;transition:width 0.25s linear;border-radius:3px}
+    .share-bar{height:9px;background:#0a0a0c;border-radius:5px;overflow:hidden;margin:0.45rem 0}
+    .share-fill{height:100%;background:linear-gradient(90deg,#059669,var(--accent));width:0%;transition:width 0.45s ease;border-radius:5px}
+    .tabs{display:flex;gap:0.28rem;margin-bottom:0.7rem;flex-wrap:wrap}
+    .tab{flex:1;min-width:64px;text-align:center;padding:0.35rem 0.15rem;background:var(--panel);border:1px solid var(--border);border-radius:7px;cursor:pointer;font-size:0.7rem;font-weight:600;color:var(--muted);transition:0.15s}
+    .tab:hover{color:var(--text);border-color:#3f3f46}
+    .tab.active{background:var(--accent);color:#0a0a0c;border-color:var(--accent)}
+    .hidden{display:none!important}
+    .log{max-height:140px;overflow-y:auto;font-size:0.72rem;color:var(--muted)}
+    .log p{margin-bottom:0.22rem;padding-bottom:0.18rem;border-bottom:1px solid #1c1c21}
+    .log .good{color:var(--accent)}.log .bad{color:var(--red)}.log .warn{color:var(--amber)}
+    .help{font-size:0.7rem;color:var(--muted);margin-top:0.5rem;line-height:1.45}
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.78);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem;backdrop-filter:blur(4px)}
+    .modal{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.4rem;max-width:480px;width:100%;box-shadow:0 25px 50px rgba(0,0,0,0.5);max-height:88vh;overflow-y:auto}
+    .modal.wide{max-width:560px}
+    .modal h2{font-size:1.1rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:0.45rem}
+    .modal p{color:var(--muted);font-size:0.84rem;margin-bottom:0.9rem;line-height:1.55}
+    .toast{position:fixed;bottom:1.2rem;right:1.2rem;background:var(--card);border:1px solid var(--border);border-left:3px solid var(--accent);padding:0.7rem 1rem;border-radius:8px;box-shadow:0 12px 28px rgba(0,0,0,0.45);z-index:200;animation:slideIn 0.28s ease;max-width:280px;font-size:0.8rem;font-weight:500}
+    @keyframes slideIn{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+    .district-tabs{display:flex;gap:0.28rem;margin-bottom:0.75rem;flex-wrap:wrap}
+    .district-tab{padding:0.3rem 0.65rem;border-radius:6px;border:1px solid var(--border);background:var(--panel);font-size:0.72rem;font-weight:600;cursor:pointer;color:var(--muted);transition:0.15s}
+    .district-tab.active{background:var(--glow);border-color:var(--accent);color:var(--accent)}
+    .district-tab.locked{opacity:0.4;cursor:not-allowed}
+    .footer-actions{display:flex;gap:0.35rem;margin-top:0.7rem;flex-wrap:wrap}
+    .chip{display:inline-block;font-size:0.62rem;padding:0.08rem 0.32rem;border-radius:4px;font-weight:600}
+    .chip.ok{background:rgba(16,185,129,0.15);color:var(--accent)}
+    .chip.warn{background:rgba(245,158,11,0.15);color:var(--amber)}
+    .chip.bad{background:rgba(239,68,68,0.15);color:var(--red)}
+    .chip.muted{background:rgba(161,161,170,0.12);color:var(--muted)}
+    .chip.blue{background:rgba(59,130,246,0.15);color:var(--blue)}
+    .auto-row{display:flex;align-items:center;justify-content:space-between;gap:0.6rem;margin-top:0.7rem;padding-top:0.7rem;border-top:1px solid var(--border)}
+    .toggle{width:38px;height:21px;background:#3f3f46;border-radius:11px;position:relative;cursor:pointer;transition:background 0.2s;flex-shrink:0}
+    .toggle.on{background:var(--accent)}
+    .toggle::after{content:'';position:absolute;top:3px;left:3px;width:15px;height:15px;background:#fff;border-radius:50%;transition:transform 0.2s}
+    .toggle.on::after{transform:translateX(17px)}
+    .choice-btn{display:block;width:100%;text-align:left;padding:0.65rem 0.85rem;margin-bottom:0.4rem;background:var(--panel);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-size:0.8rem;transition:0.15s}
+    .choice-btn:hover{border-color:var(--accent);background:var(--glow)}
+    .choice-btn .choice-cost{color:var(--muted);font-size:0.72rem;margin-top:0.18rem}
+    .rules-list{list-style:none}
+    .rules-list li{padding:0.35rem 0;border-bottom:1px solid var(--border);font-size:0.82rem;color:var(--muted);display:flex;gap:0.5rem}
+    .rules-list li strong{color:var(--text);min-width:1.2rem}
+    .log::-webkit-scrollbar{width:5px}.log::-webkit-scrollbar-thumb{background:#3f3f46;border-radius:3px}
+    .inv-row{display:flex;justify-content:space-between;align-items:center;padding:0.4rem 0;border-bottom:1px solid var(--border);font-size:0.78rem}
+    .inv-row:last-child{border-bottom:none}
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <canvas id="particleCanvas"></canvas>
+    <div class="hero-content">
+      <div class="hero-brand">Whorton<span>.</span>Empire</div>
+      <div class="hero-tag">Fake it until you make it · Then make it legitimate</div>
+    </div>
+  </div>
+
+  <header class="topbar">
+    <div class="nav-links">
+      <button class="btn secondary sm" onclick="openRules()">How to Play</button>
+      <button class="btn secondary sm" onclick="saveGame()">Save</button>
+      <button class="btn secondary sm" onclick="loadGame()">Load</button>
+      <button class="btn secondary sm" onclick="exportSave()">Export</button>
+      <button class="btn secondary sm" onclick="document.getElementById('importFile').click()">Import</button>
+      <input type="file" id="importFile" accept=".json" class="hidden" onchange="importSave(event)" />
+      <button class="btn danger sm" onclick="retireEmpire()">Retire</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><span class="stat-label">Cash</span><span class="stat-value cash" id="cashDisplay">£50,000</span></div>
+      <div class="stat"><span class="stat-label">Income</span><span class="stat-value" id="incomeDisplay">£0</span></div>
+      <div class="stat"><span class="stat-label">Age</span><span class="stat-value" id="ageDisplay">28</span></div>
+      <div class="stat"><span class="stat-label">Heat</span><span class="stat-value heat" id="heatDisplay">0%</span></div>
+      <div class="stat"><span class="stat-label">Clean Equity</span><span class="stat-value clean" id="cleanDisplay">£0</span></div>
+    </div>
+  </header>
+
+  <div class="shell">
+    <div>
+      <div class="panel">
+        <div class="panel-title">Work Week</div>
+        <div class="collection-box">
+          <div id="collectionStatus" style="font-size:0.82rem;color:var(--muted)">Ready for the next work week</div>
+          <div class="timer" id="timerDisplay">--:--</div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+          <div style="display:flex;gap:0.35rem;justify-content:center;flex-wrap:wrap">
+            <button class="btn" id="startCollectionBtn" onclick="startCollection()">Simulate Work Week</button>
+          </div>
+          <div class="auto-row">
+            <div style="font-size:0.78rem">
+              <div style="font-weight:600">Auto-Run</div>
+              <div style="color:var(--muted);font-size:0.7rem">Automatically simulate each work week</div>
+              <div id="autoWarn" style="color:var(--amber);font-size:0.7rem;margin-top:0.2rem;display:none">Auto paused — low operating cash</div>
+            </div>
+            <div class="toggle" id="autoToggle" onclick="toggleAuto()"></div>
+          </div>
+          <p class="help">Each work week pays income and wages. No manager = 50% income. Rank C+ needs a CEO.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Districts</div>
+        <div class="district-tabs" id="districtTabs"></div>
+        <div id="districtInfo" style="font-size:0.78rem;color:var(--muted);margin-bottom:0.6rem"></div>
+        <div class="panel-title" style="margin-top:0.3rem">Owned</div>
+        <div id="ownedList" style="display:flex;flex-direction:column;gap:0.45rem"></div>
+        <div class="panel-title" style="margin-top:0.9rem">Available</div>
+        <div id="availableList" style="display:flex;flex-direction:column;gap:0.45rem"></div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Firms (Endgame Targets)</div>
+        <div id="firmsList" style="display:flex;flex-direction:column;gap:0.45rem"></div>
+        <p class="help">Billion-scale plays. Need clean equity + cash. Owning one is a legacy move.</p>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div class="panel-title">District Control</div>
+        <div style="display:flex;justify-content:space-between;font-size:0.82rem;font-weight:600">
+          <span id="currentDistrictName">Spitalfields</span>
+          <span id="sharePercent">0%</span>
+        </div>
+        <div class="share-bar"><div class="share-fill" id="shareFill"></div></div>
+        <p class="help" id="goalMessage">90% to dominate.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Capital & Markets</div>
+        <div class="inv-row"><span>Cash (lossy)</span><span id="cashInv" style="color:var(--accent)">£50,000</span></div>
+        <div class="inv-row"><span>UK Index Fund</span><span id="indexHold">£0</span></div>
+        <div class="inv-row"><span>Global Equity</span><span id="globalHold">£0</span></div>
+        <div class="inv-row"><span>Bitcoin</span><span id="btcLine">0 BTC · value £0</span></div>
+        <div class="inv-row"><span>Clean Equity</span><span id="cleanLine" style="color:var(--blue)">£0</span></div>
+
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.7rem;margin-bottom:0.25rem;font-weight:600">Funds</div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap">
+          <button class="btn sm" onclick="buyFund('index',5000)">Index £5k</button>
+          <button class="btn sm" onclick="buyFund('index',25000)">Index £25k</button>
+          <button class="btn sm" onclick="buyFund('global',10000)">Global £10k</button>
+          <button class="btn sm" onclick="buyFund('global',50000)">Global £50k</button>
+        </div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-top:0.3rem">
+          <button class="btn sm secondary" onclick="sellFund('index',0.25)">Sell 25% Index</button>
+          <button class="btn sm secondary" onclick="sellFund('global',0.25)">Sell 25% Global</button>
+        </div>
+
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.7rem;margin-bottom:0.25rem;font-weight:600">Bitcoin</div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap">
+          <button class="btn sm" onclick="buyBtc(0.01)">Buy 0.01</button>
+          <button class="btn sm" onclick="buyBtc(0.05)">Buy 0.05</button>
+          <button class="btn sm" onclick="buyBtc(0.5)">Buy 0.5</button>
+          <button class="btn sm" onclick="buyBtc(1)">Buy 1.0</button>
+        </div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap;margin-top:0.3rem">
+          <button class="btn sm secondary" onclick="sellBtc(0.01)">Sell 0.01</button>
+          <button class="btn sm secondary" onclick="sellBtc(0.05)">Sell 0.05</button>
+          <button class="btn sm secondary" onclick="sellBtc(0.5)">Sell 0.5</button>
+          <button class="btn sm secondary" onclick="sellBtc(1)">Sell 1.0</button>
+          <button class="btn sm secondary" onclick="sellBtc(-1)">Sell all</button>
+        </div>
+        <div style="font-size:0.72rem;color:var(--muted);margin-top:0.7rem;margin-bottom:0.25rem;font-weight:600">Clean cash → equity</div>
+        <div style="display:flex;gap:0.3rem;flex-wrap:wrap">
+          <button class="btn sm amber" onclick="launderCash(5000)">Clean £5k</button>
+          <button class="btn sm amber" onclick="launderCash(10000)">Clean £10k</button>
+          <button class="btn sm amber" onclick="launderCash(25000)">Clean £25k</button>
+          <button class="btn sm amber" onclick="launderCash(100000)">Clean £100k</button>
+          <button class="btn sm amber" onclick="launderCash(-1)">Clean 50%</button>
+        </div>
+        <p class="help">Cash inflates away. Funds steadier. Cleaning: 20% fee, cuts Heat. Clean-title assets are immune to fines/events.</p>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Staff</div>
+        <div class="tabs">
+          <div class="tab active" data-tab="advisors" onclick="switchTab('advisors')">Advisors</div>
+          <div class="tab" data-tab="managers" onclick="switchTab('managers')">Managers</div>
+          <div class="tab" data-tab="executives" onclick="switchTab('executives')">Executives</div>
+          <div class="tab" data-tab="security" onclick="switchTab('security')">Security</div>
+          <div class="tab" data-tab="legal" onclick="switchTab('legal')">Legal</div>
+          <div class="tab" data-tab="heir" onclick="switchTab('heir')">Heir</div>
+        </div>
+        <div id="advisorsTab"><div id="advisorsList" style="display:flex;flex-direction:column;gap:0.4rem"></div><p class="help">Use Advisor on a property card to assign free. No advisor → rank can slip (warning first).</p></div>
+        <div id="executivesTab" class="hidden"><div id="executivesList" style="display:flex;flex-direction:column;gap:0.4rem"></div><p class="help">Rank C+ properties need a CEO or run at 65%. Executives add multipliers and perks. Executives provide property multipliers and unique perks.</p></div>
+        <div id="managersTab" class="hidden"><div id="managersList" style="display:flex;flex-direction:column;gap:0.4rem"></div><p class="help">Assign one manager per property. No manager = 50% income. Specialty match +8%. Bonuses permanent.</p></div>
+        <div id="securityTab" class="hidden"><div id="securityList" style="display:flex;flex-direction:column;gap:0.4rem"></div><p class="help">Cuts event risk.</p></div>
+        <div id="legalTab" class="hidden"><div id="legalList" style="display:flex;flex-direction:column;gap:0.4rem"></div><p class="help">Compliance officers reduce Heat gain and audit severity.</p></div>
+        <div id="heirTab" class="hidden">
+          <div id="heirPanel"></div>
+          <p class="help">From age 45 you can name an heir. At 70+ succession pressure rises. Retire into Legacy for permanent bonuses next run.</p>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Activity</div>
+        <div class="log" id="log"></div>
+        <div class="footer-actions">
+          <button class="btn secondary sm" onclick="saveGame()">Save</button>
+          <button class="btn danger sm" onclick="retireEmpire()">Retire / Legacy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="rulesModal" class="modal-overlay hidden">
+    <div class="modal">
+      <h2>How to Play</h2>
+      <ul class="rules-list">
+        <li><strong>1</strong> Simulate a Work Week to advance the empire and collect income.</li>
+        <li><strong>2</strong> Three districts: Spitalfields → Canary Wharf → Mayfair.</li>
+        <li><strong>3</strong> Each property shows run cost (wages). Pay or strain staff.</li>
+        <li><strong>4</strong> Complaints freeze revenue until you pay the fine — you keep the property.</li>
+        <li><strong>4b</strong> Sell any property anytime (~70%+ value). Use this if cash is tight.</li>
+        <li><strong>5</strong> Cash inflates away. Move into funds / BTC / clean equity.</li>
+        <li><strong>6</strong> High ranks generate Heat. Legal staff and cleaning reduce it.</li>
+        <li><strong>7</strong> Heat high → audits seize unwashed cash.</li>
+        <li><strong>8</strong> Firms are billion-scale end targets.</li>
+        <li><strong>9</strong> Every property needs a manager (else 50%). Rank C+ needs a CEO (else 65%).</li>
+         <li><strong>10</strong> Executives have unique perks; Managers control districts.</li>
+         <li><strong>11</strong> Auto-Run pauses safely if cash runs out and resumes when conditions allow.</li>
+      </ul>
+      <button class="btn" style="width:100%;margin-top:0.6rem" onclick="closeRules()">Got it</button>
+    </div>
+  </div>
+
+  <div id="eventModal" class="modal-overlay hidden"><div class="modal wide"><h2 id="eventTitle"></h2><p id="eventDesc"></p><div id="eventChoices"></div></div></div>
+  <div id="upgradeModal" class="modal-overlay hidden"><div class="modal wide"><h2 id="upgradeTitle"></h2><p id="upgradeDesc"></p><div id="upgradeChoices"></div><button class="btn secondary" style="width:100%;margin-top:0.45rem" onclick="closeUpgrade()">Cancel</button></div></div>
+  <div id="bonusModal" class="modal-overlay hidden"><div class="modal"><h2>Bonus</h2><p id="bonusDesc"></p><div id="bonusOptions" style="display:flex;flex-direction:column;gap:0.35rem;margin-bottom:0.8rem"></div><button class="btn secondary" style="width:100%" onclick="closeBonus()">Cancel</button></div></div>
+  <div id="decayModal" class="modal-overlay hidden"><div class="modal"><h2>Rank at Risk</h2><p id="decayDesc"></p><div id="decayChoices"></div></div></div>
+  <div id="toastContainer"></div>
+
+  <script>
+    const DISTRICTS = [
+      { id: 'spitalfields', name: 'Spitalfields', unlockShare: 0, rival: 'The Firm' },
+      { id: 'canary', name: 'Canary Wharf', unlockShare: 40, rival: 'Dockside Holdings' },
+      { id: 'mayfair', name: 'Mayfair', unlockShare: 70, rival: 'Crown & Circle' },
+    ];
+
+    const PROPERTIES = [
+      { id:'s1',district:'spitalfields',name:'Corner Newsagent',cost:22000,base:1600,type:'Retail',rank:'D',runCost:280 },
+      { id:'s2',district:'spitalfields',name:'Brick Lane Café',cost:38000,base:2800,type:'Restaurant',rank:'D',runCost:420 },
+      { id:'s3',district:'spitalfields',name:'Barbershop',cost:28000,base:2100,type:'Service',rank:'D',runCost:320 },
+      { id:'s4',district:'spitalfields',name:'Dry Cleaners',cost:32000,base:2400,type:'Service',rank:'D',runCost:350 },
+      { id:'s5',district:'spitalfields',name:'Convenience Store',cost:52000,base:3900,type:'Retail',rank:'C',runCost:480 },
+      { id:'s6',district:'spitalfields',name:'The Old Blue Pub',cost:72000,base:5400,type:'Restaurant',rank:'C',runCost:620 },
+      { id:'s7',district:'spitalfields',name:'Pharmacy',cost:85000,base:6300,type:'Retail',rank:'C',runCost:700 },
+      { id:'s8',district:'spitalfields',name:'Boutique Rooms',cost:125000,base:9200,type:'Hospitality',rank:'B',runCost:950 },
+      // Wapping — higher
+      { id:'w1',district:'canary',name:'Riverfront Deli',cost:180000,base:9800,type:'Restaurant',rank:'C',runCost:1100 },
+      { id:'w2',district:'canary',name:'Warehouse Gym',cost:145000,base:8200,type:'Leisure',rank:'C',runCost:980 },
+      { id:'w3',district:'canary',name:'Gallery Space',cost:260000,base:14500,type:'Commercial',rank:'B',runCost:1400 },
+      { id:'w4',district:'canary',name:'Serviced Offices',cost:380000,base:21000,type:'Commercial',rank:'B',runCost:1900 },
+      { id:'w5',district:'canary',name:'Dockside Hotel',cost:520000,base:28500,type:'Hospitality',rank:'A',runCost:2600 },
+      // Mayfair — highest
+      { id:'m1',district:'mayfair',name:'Private Members Gym',cost:420000,base:22000,type:'Leisure',rank:'B',runCost:2100 },
+      { id:'m2',district:'mayfair',name:'Bond Street Unit',cost:680000,base:35000,type:'Retail',rank:'A',runCost:3200 },
+      { id:'m3',district:'mayfair',name:"Gentlemen's Club",cost:950000,base:48000,type:'Hospitality',rank:'A',runCost:4200 },
+      { id:'m4',district:'mayfair',name:'Whorton House',cost:1600000,base:82000,type:'Commercial',rank:'S',runCost:7500 },
+    ];
+
+
+    // Buyable only with Clean Equity (limited premium slots)
+    const CLEAN_PROPERTIES = [
+      { id:'cs1', district:'spitalfields', name:'Clean Title Café', costClean:240000, base:9000, type:'Restaurant', rank:'C', runCost:900 },
+      { id:'cs2', district:'spitalfields', name:'Licensed Retail Unit', costClean:560000, base:18000, type:'Retail', rank:'B', runCost:1600 },
+      { id:'cw1', district:'canary', name:'Compliant Offices', costClean:900000, base:28000, type:'Commercial', rank:'B', runCost:2400 },
+      { id:'cw2', district:'canary', name:'Regulated Warehouse', costClean:1240000, base:37000, type:'Commercial', rank:'A', runCost:3200 },
+      { id:'cm1', district:'mayfair', name:'Mayfair Trust Suite', costClean:2400000, base:64000, type:'Commercial', rank:'A', runCost:5200 },
+      { id:'cm2', district:'mayfair', name:'Oxford Row Residences', costClean:5000000, base:110000, type:'Hospitality', rank:'S', runCost:9000 },
+    ];
+
+    const FIRMS = [
+      // Shoreditch
+      { id:'f_s1', name:'East London FC', cost:45000000, cleanNeed:8000000, income:180000, type:'Sports', district:'spitalfields' },
+      { id:'f_s2', name:'Brick Lane Holdings', cost:95000000, cleanNeed:18000000, income:320000, type:'Mixed', district:'spitalfields' },
+      // Wapping
+      { id:'f_w1', name:'Dockside Logistics', cost:180000000, cleanNeed:35000000, income:520000, type:'Commercial', district:'canary' },
+      { id:'f_w2', name:'Thames Media Group', cost:260000000, cleanNeed:50000000, income:720000, type:'Media', district:'canary' },
+      // Mayfair
+      { id:'f_m1', name:'Crown Hotels PLC', cost:480000000, cleanNeed:90000000, income:1100000, type:'Hospitality', district:'mayfair' },
+      { id:'f_m2', name:'Oxford Street Group', cost:750000000, cleanNeed:120000000, income:1600000, type:'Retail', district:'mayfair' },
+      { id:'f_m3', name:'Whorton Capital', cost:2000000000, cleanNeed:400000000, income:4500000, type:'Finance', district:'mayfair' },
+    ];
+
+    const RANK_MULT = { D:1.0, C:1.35, B:1.85, A:2.5, S:3.4 };
+    const RANK_ORDER = ['D','C','B','A','S'];
+    const UPGRADE_COST = { D:11000, C:28000, B:58000, A:120000 };
+
+    const ADVISORS = [
+      { id:'a1',name:'James Hart',cost:16000,severance:8000,specialty:'Retail',speed:1.0,capacity:1,quality:82 },
+      { id:'a2',name:'Elena Vargas',cost:19000,severance:9500,specialty:'Restaurant',speed:1.0,capacity:1,quality:85 },
+      { id:'a3',name:'Tom Reeves',cost:14000,severance:7000,specialty:'Service',speed:1.0,capacity:1,quality:78 },
+      { id:'a4',name:'Priya Shah',cost:42000,severance:18000,specialty:'Commercial',speed:1.4,capacity:2,quality:90 },
+      { id:'a5',name:'Marcus Cole',cost:26000,severance:12000,specialty:'Hospitality',speed:1.1,capacity:1,quality:86 },
+      { id:'a6',name:'Sofia Lang',cost:24000,severance:11000,specialty:'Leisure',speed:1.0,capacity:1,quality:84 },
+      { id:'a7',name:'Director Vale',cost:85000,severance:35000,specialty:'Commercial',speed:1.6,capacity:4,quality:94 },
+    ];
+    const EXECUTIVES = [
+      { id:'e1',name:'Sarah Mitchell',cost:2800000,severance:900000,baseMult:1.32,salary:18000,perk:'Growth CEO',desc:'+32% on assigned property · +10% Heat · aggressive growth' },
+      { id:'e2',name:'James Thornton',cost:3500000,severance:1100000,baseMult:1.20,salary:16000,perk:'Compliance CEO',desc:'+20% income · −30% Heat · −20% complaint risk — best shield' },
+      { id:'e3',name:'Victoria Shaw',cost:4200000,severance:1400000,baseMult:1.24,salary:22000,perk:'Finance CEO',desc:'+24% income · +10% fund returns · −10% Heat' },
+      { id:'e4',name:'Marcus Whorton',cost:6500000,severance:2200000,baseMult:1.35,salary:28000,perk:'Legacy CEO',desc:'+35% income · −10% Heat · reputation tick — flagship hire' }
+    ];
+    const MANAGERS = [
+      { id:'m1', name:'Sarah Quinn', cost:18000, severance:8000, baseMult:1.15, heatCut:0.02, specialty:'Retail', personality:'Reliable', desc:'+15% · −2% heat · Retail' },
+      { id:'m2', name:'David Okonkwo', cost:28000, severance:12000, baseMult:1.22, heatCut:0.01, specialty:'Restaurant', personality:'Aggressive', desc:'+22% · Restaurant' },
+      { id:'m3', name:'Lisa Chen', cost:35000, severance:14000, baseMult:1.18, heatCut:0.04, specialty:'Service', personality:'Balanced', desc:'+18% · −4% heat · Service' },
+      { id:'m4', name:'Tom Bradley', cost:42000, severance:16000, baseMult:1.25, heatCut:0.02, specialty:'Commercial', personality:'Operator', desc:'+25% · Commercial' },
+      { id:'m5', name:'Nina Patel', cost:48000, severance:18000, baseMult:1.20, heatCut:0.05, specialty:'Hospitality', personality:'Steady', desc:'+20% · −5% heat · Hospitality' },
+      { id:'m6', name:'Chris Walsh', cost:55000, severance:20000, baseMult:1.28, heatCut:0.01, specialty:'Leisure', personality:'Pushy', desc:'+28% · Leisure' },
+      { id:'m7', name:'Amira Hassan', cost:65000, severance:24000, baseMult:1.24, heatCut:0.06, specialty:'Retail', personality:'Compliant', desc:'+24% · −6% heat · Retail' },
+      { id:'m8', name:'Luke Foster', cost:72000, severance:26000, baseMult:1.32, heatCut:0.02, specialty:'Commercial', personality:'Rainmaker', desc:'+32% · Commercial' },
+      { id:'m9', name:'Sophie Grant', cost:80000, severance:30000, baseMult:1.26, heatCut:0.07, specialty:'Hospitality', personality:'Diplomat', desc:'+26% · −7% heat' },
+      { id:'m10', name:'Robert Hale', cost:95000, severance:35000, baseMult:1.40, heatCut:0.00, specialty:'Commercial', personality:'Ruthless', desc:'+40% · high pressure' },
+      { id:'m11', name:'Elena Ruiz', cost:88000, severance:32000, baseMult:1.30, heatCut:0.05, specialty:'Restaurant', personality:'Craft', desc:'+30% · −5% heat · Restaurant' },
+      { id:'m12', name:'James Pike', cost:110000, severance:40000, baseMult:1.35, heatCut:0.03, specialty:'Service', personality:'Systems', desc:'+35% · Service' },
+    ];
+    const SECURITY = [
+      { id:'s1',name:'Night Watch',cost:18000,severance:6000,reduction:0.22,desc:'−22% events' },
+      { id:'s2',name:'Private Security',cost:42000,severance:14000,reduction:0.40,desc:'−40% events' },
+      { id:'s3',name:'Executive Protection',cost:78000,severance:28000,reduction:0.62,desc:'−62% events' },
+    ];
+    const LEGAL = [
+      { id:'l1',name:'Compliance Junior',cost:28000,severance:10000,heatCut:0.15,desc:'−15% Heat gain' },
+      { id:'l2',name:'Regulatory Counsel',cost:65000,severance:22000,heatCut:0.35,desc:'−35% Heat gain' },
+      { id:'l3',name:'City QC Panel',cost:140000,severance:50000,heatCut:0.55,desc:'−55% Heat · softer audits' },
+    ];
+    const BONUSES = [
+      { id:'b1',name:'New Phone',cost:3500,boost:0.03 },
+      { id:'b2',name:'Cash Bonus',cost:8000,boost:0.06 },
+      { id:'b3',name:'Company Car',cost:18000,boost:0.10 },
+      { id:'b4',name:'Equity Slice',cost:45000,boost:0.18 },
+    ];
+    const HEIRS = [
+      { id:'h1',name:'Alex Whorton',trait:'Operator',desc:'+10% property income when active' },
+      { id:'h2',name:'Jordan Whorton',trait:'Financier',desc:'+15% fund returns when active' },
+      { id:'h3',name:'Sam Whorton',trait:'Networker',desc:'−20% Heat gain when active' },
+    ];
+
+    const COLLECTION_SECS = 5, SAVE_KEY = 'whortonEmpire_v3';
+    const CYCLES_PER_YEAR = 12, START_AGE = 28, INFLATION = 0.004;
+
+    let state = defaultState();
+    let bonusTarget = null, upgradePropId = null, pendingEvent = null, pendingDecay = null;
+
+    function defaultState() {
+      return {
+        cash: 50000, basicIncome: 0, reputation: 70,
+        cycles: 0, age: 28, year: 2026,
+        btc: 0, btcPrice: 42000, indexFund: 0, globalFund: 0,
+        heat: 0, cleanEquity: 0,
+        owned: {}, hiredAdvisors: {}, hiredManagers: {}, hiredExecutives: {}, hiredSecurity: {}, hiredLegal: {},
+        managerBoost: {}, activeManager: {}, activeExecutives: {}, activeSecurity: {}, activeLegal: null,
+        upgrading: null, collection: null, currentDistrict: 'spitalfields',
+        log: [], totalEarned: 0, dominated: {}, autoCollect: false, fires: 0,
+        heirId: null, firmsOwned: {},
+        legacy: loadLegacy(),
+      };
+    }
+    function loadLegacy() {
+      try { return JSON.parse(localStorage.getItem(SAVE_KEY + '_legacy') || '{}'); } catch(e) { return {}; }
+    }
+    function saveLegacy(leg) {
+      localStorage.setItem(SAVE_KEY + '_legacy', JSON.stringify(leg));
+    }
+
+    
+    function allProperties() {
+      return PROPERTIES.concat(typeof CLEAN_PROPERTIES !== 'undefined' ? CLEAN_PROPERTIES : []);
+    }
+
+    function money(n) { return '£' + Math.floor(n).toLocaleString('en-GB'); }
+    function log(msg, type) {
+      type = type || '';
+      var t = new Date().toLocaleTimeString([], { hour:'2-digit', minute:'2-digit' });
+      state.log.unshift({ t:t, msg:msg, type:type });
+      if (state.log.length > 55) state.log.pop();
+      renderLog();
+    }
+    function toast(msg) {
+      var el = document.createElement('div'); el.className = 'toast'; el.textContent = msg;
+      document.getElementById('toastContainer').appendChild(el);
+      setTimeout(function(){ el.remove(); }, 3000);
+    }
+
+    function managerMult(id) {
+      var m = MANAGERS.find(function(x){ return x.id===id; });
+      if (!m) return 1;
+      return m.baseMult + (state.managerBoost[id] || 0);
+    }
+    function advisorLevel(id) {
+      var h = state.hiredAdvisors[id];
+      return h ? Math.min(20, 1 + Math.floor((h.xp||0)/1000)) : 1;
+    }
+    
+    function executiveMult(id) {
+      var e=EXECUTIVES.find(function(x){return x.id===id;});
+      return e ? e.baseMult : 1;
+    }
+    function executiveForProperty(id) {
+      return state.owned[id] && state.owned[id].executiveId ? state.owned[id].executiveId : null;
+    }
+    function sRankPenalty(id) {
+      var o=state.owned[id];
+      if(!o || o.rank!=='S') return 1;
+      return o.executiveId ? 1 : 0.65;
+    }
+    function businessHealth(id) {
+      var o=state.owned[id]; if(!o) return 0;
+      var h=100;
+      if(o.frozen) h-=45;
+      if(o.fineAmount) h-=20;
+      if(!o.managerId) h-=25;
+      var needsCeo = RANK_ORDER.indexOf(o.rank) >= RANK_ORDER.indexOf('C');
+      if(needsCeo && !o.executiveId) h-=25;
+      if(o.rank!=='D' && !o.advisorId) h-=10;
+      h-=Math.min(25,Math.floor((o.complaintLevel||0)/4));
+      return Math.max(0,h);
+    }
+    function executiveHeatCut() {
+      var cut=0;
+      Object.keys(state.hiredExecutives||{}).forEach(function(id){
+        var e=EXECUTIVES.find(function(x){return x.id===id;});
+        if(e && (state.activeExecutives||{})[id]) {
+          if(id==='e2') cut=Math.max(cut,0.30);
+          if(id==='e3') cut=Math.max(cut,0.10);
+          if(id==='e4') cut=Math.max(cut,0.10);
+        }
+      });
+      return cut;
+    }
+    function executiveRiskCut() { return (state.activeExecutives && state.activeExecutives['e2']) ? 0.20 : 0; }
+    function executiveFundBonus() { return (state.activeExecutives && state.activeExecutives['e3']) ? 0.10 : 0; }
+
+    function propRunCost(id) {
+      var p = allProperties().find(function(x){ return x.id===id; });
+      if (!p) return 0;
+      var o = state.owned[id];
+      var mult = 1 + RANK_ORDER.indexOf(o ? o.rank : p.rank) * 0.12;
+      return Math.floor((p.runCost || 300) * mult);
+    }
+    function effectivePropIncome(id) {
+      var p = allProperties().find(function(x){ return x.id===id; });
+      var o = state.owned[id];
+      if (!p || !o) return 0;
+      if (o.frozen) return 0;
+      var base = p.base * RANK_MULT[o.rank || 'D'];
+      var level = o.complaintLevel || 0;
+      var penalty = Math.min(0.75, (level / 100) * 0.75);
+      var mult = 1;
+      // Manager required — without one, property runs at 50%
+      var mid = o.managerId;
+      if (!mid) {
+        mult *= 0.5;
+      } else {
+        var m = MANAGERS.find(function(x){ return x.id===mid; });
+        if (m) {
+          mult *= m.baseMult + (state.managerBoost[mid] || 0);
+          // specialty match bonus
+          if (m.specialty === p.type) mult *= 1.08;
+        }
+      }
+      // CEO required from rank C upward
+      var needsCeo = RANK_ORDER.indexOf(o.rank) >= RANK_ORDER.indexOf('C');
+      if (needsCeo) {
+        if (o.executiveId) {
+          mult *= executiveMult(o.executiveId);
+        } else {
+          mult *= 0.65; // under-executive penalty
+        }
+      }
+      return Math.max(0, base * (1 - penalty) * mult);
+    }
+
+    function calcDistrictIncome(districtId) {
+      var total = 0;
+      Object.keys(state.owned).forEach(function(id) {
+        var p = allProperties().find(function(x){ return x.id===id; });
+        if (!p || p.district !== districtId) return;
+        total += effectivePropIncome(id);
+      });
+      if (state.heirId === 'h1') total *= 1.10;
+      return Math.floor(total);
+    }
+
+    function propResaleValue(id) {
+      var p = allProperties().find(function(x){ return x.id===id; });
+      var o = state.owned[id];
+      if (!p || !o) return 0;
+      var baseCost = p.cost || p.costClean || 0;
+      var rankBonus = RANK_ORDER.indexOf(o.rank) * 0.12;
+      var mult = 0.70 + rankBonus;
+      if (o.frozen) mult *= 0.85;
+      return Math.floor(baseCost * mult);
+    }
+
+    function sellProperty(id) {
+      if (!state.owned[id]) return;
+      var p = allProperties().find(function(x){ return x.id===id; });
+      var val = propResaleValue(id);
+      if (!confirm('Sell '+p.name+' for '+money(val)+'?')) return;
+      state.cash += val;
+      delete state.owned[id];
+      log('Sold '+p.name+' for '+money(val), 'warn');
+      toast('Sold '+p.name+' · +'+money(val));
+      updateUI(); saveGame(true);
+    }
+
+    function payFine(id) {
+      var o = state.owned[id];
+      if (!o || !o.fineAmount) return;
+      if (o.heatLock && (state.heat||0) >= 50) {
+        toast('Heat still high — drop below 50% before reopening');
+        return;
+      }
+      if (state.cash < o.fineAmount) { toast('Need '+money(o.fineAmount)); return; }
+      state.cash -= o.fineAmount;
+      o.fineAmount = 0;
+      o.complaintLevel = 0;
+      o.frozen = false;
+      o.heatLock = false;
+      var p = allProperties().find(function(x){ return x.id===id; });
+      log('Fine paid on '+p.name+' — revenue restored', 'good');
+      toast('Fine paid · '+p.name+' active');
+      updateUI(); saveGame(true);
+    }
+
+    function firmIncome() {
+      var t = 0;
+      Object.keys(state.firmsOwned||{}).forEach(function(fid) {
+        var f = FIRMS.find(function(x){ return x.id===fid; });
+        if (f) t += f.income;
+      });
+      return t;
+    }
+    function calcIncome() {
+      var fromProps = DISTRICTS.reduce(function(s,d){ return s + calcDistrictIncome(d.id); }, 0);
+      return fromProps + (state.basicIncome||800) + firmIncome();
+    }
+    function calcNetWorth() {
+      var v = state.cash + (state.indexFund||0) + (state.globalFund||0) + Math.floor((state.btc||0)*(state.btcPrice||42000)) + (state.cleanEquity||0);
+      Object.keys(state.owned).forEach(function(id) {
+        var p = allProperties().find(function(x){ return x.id===id; });
+        if (!p) return;
+        var baseCost = p.cost || p.costClean || 0;
+        v += baseCost * (1 + RANK_ORDER.indexOf(state.owned[id].rank) * 0.3);
+      });
+      Object.keys(state.firmsOwned||{}).forEach(function(fid) {
+        var f = FIRMS.find(function(x){ return x.id===fid; });
+        if (f) v += f.cost;
+      });
+      return Math.floor(v);
+    }
+    function calcDistrictShare(districtId) {
+      var props = allProperties().filter(function(p){ return p.district===districtId; });
+      var ownedVal=0, totalVal=0;
+      props.forEach(function(p) {
+        var baseCost = p.cost || p.costClean || 0;
+        totalVal += baseCost;
+        if (state.owned[p.id]) {
+          var idx = RANK_ORDER.indexOf(state.owned[p.id].rank);
+          if (idx < 0) idx = 0;
+          ownedVal += baseCost * (1 + idx * 0.28);
+        }
+      });
+      if (!totalVal) return 0;
+      return Math.min(100, Math.floor((ownedVal / totalVal) * 100));
+    }
+    function isDistrictUnlocked(id) {
+      var d = DISTRICTS.find(function(x){ return x.id===id; });
+      if (!d || d.unlockShare===0) return true;
+      var idx = DISTRICTS.findIndex(function(x){ return x.id===id; });
+      var prev = DISTRICTS[idx-1];
+      return prev ? calcDistrictShare(prev.id) >= d.unlockShare : true;
+    }
+    function securityReduction(districtId) {
+      var sid = state.activeSecurity[districtId];
+      if (!sid) return 0;
+      var s = SECURITY.find(function(x){ return x.id===sid; });
+      return s ? s.reduction : 0;
+    }
+    function legalHeatCut() {
+      if (!state.activeLegal) return 0;
+      var l = LEGAL.find(function(x){ return x.id===state.activeLegal; });
+      return l ? l.heatCut : 0;
+    }
+    function findStaffAssignment(type, id) {
+      var map = type==='manager' ? state.activeManager : state.activeSecurity;
+      for (var dist in map) if (map[dist]===id) return dist;
+      return null;
+    }
+
+    // ---- markets ----
+    function tickMarkets() {
+      // inflation on cash
+      if (state.cash > 0) {
+        var loss = Math.floor(state.cash * INFLATION);
+        if (loss > 0) { state.cash -= loss; }
+      }
+      // index ~ +0.15% to +0.6% with small downside
+      var ix = (Math.random()*0.008 - 0.001) + executiveFundBonus();
+      if (state.heirId==='h2') ix += 0.001;
+      state.indexFund = Math.max(0, Math.floor((state.indexFund||0) * (1+ix)));
+      var gx = (Math.random()*0.01 - 0.002) + executiveFundBonus();
+      if (state.heirId==='h2') gx += 0.0015;
+      state.globalFund = Math.max(0, Math.floor((state.globalFund||0) * (1+gx)));
+      // btc volatile
+      var shock = Math.random()<0.08 ? (Math.random()*0.22-0.08) : (Math.random()*0.1-0.05);
+      state.btcPrice = Math.max(8000, Math.floor((state.btcPrice||42000)*(1+shock)));
+    }
+    function buyFund(which, amount) {
+      if (state.cash < amount) { toast('Need '+money(amount)); return; }
+      state.cash -= amount;
+      if (which==='index') state.indexFund = (state.indexFund||0) + amount;
+      else state.globalFund = (state.globalFund||0) + amount;
+      log('Invested '+money(amount)+' in '+(which==='index'?'UK Index':'Global Equity'), 'good');
+      toast('Invested');
+      updateUI(); saveGame(true);
+    }
+    function sellFund(which, pct) {
+      var hold = which==='index' ? (state.indexFund||0) : (state.globalFund||0);
+      var amt = Math.floor(hold * pct);
+      if (amt <= 0) { toast('Nothing to sell'); return; }
+      if (which==='index') state.indexFund -= amt; else state.globalFund -= amt;
+      state.cash += amt;
+      log('Sold '+money(amt)+' from '+(which==='index'?'Index':'Global'), 'good');
+      toast('Sold '+money(amt));
+      updateUI(); saveGame(true);
+    }
+    function buyBtc(amt) {
+      var price = state.btcPrice||42000;
+      var cost = Math.floor(price*amt);
+      if (state.cash < cost) { toast('Need '+money(cost)); return; }
+      state.cash -= cost; state.btc = (state.btc||0)+amt;
+      log('Bought '+amt+' BTC @ '+money(price), 'good'); toast('BTC bought');
+      updateUI(); saveGame(true);
+    }
+    function sellBtc(amt) {
+      var hold = state.btc||0; if (hold<=0) { toast('No BTC'); return; }
+      if (amt<0) amt = hold; amt = Math.min(amt, hold);
+      var gain = Math.floor((state.btcPrice||42000)*amt);
+      state.btc = hold-amt; state.cash += gain;
+      log('Sold BTC for '+money(gain), 'good'); toast('+'+money(gain));
+      updateUI(); saveGame(true);
+    }
+    function launderCash(amount) {
+      if (amount < 0) amount = Math.floor(state.cash * 0.5);
+      if (amount < 1000) { toast('Min £1,000'); return; }
+      if (state.cash < amount) { toast('Not enough cash'); return; }
+      state.cash -= amount;
+      var cleaned = Math.floor(amount * 0.8);
+      state.cleanEquity = (state.cleanEquity||0) + cleaned;
+      var heatDrop = Math.min(state.heat, 4 + Math.floor(amount/50000));
+      state.heat = Math.max(0, state.heat - heatDrop);
+      log('Cleaned '+money(amount)+' → '+money(cleaned)+' equity (Heat −'+heatDrop+')', 'good');
+      toast('Clean equity +'+money(cleaned));
+      checkVictory();
+      updateUI(); saveGame(true);
+    }
+
+    // ---- core actions ----
+    
+    function marketValue(id) {
+      var p = allProperties().find(function(x){ return x.id===id; });
+      if (!p) return 0;
+      var o = state.owned[id];
+      var base = p.cost || p.costClean || 0;
+      var idx = o ? RANK_ORDER.indexOf(o.rank) : 0;
+      return Math.floor(base * (1 + Math.max(0,idx) * 0.25));
+    }
+    function openBidOnAvailable(propId) {
+      var p = PROPERTIES.find(function(x){ return x.id===propId; });
+      if (!p || state.owned[propId]) return;
+      var mv = p.cost;
+      var low = Math.floor(mv * 0.85);
+      var fair = mv;
+      var premium = Math.floor(mv * 1.15);
+      document.getElementById('upgradeTitle').textContent = 'Bid — '+p.name;
+      document.getElementById('upgradeDesc').textContent = 'Market ~'+money(mv)+'. Overpay improves odds and may come with a manager.';
+      document.getElementById('upgradeChoices').innerHTML =
+        '<button class="choice-btn" onclick="placeBid(\''+propId+'\','+low+')"><strong>Lowball '+money(low)+'</strong><div class="choice-cost">40% chance · no staff</div></button>'+
+        '<button class="choice-btn" onclick="placeBid(\''+propId+'\','+fair+')"><strong>Market '+money(fair)+'</strong><div class="choice-cost">75% chance</div></button>'+
+        '<button class="choice-btn" onclick="placeBid(\''+propId+'\','+premium+')"><strong>Premium '+money(premium)+'</strong><div class="choice-cost">95% chance · may include a manager</div></button>';
+      document.getElementById('upgradeModal').classList.remove('hidden');
+    }
+    function placeBid(propId, offer) {
+      var p = PROPERTIES.find(function(x){ return x.id===propId; });
+      if (!p || state.owned[propId]) return;
+      if (state.cash < offer) { toast('Need '+money(offer)); return; }
+      var mv = p.cost;
+      var ratio = offer / mv;
+      var chance = ratio >= 1.15 ? 0.95 : ratio >= 1.0 ? 0.75 : 0.40;
+      state.cash -= offer; // earnest — refund partial on fail
+      if (Math.random() < chance) {
+        state.owned[propId] = { rank: p.rank, advisorId: null, managerId: null, executiveId: null, complaintLevel: 0, fineAmount: 0, frozen: false, health: 100 };
+        // premium may include free manager if available unhired
+        if (ratio >= 1.15) {
+          var freeMgr = MANAGERS.find(function(m){ return !state.hiredManagers[m.id]; });
+          if (freeMgr && Math.random() < 0.55) {
+            state.hiredManagers[freeMgr.id] = true;
+            state.managerBoost[freeMgr.id] = 0;
+            state.owned[propId].managerId = freeMgr.id;
+            log('Acquisition included manager '+freeMgr.name, 'good');
+          }
+        }
+        log('Won bid on '+p.name+' for '+money(offer), 'good');
+        toast('Acquired '+p.name);
+        checkDomination(p.district);
+      } else {
+        var refund = Math.floor(offer * 0.9);
+        state.cash += refund;
+        log('Bid failed on '+p.name+' — '+money(offer-refund)+' costs burned', 'warn');
+        toast('Bid failed');
+        // rival may take it
+        if (Math.random() < 0.35) {
+          state.rivalOwned = state.rivalOwned || {};
+          state.rivalOwned[propId] = true;
+          log('Rival secured '+p.name, 'bad');
+        }
+      }
+      closeUpgrade(); updateUI(); saveGame(true);
+    }
+    function rivalTick() {
+      state.rivalOwned = state.rivalOwned || {};
+      // Rival buys a random available property occasionally as empire grows
+      if (Math.random() > 0.12) return;
+      var avail = PROPERTIES.filter(function(p){ return !state.owned[p.id] && !state.rivalOwned[p.id] && isDistrictUnlocked(p.district); });
+      if (!avail.length) return;
+      var pick = avail[Math.floor(Math.random()*avail.length)];
+      // prefer higher value as player advances
+      state.rivalOwned[pick.id] = true;
+      log('Rival acquired '+pick.name+' in '+(DISTRICTS.find(function(d){return d.id===pick.district;})||{}).name, 'warn');
+      toast('Rival bought '+pick.name);
+    }
+    function rivalOfferTick() {
+      // Rival offers to buy one of your properties
+      var ids = Object.keys(state.owned).filter(function(id){ return !state.owned[id].cleanTitle; });
+      if (ids.length < 2 || Math.random() > 0.08) return;
+      var id = ids[Math.floor(Math.random()*ids.length)];
+      var p = allProperties().find(function(x){ return x.id===id; });
+      if (!p || !p.cost) return;
+      var offer = Math.floor(marketValue(id) * (0.9 + Math.random()*0.35));
+      pendingEvent = { type: 'rivalOffer', propId: id, offer: offer };
+      document.getElementById('eventTitle').textContent = 'Rival offer';
+      document.getElementById('eventDesc').textContent = 'A rival wants '+p.name+' for '+money(offer)+'.';
+      document.getElementById('eventChoices').innerHTML =
+        '<button class="choice-btn" onclick="resolveRivalOffer(true)"><strong>Accept '+money(offer)+'</strong><div class="choice-cost">Sell the asset</div></button>'+
+        '<button class="choice-btn" onclick="resolveRivalOffer(false)"><strong>Refuse</strong><div class="choice-cost">Keep '+p.name+'</div></button>';
+      document.getElementById('eventModal').classList.remove('hidden');
+    }
+    function resolveRivalOffer(accept) {
+      if (!pendingEvent || pendingEvent.type !== 'rivalOffer') return;
+      var id = pendingEvent.propId;
+      var p = allProperties().find(function(x){ return x.id===id; });
+      if (accept && state.owned[id]) {
+        state.cash += pendingEvent.offer;
+        delete state.owned[id];
+        state.rivalOwned = state.rivalOwned || {};
+        state.rivalOwned[id] = true;
+        log('Sold '+p.name+' to rival for '+money(pendingEvent.offer), 'warn');
+        toast('Sold to rival');
+      } else {
+        log('Refused rival offer on '+(p?p.name:'asset'));
+      }
+      pendingEvent = null;
+      document.getElementById('eventModal').classList.add('hidden');
+      updateUI(); saveGame(true);
+    }
+
+    function buyProperty(id) {
+      var p = allProperties().find(function(x){ return x.id===id; });
+      if (!p || state.owned[id] || !isDistrictUnlocked(p.district)) return;
+      if (state.cash < p.cost) { toast('Insufficient capital'); return; }
+      state.cash -= p.cost;
+      state.owned[id] = { rank: p.rank, advisorId: null, managerId: null, executiveId: null, complaintLevel: 0, fineAmount: 0, frozen: false, health: 100 };
+      log('Acquired '+p.name+' · run cost '+money(propRunCost(id))+'/cycle', 'good');
+      toast('Acquired '+p.name);
+      checkDomination(p.district); updateUI(); saveGame(true);
+    }
+    
+    function buyCleanProperty(id) {
+      var p = CLEAN_PROPERTIES.find(function(x){ return x.id===id; });
+      if (!p || state.owned[id] || !isDistrictUnlocked(p.district)) return;
+      if ((state.cleanEquity||0) < p.costClean) { toast('Need '+money(p.costClean)+' clean equity'); return; }
+      state.cleanEquity -= p.costClean;
+      state.owned[id] = { rank: p.rank, advisorId: null, managerId: null, executiveId: null, complaintLevel: 0, fineAmount: 0, frozen: false, health: 100, cleanTitle: true };
+      log('Acquired (clean) '+p.name+' for '+money(p.costClean)+' clean equity', 'good');
+      toast('Clean asset: '+p.name);
+      checkDomination(p.district);
+      updateUI(); saveGame(true);
+    }
+
+    function buyFirm(id) {
+      var f = FIRMS.find(function(x){ return x.id===id; });
+      if (!f || state.firmsOwned[id]) return;
+      if (f.district && !isDistrictUnlocked(f.district)) { toast('District locked'); return; }
+      if ((state.cleanEquity||0) < f.cleanNeed) { toast('Need '+money(f.cleanNeed)+' clean equity'); return; }
+      if (state.cash < f.cost) { toast('Need '+money(f.cost)+' cash'); return; }
+      state.cash -= f.cost;
+      state.firmsOwned[id] = true;
+      log('Acquired firm: '+f.name, 'good');
+      toast('Firm acquired');
+      state.reputation = Math.min(100, state.reputation+8);
+      updateUI(); saveGame(true);
+    }
+
+    function hireAdvisor(id) {
+      var a = ADVISORS.find(function(x){ return x.id===id; }); if (!a||state.hiredAdvisors[id]) return;
+      if (state.cash < a.cost) { toast('Insufficient'); return; }
+      state.cash -= a.cost; state.hiredAdvisors[id] = { xp:0 };
+      log('Hired '+a.name, 'good'); toast('Hired'); updateUI(); saveGame(true);
+    }
+    function hireExecutive(id) {
+      var e=EXECUTIVES.find(function(x){return x.id===id;}); if(!e||state.hiredExecutives[id]) return;
+      if(state.cash<e.cost){toast('Insufficient');return;}
+      state.cash-=e.cost; state.hiredExecutives[id]={xp:0};
+      log('Hired '+e.name+' · '+e.perk,'good'); toast('Executive hired'); updateUI(); saveGame(true);
+    }
+    function assignExecutive(id) {
+      if(!state.hiredExecutives[id]) return;
+      var target=state.currentDistrict;
+      var sProps=Object.keys(state.owned).filter(function(pid){var r=state.owned[pid].rank; var p=allProperties().find(function(x){return x.id===pid;}); return p&&p.district===target&&RANK_ORDER.indexOf(r)>=RANK_ORDER.indexOf('C')&&!state.owned[pid].executiveId;});
+      if(!sProps.length){sProps=Object.keys(state.owned).filter(function(pid){var r=state.owned[pid].rank; var p=allProperties().find(function(x){return x.id===pid;}); return p&&p.district===target&&RANK_ORDER.indexOf(r)>=RANK_ORDER.indexOf('C');});}
+      if(!sProps.length){toast('No Rank C+ property in this district');return;}
+      var prop=sProps[0];
+      Object.keys(state.owned).forEach(function(pid){if(state.owned[pid].executiveId===id) state.owned[pid].executiveId=null;});
+      state.owned[prop].executiveId=id;
+      state.activeExecutives[id]=prop;
+      log(eName(id)+' assigned to '+allProperties().find(function(p){return p.id===prop;}).name,'good'); toast('Executive assigned'); updateUI(); saveGame(true);
+    }
+    function eName(id){var e=EXECUTIVES.find(function(x){return x.id===id;});return e?e.name:'Executive';}
+
+    function hireManager(id) {
+      var m = MANAGERS.find(function(x){ return x.id===id; }); if (!m||state.hiredManagers[id]) return;
+      if (state.cash < m.cost) { toast('Insufficient'); return; }
+      state.cash -= m.cost; state.hiredManagers[id]=true; state.managerBoost[id]=0;
+      log('Hired '+m.name, 'good'); toast('Hired'); updateUI(); saveGame(true);
+    }
+    function hireSecurity(id) {
+      var s = SECURITY.find(function(x){ return x.id===id; }); if (!s||state.hiredSecurity[id]) return;
+      if (state.cash < s.cost) { toast('Insufficient'); return; }
+      state.cash -= s.cost; state.hiredSecurity[id]=true;
+      log('Hired '+s.name, 'good'); toast('Hired'); updateUI(); saveGame(true);
+    }
+    function hireLegal(id) {
+      var l = LEGAL.find(function(x){ return x.id===id; }); if (!l||state.hiredLegal[id]) return;
+      if (state.cash < l.cost) { toast('Insufficient'); return; }
+      state.cash -= l.cost; state.hiredLegal[id]=true;
+      log('Hired '+l.name, 'good'); toast('Hired'); updateUI(); saveGame(true);
+    }
+    function assignLegal(id) {
+      if (!state.hiredLegal[id]) return;
+      state.activeLegal = id;
+      toast('Legal assigned'); updateUI(); saveGame(true);
+    }
+    function fireStaff(type, id) {
+      var name='', sever=0;
+      if (type==='advisor') {
+        var a=ADVISORS.find(function(x){return x.id===id;}); name=a.name; sever=a.severance;
+        Object.keys(state.owned).forEach(function(pid){ if(state.owned[pid].advisorId===id) state.owned[pid].advisorId=null; });
+        delete state.hiredAdvisors[id];
+      } else if (type==='executive') {
+         var e=EXECUTIVES.find(function(x){return x.id===id;}); name=e.name; sever=e.severance;
+         Object.keys(state.owned).forEach(function(pid){if(state.owned[pid].executiveId===id) state.owned[pid].executiveId=null;});
+         delete state.hiredExecutives[id]; delete state.activeExecutives[id];
+       } else if (type==='manager') {
+        var m=MANAGERS.find(function(x){return x.id===id;}); name=m.name; sever=m.severance;
+        delete state.hiredManagers[id]; delete state.managerBoost[id];
+        Object.keys(state.owned).forEach(function(pid){ if(state.owned[pid].managerId===id) state.owned[pid].managerId=null; });
+        for (var d in state.activeManager) if (state.activeManager[d]===id) delete state.activeManager[d];
+      } else if (type==='security') {
+        var s=SECURITY.find(function(x){return x.id===id;}); name=s.name; sever=s.severance;
+        delete state.hiredSecurity[id];
+        for (var d2 in state.activeSecurity) if (state.activeSecurity[d2]===id) delete state.activeSecurity[d2];
+      } else if (type==='legal') {
+        var l=LEGAL.find(function(x){return x.id===id;}); name=l.name; sever=l.severance;
+        delete state.hiredLegal[id]; if (state.activeLegal===id) state.activeLegal=null;
+      }
+      if (state.cash < sever) { toast('Need '+money(sever)+' severance'); return; }
+      state.cash -= sever; state.fires++; state.reputation = Math.max(20, state.reputation-3);
+      log('Fired '+name, 'warn'); toast('Fired'); updateUI(); saveGame(true);
+    }
+    function managerForProperty(id) {
+      return state.owned[id] && state.owned[id].managerId ? state.owned[id].managerId : null;
+    }
+    function findManagerProperty(managerId) {
+      for (var pid in state.owned) if (state.owned[pid].managerId === managerId) return pid;
+      return null;
+    }
+    function openAssignManager(propId) {
+      if (!state.owned[propId]) return;
+      var p = allProperties().find(function(x){ return x.id===propId; });
+      var hired = Object.keys(state.hiredManagers||{});
+      if (!hired.length) { toast('Hire a manager first'); return; }
+      var htmlChoices = hired.map(function(mid){
+        var m = MANAGERS.find(function(x){ return x.id===mid; });
+        var on = findManagerProperty(mid);
+        var onName = on ? (allProperties().find(function(x){return x.id===on;})||{}).name : null;
+        var match = m.specialty === p.type;
+        return '<button class="choice-btn" onclick="assignManagerToProp(\''+propId+'\',\''+mid+'\')">'+
+          '<strong>'+m.name+'</strong> · '+m.specialty+(match?' · MATCH':'')+' · ×'+(m.baseMult+(state.managerBoost[mid]||0)).toFixed(2)+
+          '<div class="choice-cost">'+(onName?('Currently: '+onName+' — will move'):'Available')+' · '+m.desc+'</div></button>';
+      }).join('');
+      htmlChoices += '<button class="choice-btn" onclick="assignManagerToProp(\''+propId+'\',null)"><strong>Unassign</strong><div class="choice-cost">Property runs at 50% without a manager</div></button>';
+      document.getElementById('upgradeTitle').textContent = 'Assign manager — '+p.name;
+      document.getElementById('upgradeDesc').textContent = 'Every property needs a manager. Match specialty for +8%.';
+      document.getElementById('upgradeChoices').innerHTML = htmlChoices;
+      document.getElementById('upgradeModal').classList.remove('hidden');
+    }
+    function assignManagerToProp(propId, managerId) {
+      if (!state.owned[propId]) return;
+      if (!managerId) {
+        state.owned[propId].managerId = null;
+        log('Manager unassigned from '+(allProperties().find(function(x){return x.id===propId;})||{}).name);
+        closeUpgrade(); updateUI(); saveGame(true); return;
+      }
+      if (!state.hiredManagers[managerId]) return;
+      // remove from previous property
+      var prev = findManagerProperty(managerId);
+      if (prev && prev !== propId) state.owned[prev].managerId = null;
+      state.owned[propId].managerId = managerId;
+      var m = MANAGERS.find(function(x){ return x.id===managerId; });
+      log('Assigned manager '+m.name+' → '+(allProperties().find(function(x){return x.id===propId;})||{}).name, 'good');
+      toast('Manager assigned');
+      closeUpgrade(); updateUI(); saveGame(true);
+    }
+    function assignManager(id) {
+      // legacy: assign to first unmanaged owned prop in current district
+      if (!state.hiredManagers[id]) return;
+      var targets = Object.keys(state.owned).filter(function(pid){
+        var p = allProperties().find(function(x){ return x.id===pid; });
+        return p && p.district===state.currentDistrict && !state.owned[pid].managerId;
+      });
+      if (!targets.length) {
+        // open on first owned in district
+        targets = Object.keys(state.owned).filter(function(pid){
+          var p = allProperties().find(function(x){ return x.id===pid; });
+          return p && p.district===state.currentDistrict;
+        });
+      }
+      if (!targets.length) { toast('No property in this district'); return; }
+      openAssignManager(targets[0]);
+    }
+    function unassignManager(id) {
+      var prop = findManagerProperty(id);
+      if (!prop) return;
+      state.owned[prop].managerId = null;
+      toast('Manager unassigned'); updateUI(); saveGame(true);
+    }
+
+    function assignSecurity(id) {
+      if (!state.hiredSecurity[id]) return;
+      var cur=findStaffAssignment('security',id);
+      if (cur===state.currentDistrict) return;
+      if (cur) delete state.activeSecurity[cur];
+      if (state.activeSecurity[state.currentDistrict]) delete state.activeSecurity[state.currentDistrict];
+      state.activeSecurity[state.currentDistrict]=id;
+      toast('Security assigned'); updateUI(); saveGame(true);
+    }
+    function unassignSecurity(id) {
+      var dist=findStaffAssignment('security',id); if(!dist) return;
+      delete state.activeSecurity[dist]; toast('Unassigned'); updateUI(); saveGame(true);
+    }
+    function openBonus(id) {
+      bonusTarget=id;
+      var m=MANAGERS.find(function(x){return x.id===id;});
+      document.getElementById('bonusDesc').textContent=m.name+' · ×'+managerMult(id).toFixed(2);
+      document.getElementById('bonusOptions').innerHTML=BONUSES.map(function(b){
+        return '<button class="btn secondary" style="width:100%;text-align:left" onclick="giveBonus(\''+b.id+'\')">'+b.name+' — '+money(b.cost)+' · +'+Math.round(b.boost*100)+'%</button>';
+      }).join('');
+      document.getElementById('bonusModal').classList.remove('hidden');
+    }
+    function giveBonus(bid) {
+      var b=BONUSES.find(function(x){return x.id===bid;});
+      if (state.cash<b.cost){toast('Insufficient');return;}
+      state.cash-=b.cost; state.managerBoost[bonusTarget]=(state.managerBoost[bonusTarget]||0)+b.boost;
+      log('Bonus to '+MANAGERS.find(function(x){return x.id===bonusTarget;}).name,'good');
+      closeBonus(); updateUI(); saveGame(true);
+    }
+    function closeBonus(){ bonusTarget=null; document.getElementById('bonusModal').classList.add('hidden'); }
+
+    
+    function openAssignAdvisor(propId) {
+      if (!state.owned[propId]) return;
+      var p = allProperties().find(function(x){ return x.id===propId; });
+      var hired = Object.keys(state.hiredAdvisors||{});
+      if (!hired.length) { toast('Hire an advisor first'); return; }
+      var htmlChoices = hired.map(function(aid){
+        var a = ADVISORS.find(function(x){ return x.id===aid; });
+        var match = a.specialty === p.type;
+        var used = Object.keys(state.owned).filter(function(id){ return state.owned[id].advisorId===aid; }).length;
+        var cap = a.capacity + (advisorLevel(aid)>=10?1:0) + (advisorLevel(aid)>=15?1:0);
+        var full = used >= cap && state.owned[propId].advisorId !== aid;
+        return '<button class="choice-btn" onclick="assignAdvisorFree(\''+propId+'\',\''+aid+'\')" '+(full?'disabled style="opacity:0.5"':'')+'>'+
+          '<strong>'+a.name+'</strong> · '+a.specialty+(match?' · MATCH':'')+' · '+used+'/'+cap+
+          '<div class="choice-cost">Lv'+advisorLevel(aid)+(full?' · at capacity':'')+'</div></button>';
+      }).join('');
+      htmlChoices += '<button class="choice-btn" onclick="assignAdvisorFree(\''+propId+'\',null)"><strong>Unassign</strong><div class="choice-cost">Remove advisor from this property</div></button>';
+      document.getElementById('upgradeTitle').textContent = 'Assign advisor — '+p.name;
+      document.getElementById('upgradeDesc').textContent = 'Free assignment. Matching specialty helps upgrades later.';
+      document.getElementById('upgradeChoices').innerHTML = htmlChoices;
+      document.getElementById('upgradeModal').classList.remove('hidden');
+    }
+    function assignAdvisorFree(propId, advisorId) {
+      if (!state.owned[propId]) return;
+      if (!advisorId) {
+        state.owned[propId].advisorId = null;
+        log('Advisor unassigned from '+(allProperties().find(function(x){return x.id===propId;})||{}).name);
+        closeUpgrade(); updateUI(); saveGame(true); return;
+      }
+      if (!state.hiredAdvisors[advisorId]) return;
+      var a = ADVISORS.find(function(x){ return x.id===advisorId; });
+      var used = Object.keys(state.owned).filter(function(id){ return state.owned[id].advisorId===advisorId; }).length;
+      var cap = a.capacity + (advisorLevel(advisorId)>=10?1:0) + (advisorLevel(advisorId)>=15?1:0);
+      if (state.owned[propId].advisorId !== advisorId && used >= cap) { toast('Advisor at capacity'); return; }
+      state.owned[propId].advisorId = advisorId;
+      log('Assigned '+a.name+' → '+(allProperties().find(function(x){return x.id===propId;})||{}).name, 'good');
+      toast('Advisor assigned');
+      closeUpgrade(); updateUI(); saveGame(true);
+    }
+
+    function openUpgrade(propId) {
+      var p=allProperties().find(function(x){return x.id===propId;});
+      var owned=state.owned[propId]; if(!p||!owned) return;
+      var idx=RANK_ORDER.indexOf(owned.rank); if(idx>=RANK_ORDER.length-1){toast('Max rank');return;}
+      if(state.upgrading){toast('Already upgrading');return;}
+      upgradePropId=propId;
+      var next=RANK_ORDER[idx+1], base=UPGRADE_COST[owned.rank];
+      document.getElementById('upgradeTitle').textContent='Upgrade '+p.name;
+      document.getElementById('upgradeDesc').textContent=owned.rank+' → '+next+' · base '+money(base)+' · run cost now '+money(propRunCost(propId));
+      var hired=Object.keys(state.hiredAdvisors);
+      if(!hired.length) document.getElementById('upgradeChoices').innerHTML='<p style="color:var(--muted)">Hire an advisor first.</p>';
+      else {
+        document.getElementById('upgradeChoices').innerHTML=hired.map(function(aid){
+          var a=ADVISORS.find(function(x){return x.id===aid;});
+          var match=a.specialty===p.type;
+          var cost=Math.floor(base*(match?0.75:1)*(1-advisorLevel(aid)*0.01));
+          var time=Math.max(5, Math.round(12/a.speed*(match?0.8:1)));
+          var success=Math.min(97, 72+(match?12:0)+advisorLevel(aid));
+          return '<button class="choice-btn" onclick="confirmUpgrade(\''+aid+'\')"><strong>'+a.name+'</strong> Lv'+advisorLevel(aid)+(match?' · specialist':'')+
+            '<div class="choice-cost">'+money(cost)+' · '+time+'s · '+success+'% success</div></button>';
+        }).join('');
+      }
+      document.getElementById('upgradeModal').classList.remove('hidden');
+    }
+    function confirmUpgrade(advisorId) {
+      var p=allProperties().find(function(x){return x.id===upgradePropId;});
+      var owned=state.owned[upgradePropId];
+      var a=ADVISORS.find(function(x){return x.id===advisorId;});
+      var idx=RANK_ORDER.indexOf(owned.rank); var next=RANK_ORDER[idx+1];
+      var base=UPGRADE_COST[owned.rank]; var match=a.specialty===p.type;
+      var cost=Math.floor(base*(match?0.75:1)*(1-advisorLevel(advisorId)*0.01));
+      var time=Math.max(5, Math.round(12/a.speed*(match?0.8:1)));
+      var success=Math.min(97, 72+(match?12:0)+advisorLevel(advisorId));
+      if(state.cash<cost){toast('Insufficient');return;}
+      state.cash-=cost; owned.advisorId=advisorId;
+      state.upgrading={propId:upgradePropId,advisorId:advisorId,from:owned.rank,to:next,endsAt:Date.now()+time*1000,success:success};
+      log('Upgrading '+p.name+' → '+next); closeUpgrade(); updateUI(); saveGame(true);
+    }
+    function closeUpgrade(){ upgradePropId=null; document.getElementById('upgradeModal').classList.add('hidden'); }
+
+    function setHeir(id) {
+      if ((state.age||28) < 45) { toast('Name an heir from age 45'); return; }
+      state.heirId = id;
+      var h = HEIRS.find(function(x){return x.id===id;});
+      log('Named heir: '+h.name+' ('+h.trait+')', 'good');
+      toast('Heir: '+h.name);
+      updateUI(); saveGame(true);
+    }
+
+    function scheduleAutoRun(delay) {
+      clearTimeout(window.whortonAutoTimer);
+      window.whortonAutoTimer=setTimeout(function(){
+        if(!state.autoCollect || state.collection || pendingEvent || pendingDecay) return;
+        if(document.visibilityState==='hidden') { scheduleAutoRun(1000); return; }
+        startCollection();
+      }, delay||600);
+    }
+    document.addEventListener('visibilitychange', function(){ if(document.visibilityState==='visible' && state.autoCollect && !state.collection && !pendingEvent && !pendingDecay) scheduleAutoRun(100); });
+
+    function startCollection() {
+      if (state.collection) return;
+            // Heat lockdown: still allow collection (unfrozen props only — handled in income)
+      state.collection = { start:Date.now(), duration:COLLECTION_SECS*1000, endsAt:Date.now()+COLLECTION_SECS*1000, district:state.currentDistrict };
+      log('Collection · '+DISTRICTS.find(function(d){return d.id===state.currentDistrict;}).name);
+      updateUI();
+    }
+
+    function finishCollection(fromAuto) {
+      if (!state.collection) return;
+      if (Date.now() < state.collection.endsAt) { if (!fromAuto) toast('Still running'); return; }
+      var district = state.collection.district;
+      var income = calcDistrictIncome(district);
+      var basic = state.basicIncome || 0;
+      var propPart = Math.floor(income * (0.93+Math.random()*0.14));
+      income = propPart + basic + firmIncome();
+
+      // wages
+      var wage = 0;
+      Object.keys(state.owned).forEach(function(id){ wage += propRunCost(id); });
+      var mgrCount = 0; Object.keys(state.owned).forEach(function(id){ if(state.owned[id].managerId) mgrCount++; });
+      wage += mgrCount * 250;
+      wage += Object.keys(state.activeSecurity).length * 150;
+      if (state.activeLegal) wage += 400;
+       Object.keys(state.activeExecutives||{}).forEach(function(eid){ var ex=EXECUTIVES.find(function(x){return x.id===eid;}); if(ex) wage += ex.salary; });
+      if (wage > 0) {
+        if (state.cash + income >= wage) income -= wage;
+        else { income = Math.max(0, income - state.cash); state.cash = 0; log('Wages short — staff strained', 'warn'); state.reputation=Math.max(20,state.reputation-2); }
+      }
+
+      // heat gain (always accumulates from activity)
+      var highTier = 0;
+      Object.keys(state.owned).forEach(function(id){ if (['A','S'].indexOf(state.owned[id].rank)>=0) highTier++; });
+      var heatGain = (1 + highTier * 0.5) * (1 - legalHeatCut()) * (1 - executiveHeatCut());
+       if (state.activeExecutives && state.activeExecutives['e1']) heatGain *= 1.10;
+      if (state.heirId==='h3') heatGain *= 0.8;
+      state.heat = Math.min(100, Math.floor((state.heat||0) + Math.max(0.5, heatGain)));
+       if (state.activeExecutives && state.activeExecutives['e4']) state.reputation=Math.min(100,state.reputation+0.05);
+
+      // Heat lockdown: at 75%+ a random property can be forcibly frozen until heat drops
+      if ((state.heat||0) >= 75) {
+        maybeForceShutdown();
+      }
+
+      // Audits only at high heat
+      if ((state.heat||0) >= 75 && Math.random() < 0.35) {
+        triggerAudit();
+      } else if ((state.heat||0) >= 50 && Math.random() < 0.18) {
+        triggerAudit();
+      }
+
+      tickMarkets();
+
+      // age
+      state.cycles = (state.cycles||0)+1;
+      if (state.cycles % CYCLES_PER_YEAR === 0) {
+        state.age = (state.age||28)+1;
+        state.year = (state.year||2026)+1;
+        log('Year passed. Age '+state.age+' ('+state.year+').', 'warn');
+        if (state.age >= 70 && !state.heirId) log('No heir named. Succession risk rising.', 'bad');
+      }
+
+      // Events only once heat >= 25%; frequency scales with heat
+      var heat = state.heat || 0;
+      var eventChance = 0;
+      if (heat >= 75) eventChance = 0.45;
+      else if (heat >= 50) eventChance = 0.28;
+      else if (heat >= 25) eventChance = 0.18;
+      // security reduces event chance
+      eventChance = Math.max(0, eventChance - securityReduction(district) * 0.5);
+       eventChance = Math.max(0, eventChance - executiveRiskCut() * 0.5);
+
+      var roll = Math.random();
+      if (heat >= 25 && roll < eventChance) {
+        triggerBusinessEvent(district, income);
+        return;
+      } else if (heat >= 25 && roll < eventChance + 0.06) {
+        income = Math.floor(income * 0.6);
+        log('Disruption — '+money(income), 'warn');
+      } else {
+        log('Collected '+money(income)+(fromAuto?' (auto)':''), 'good');
+        toast('+'+money(income));
+      }
+
+      // If empire under heat lockdown (any force-frozen needing heat drop), still allow collection from unfrozen
+      state.cash += income;
+      state.totalEarned += income;
+      state.collection = null;
+      checkDomination(district);
+      queueRankWarnings();
+      checkVictory();
+      updateUI(); saveGame(true);
+
+      // Auto-collect continue
+      if (state.autoCollect && fromAuto) scheduleAutoRun(800);
+    }
+
+    function maybeForceShutdown() {
+      // At 75%+ heat, chance to freeze a random unfrozen property without asking
+      var ids = Object.keys(state.owned).filter(function(id){ return !state.owned[id].frozen && !state.owned[id].cleanTitle; });
+      if (!ids.length) return;
+      if (Math.random() > 0.4) return;
+      var id = ids[Math.floor(Math.random()*ids.length)];
+      var p = allProperties().find(function(x){ return x.id===id; });
+      var o = state.owned[id];
+      o.frozen = true;
+      o.heatLock = true; // must drop heat before unfreeze via fine alone isn't enough
+      o.fineAmount = Math.max(o.fineAmount||0, Math.floor(p.base * RANK_MULT[o.rank] * 5));
+      o.complaintLevel = 100;
+      log('HEAT RAID — '+p.name+' shut down. Drop Heat below 50% and pay fine to reopen.', 'bad');
+      toast(p.name+' shut down by regulators');
+    }
+
+    function triggerAudit() {
+      var severity = state.activeLegal && LEGAL.find(function(x){return x.id===state.activeLegal;}) && LEGAL.find(function(x){return x.id===state.activeLegal;}).heatCut > 0.4 ? 0.15 : 0.30;
+      var seized = Math.floor(state.cash * severity);
+      state.cash -= seized;
+      state.heat = Math.max(20, Math.floor(state.heat * 0.4));
+      log('AUDIT — authorities seized '+money(seized)+' unwashed cash', 'bad');
+      toast('Audit: −'+money(seized));
+    }
+
+    function queueRankWarnings() {
+      if (pendingDecay) return;
+      var atRisk = [];
+      Object.keys(state.owned).forEach(function(id) {
+        var o = state.owned[id];
+        if (o.rank==='S' && !o.executiveId) { atRisk.push(id); return; }
+         if (o.cleanTitle) return;
+        if (!o.advisorId && RANK_ORDER.indexOf(o.rank) > 0 && Math.random() < 0.12) atRisk.push(id);
+      });
+      if (!atRisk.length) return;
+      var id = atRisk[0];
+      var p = allProperties().find(function(x){return x.id===id;});
+      pendingDecay = id;
+      document.getElementById('decayDesc').textContent = p.name + ' (Rank '+state.owned[id].rank+') is understaffed. Assign a manager (and a CEO from Rank C+).';
+      document.getElementById('decayChoices').innerHTML =
+        '<button class="choice-btn" onclick="saveDecay(true)"><strong>Inject emergency budget</strong><div class="choice-cost">'+money(propRunCost(id)*8)+' · stabilise rank</div></button>'+
+        '<button class="choice-btn" onclick="saveDecay(false)"><strong>Ignore</strong><div class="choice-cost">Rank will drop</div></button>';
+      document.getElementById('decayModal').classList.remove('hidden');
+    }
+    function saveDecay(pay) {
+      if (!pendingDecay) return;
+      var id = pendingDecay;
+      var p = allProperties().find(function(x){return x.id===id;});
+      if (pay) {
+        var cost = propRunCost(id)*8;
+        if (state.cash < cost) { toast('Need '+money(cost)); return; }
+        state.cash -= cost;
+        log('Stabilised '+p.name, 'good');
+        toast('Rank held');
+      } else {
+        var idx = RANK_ORDER.indexOf(state.owned[id].rank);
+        if (idx > 0) {
+          state.owned[id].rank = RANK_ORDER[idx-1];
+          log(p.name+' dropped to Rank '+state.owned[id].rank, 'bad');
+          toast(p.name+' ↓ rank');
+        }
+      }
+      pendingDecay = null;
+      document.getElementById('decayModal').classList.add('hidden');
+      updateUI(); saveGame(true);
+    }
+
+    function triggerBusinessEvent(district, potentialIncome) {
+      var ownedIn = Object.keys(state.owned).filter(function(id){
+        var p=allProperties().find(function(x){return x.id===id;});
+        var o=state.owned[id];
+        return p && p.district===district && !o.frozen && !o.cleanTitle;
+      });
+      var target = ownedIn.length ? ownedIn[Math.floor(Math.random()*ownedIn.length)] : null;
+      if (!target) {
+        // no valid target — just pay reduced income
+        state.cash += Math.floor(potentialIncome * 0.6);
+        state.collection = null;
+        log('Minor disruption — reduced take', 'warn');
+        updateUI(); saveGame(true);
+        return;
+      }
+      var p = allProperties().find(function(x){ return x.id===target; });
+      var o = state.owned[target];
+      var rival = DISTRICTS.find(function(d){ return d.id===district; }).rival;
+      var fine = Math.max(4000, Math.floor(p.base * RANK_MULT[o.rank] * 4));
+      pendingEvent = { district: district, potentialIncome: potentialIncome, target: target, fine: fine };
+      document.getElementById('eventTitle').textContent = 'Complaint — ' + p.name;
+      document.getElementById('eventDesc').textContent =
+        rival + ' / regulators have filed a complaint against ' + p.name + '. ' +
+        'Revenue will be frozen until you settle. Fine: ' + money(fine) + '. You will not lose the property.';
+      document.getElementById('eventChoices').innerHTML =
+        '<button class="choice-btn" onclick="resolveComplaint(0)"><strong>Pay fine now</strong><div class="choice-cost">' + money(fine) + ' · full collection this cycle</div></button>' +
+        '<button class="choice-btn" onclick="resolveComplaint(1)"><strong>Defer — freeze revenue</strong><div class="choice-cost">Keep cash · ' + p.name + ' earns £0 until paid</div></button>' +
+        '<button class="choice-btn" onclick="resolveComplaint(2)"><strong>Negotiate</strong><div class="choice-cost">' + money(Math.floor(fine*0.55)) + ' · 70% chance to clear</div></button>';
+      document.getElementById('eventModal').classList.remove('hidden');
+      state.collection = null;
+      updateUI();
+    }
+
+    function resolveComplaint(choice) {
+      if (!pendingEvent) return;
+      var id = pendingEvent.target;
+      var o = state.owned[id];
+      var p = allProperties().find(function(x){ return x.id===id; });
+      var fine = pendingEvent.fine;
+      var income = pendingEvent.potentialIncome;
+
+      if (choice === 0) {
+        if (state.cash < fine) { toast('Need ' + money(fine) + ' — defer or negotiate'); return; }
+        state.cash -= fine;
+        if (o) { o.fineAmount = 0; o.complaintLevel = 0; o.frozen = false; }
+        state.cash += income;
+        state.totalEarned += income;
+        log('Fine paid on ' + p.name + ' · collected ' + money(income), 'good');
+        toast('Settled · revenue clear');
+      } else if (choice === 1) {
+        if (o) {
+          o.frozen = true;
+          o.fineAmount = fine;
+          o.complaintLevel = Math.min(100, (o.complaintLevel || 0) + 40);
+        }
+        // still get income from other properties this cycle roughly
+        state.cash += Math.floor(income * 0.5);
+        log(p.name + ' FROZEN until fine ' + money(fine) + ' is paid', 'warn');
+        toast(p.name + ' frozen');
+      } else {
+        var neg = Math.floor(fine * 0.55);
+        if (state.cash < neg) { toast('Need ' + money(neg)); return; }
+        state.cash -= neg;
+        if (Math.random() < 0.70) {
+          if (o) { o.frozen = false; o.fineAmount = 0; o.complaintLevel = 0; }
+          state.cash += income;
+          state.totalEarned += income;
+          log('Negotiation worked on ' + p.name, 'good');
+          toast('Cleared');
+        } else {
+          if (o) {
+            o.frozen = true;
+            o.fineAmount = fine;
+            o.complaintLevel = Math.min(100, (o.complaintLevel || 0) + 50);
+          }
+          log('Negotiation failed — ' + p.name + ' frozen, full fine due', 'bad');
+          toast('Still frozen');
+        }
+      }
+      pendingEvent = null;
+      document.getElementById('eventModal').classList.add('hidden');
+      updateUI();
+      saveGame(true);
+      if (state.autoCollect) setTimeout(function(){ if (state.autoCollect && !state.collection) scheduleAutoRun(100); }, 800);
+    }
+
+    function toggleAuto() {
+      state.autoCollect = !state.autoCollect;
+      document.getElementById('autoToggle').classList.toggle('on', state.autoCollect);
+      toast(state.autoCollect?'Auto on':'Auto off');
+      if (state.autoCollect && !state.collection) scheduleAutoRun(100);
+      saveGame(true);
+    }
+    function checkDomination(districtId) {
+      if (calcDistrictShare(districtId)>=90 && !state.dominated[districtId]) {
+        state.dominated[districtId]=true;
+        var d=DISTRICTS.find(function(x){return x.id===districtId;});
+        state.reputation=Math.min(100,state.reputation+5);
+        log('Dominated '+d.name, 'good'); toast('Dominated '+d.name);
+      }
+    }
+    
+    function checkAchievements() {
+      state.achievements = state.achievements || {};
+      var nw = calcNetWorth();
+      var cash = state.cash || 0;
+      var marks = [
+        { id:'m1', test: function(){ return cash >= 1000000 || nw >= 1000000; }, title:'First Million', msg:'You\'ve crossed £1,000,000. The paper empire has weight now.' },
+        { id:'m10', test: function(){ return cash >= 10000000 || nw >= 10000000; }, title:'Ten Million', msg:'£10m net territory. Rivals will notice. Heat will rise.' },
+        { id:'m100', test: function(){ return nw >= 100000000; }, title:'Nine Figures', msg:'£100,000,000. You are no longer playing — you are the board.' },
+        { id:'b1', test: function(){ return nw >= 1000000000; }, title:'First Billion', msg:'One billion. Somewhere in California a certain rocket man just felt a disturbance in the markets. Don\'t spend it all on memes.' },
+      ];
+      marks.forEach(function(a){
+        if (state.achievements[a.id]) return;
+        if (!a.test()) return;
+        state.achievements[a.id] = true;
+        showAchievement(a.title, a.msg);
+      });
+    }
+    function showAchievement(title, msg) {
+      document.getElementById('eventTitle').textContent = '★ '+title;
+      document.getElementById('eventDesc').textContent = msg;
+      document.getElementById('eventChoices').innerHTML = '<button class="choice-btn" onclick="document.getElementById(\'eventModal\').classList.add(\'hidden\'); pendingEvent=null;"><strong>Continue</strong></button>';
+      document.getElementById('eventModal').classList.remove('hidden');
+      log('Achievement: '+title, 'good');
+      toast(title);
+    }
+
+    function checkVictory() {
+      if ((state.cleanEquity||0) >= 10000000 && Object.keys(state.dominated).length >= 3) {
+        log('LEGITIMACY THRESHOLD — empire is largely clean. Firms and legacy await.', 'good');
+      }
+    }
+    function setDistrict(id) {
+      if (!isDistrictUnlocked(id)) { toast('Locked'); return; }
+      state.currentDistrict=id; updateUI();
+    }
+    function switchTab(tab) {
+      document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('active');});
+      document.querySelector('.tab[data-tab="'+tab+'"]').classList.add('active');
+      ['advisors','managers','executives','security','legal','heir'].forEach(function(t){
+        document.getElementById(t+'Tab').classList.toggle('hidden', t!==tab);
+      });
+    }
+    function openRules(){document.getElementById('rulesModal').classList.remove('hidden');}
+    function closeRules(){document.getElementById('rulesModal').classList.add('hidden');}
+
+    // ---- render ----
+    function renderLog() {
+      var el=document.getElementById('log');
+      el.innerHTML = state.log.length ? state.log.map(function(l){return '<p class="'+l.type+'">['+l.t+'] '+l.msg+'</p>';}).join('') : '<p>No activity.</p>';
+    }
+    function renderDistricts() {
+      document.getElementById('districtTabs').innerHTML = DISTRICTS.map(function(d){
+        var unlocked=isDistrictUnlocked(d.id), active=state.currentDistrict===d.id, share=calcDistrictShare(d.id);
+        return '<div class="district-tab '+(active?'active':'')+' '+(!unlocked?'locked':'')+'" onclick="setDistrict(\''+d.id+'\')">'+d.name+(unlocked?' '+share+'%':' 🔒')+'</div>';
+      }).join('');
+      var d=DISTRICTS.find(function(x){return x.id===state.currentDistrict;});
+      document.getElementById('currentDistrictName').textContent=d.name;
+      var share=calcDistrictShare(d.id);
+      document.getElementById('sharePercent').textContent=share+'%';
+      document.getElementById('shareFill').style.width=share+'%';
+      document.getElementById('goalMessage').textContent = state.dominated[d.id]?'Dominated.':share>=70?d.rival+' under pressure.':'Challenge '+d.rival+'.';
+      var count=Object.keys(state.owned).filter(function(id){var p=allProperties().find(function(x){return x.id===id;});return p&&p.district===d.id;}).length;
+      document.getElementById('districtInfo').textContent='Rival: '+d.rival+' · Owned: '+count;
+    }
+    function renderProperties() {
+      var district=state.currentDistrict;
+      var ownedIds=Object.keys(state.owned).filter(function(id){var p=allProperties().find(function(x){return x.id===id;});return p&&p.district===district;});
+      var ownedEl=document.getElementById('ownedList'), availEl=document.getElementById('availableList');
+      if (!ownedIds.length) ownedEl.innerHTML='<p style="color:var(--muted);font-size:0.8rem">No assets here.</p>';
+      else ownedEl.innerHTML=ownedIds.map(function(id){
+        var p=allProperties().find(function(x){return x.id===id;});
+        var rank=state.owned[id].rank;
+        var income=Math.floor(p.base*RANK_MULT[rank]);
+        var run=propRunCost(id);
+        var canUp=RANK_ORDER.indexOf(rank)<RANK_ORDER.length-1;
+        var adv=state.owned[id].advisorId;
+        var advN=adv?ADVISORS.find(function(x){return x.id===adv;}).name.split(' ')[0]:null;
+        var frozen=!!state.owned[id].frozen;
+        var fine=state.owned[id].fineAmount||0;
+        var exid=executiveForProperty(id);
+        var health=businessHealth(id);
+        var statusBits='';
+        if(frozen) statusBits+=' · FROZEN';
+        if(fine) statusBits+=' · fine '+money(fine);
+        if(state.owned[id].cleanTitle) statusBits+=' · CLEAN TITLE';
+        var needsCeo=RANK_ORDER.indexOf(rank)>=RANK_ORDER.indexOf('C');
+        if(needsCeo&&!exid) statusBits+=' · needs CEO';
+        if(!state.owned[id].managerId) statusBits+=' · no manager (50%)';
+        income=Math.floor(effectivePropIncome(id));
+        var sellVal=propResaleValue(id);
+        var actions='';
+        if(state.upgrading&&state.upgrading.propId===id) actions='<span class="chip ok">Upgrading…</span>';
+        else {
+          actions+='<button class="btn sm secondary" onclick="openAssignAdvisor(\''+id+'\')">Advisor</button>';
+          actions+='<button class="btn sm secondary" onclick="openAssignManager(\''+id+'\')">Manager</button>';
+          if(canUp&&!frozen) actions+='<button class="btn sm secondary" onclick="openUpgrade(\''+id+'\')">Upgrade</button>';
+          if(fine) actions+='<button class="btn sm amber" onclick="payFine(\''+id+'\')">Pay '+money(fine)+'</button>';
+          actions+='<button class="btn sm secondary" onclick="sellProperty(\''+id+'\')">Sell '+money(sellVal)+'</button>';
+          if(advN) actions+='<span class="chip blue">'+advN+'</span>';
+          if(exid) actions+='<span class="chip ok">CEO: '+eName(exid).split(' ')[0]+'</span>';
+          if(needsCeo&&!exid) actions+='<button class="btn sm amber" onclick="switchTab(\'executives\')">Assign CEO</button>';
+          var mgid=state.owned[id].managerId; if(mgid){var mn=MANAGERS.find(function(x){return x.id===mgid;}); if(mn) actions+='<span class="chip ok">Mgr: '+mn.name.split(' ')[0]+'</span>';}
+          actions+='<span class="chip '+(health<50?'bad':health<75?'warn':'ok')+'">Health '+health+'%</span>';
+        }
+        return '<div class="card"><div class="card-info"><h3>'+p.name+' <span class="rank rank-'+rank+'">'+rank+'</span></h3>'+
+          '<div class="card-meta">'+p.type+' · +'+money(income)+' · run −'+money(run)+'/cycle'+statusBits+'</div></div>'+
+          '<div style="display:flex;gap:0.25rem;flex-wrap:wrap;justify-content:flex-end">'+actions+'</div></div>';
+      }).join('');
+      var available=PROPERTIES.filter(function(p){return p.district===district&&!state.owned[p.id];});
+      var cleanAvail=(typeof CLEAN_PROPERTIES!=='undefined'?CLEAN_PROPERTIES:[]).filter(function(p){return p.district===district&&!state.owned[p.id];});
+      var htmlAvail='';
+      if(!available.length && !cleanAvail.length) htmlAvail='<p style="color:var(--muted);font-size:0.8rem">All acquired.</p>';
+      else {
+        htmlAvail=available.map(function(p){
+          var rival=state.rivalOwned&&state.rivalOwned[p.id];
+          if(rival) return '<div class="card"><div class="card-info"><h3>'+p.name+' <span class="rank rank-'+p.rank+'">'+p.rank+'</span></h3>'+
+            '<div class="card-meta">Held by rival</div></div><span class="chip bad">Rival</span></div>';
+          return '<div class="card"><div class="card-info"><h3>'+p.name+' <span class="rank rank-'+p.rank+'">'+p.rank+'</span></h3>'+
+            '<div class="card-meta">'+p.type+' · base '+money(p.base)+' · run −'+money(p.runCost)+'</div></div>'+
+            '<div style="display:flex;gap:0.25rem;flex-wrap:wrap;justify-content:flex-end">'+
+            '<button class="btn sm" onclick="buyProperty(\''+p.id+'\')" '+(state.cash<p.cost?'disabled':'')+'>Buy '+money(p.cost)+'</button>'+
+            '<button class="btn sm secondary" onclick="openBidOnAvailable(\''+p.id+'\')">Bid</button></div></div>';
+        }).join('');
+        htmlAvail+=cleanAvail.map(function(p){
+          return '<div class="card"><div class="card-info"><h3>'+p.name+' <span class="rank rank-'+p.rank+'">'+p.rank+'</span> <span class="chip blue">Clean</span></h3>'+
+            '<div class="card-meta">'+p.type+' · base '+money(p.base)+' · run −'+money(p.runCost)+' · CLEAN EQUITY only</div></div>'+
+            '<button class="btn sm amber" onclick="buyCleanProperty(\''+p.id+'\')" '+((state.cleanEquity||0)<p.costClean?'disabled':'')+'>Clean '+money(p.costClean)+'</button></div>';
+        }).join('');
+      }
+      availEl.innerHTML=htmlAvail;
+    }
+    function renderFirms() {
+      document.getElementById('firmsList').innerHTML = FIRMS.map(function(f){
+        var owned=!!state.firmsOwned[f.id];
+        var dname = (DISTRICTS.find(function(d){return d.id===f.district;})||{}).name || '';
+        var unlocked = !f.district || isDistrictUnlocked(f.district);
+        return '<div class="card"><div class="card-info"><h3>'+f.name+(owned?' ✓':'')+'</h3>'+
+          '<div class="card-meta">'+dname+' · '+f.type+' · '+money(f.income)+'/cycle · need '+money(f.cleanNeed)+' clean</div></div>'+
+          (owned?'<span class="chip ok">Owned</span>':
+            (!unlocked?'<span class="chip muted">District locked</span>':
+            '<button class="btn sm" onclick="buyFirm(\''+f.id+'\')" '+((state.cash<f.cost||(state.cleanEquity||0)<f.cleanNeed)?'disabled':'')+'>'+money(f.cost)+'</button>'))+
+          '</div>';
+      }).join('');
+    }
+    function renderStaff() {
+      document.getElementById('advisorsList').innerHTML=ADVISORS.map(function(a){
+        var hired=!!state.hiredAdvisors[a.id];
+        return '<div class="card"><div class="card-info"><h3>'+a.name+(hired?' · Lv'+advisorLevel(a.id):'')+'</h3>'+
+          '<div class="card-meta">'+a.specialty+' Specialist · cap '+a.capacity+'</div></div>'+
+          (hired?'<button class="btn sm danger" onclick="fireStaff(\'advisor\',\''+a.id+'\')">Fire</button>':
+            '<button class="btn sm" onclick="hireAdvisor(\''+a.id+'\')" '+(state.cash<a.cost?'disabled':'')+'>Hire '+money(a.cost)+'</button>')+'</div>';
+      }).join('');
+      document.getElementById('executivesList').innerHTML=EXECUTIVES.map(function(e){
+        var hired=!!state.hiredExecutives[e.id];
+        var assigned=state.activeExecutives&&state.activeExecutives[e.id];
+        var aName=assigned?(allProperties().find(function(p){return p.id===assigned;})||{}).name:null;
+        var actions='';
+        if(hired){
+          actions='<div style="display:flex;gap:0.2rem;flex-wrap:wrap;justify-content:flex-end">';
+          if(assigned) actions+='<span class="chip ok">'+aName+'</span>';
+          actions+='<button class="btn sm secondary" onclick="assignExecutive(\''+e.id+'\')">Assign to Rank C+ here</button>';
+          actions+='<button class="btn sm danger" onclick="fireStaff(\'executive\',\''+e.id+'\')">Fire</button></div>';
+        } else {
+          actions='<button class="btn sm" onclick="hireExecutive(\''+e.id+'\')" '+(state.cash<e.cost?'disabled':'')+'>Hire '+money(e.cost)+'</button>';
+        }
+        return '<div class="card"><div class="card-info"><h3>'+e.name+(assigned?' ★':'')+'</h3>'+
+          '<div class="card-meta">'+e.perk+' · ×'+e.baseMult+' · salary '+money(e.salary)+'/wk<br>'+e.desc+'</div></div>'+actions+'</div>';
+      }).join('');
+      document.getElementById('managersList').innerHTML=MANAGERS.map(function(m){
+        var hired=!!state.hiredManagers[m.id];
+        var onProp=findManagerProperty(m.id);
+        var onName=onProp?(allProperties().find(function(x){return x.id===onProp;})||{}).name:null;
+        var actions='';
+        if(hired){
+          actions='<div style="display:flex;gap:0.2rem;flex-wrap:wrap;justify-content:flex-end">';
+          if(onName) actions+='<span class="chip ok">'+onName+'</span><button class="btn sm secondary" onclick="unassignManager(\''+m.id+'\')">Unassign</button>';
+          else actions+='<button class="btn sm secondary" onclick="assignManager(\''+m.id+'\')">Assign</button>';
+          actions+='<button class="btn sm amber" onclick="openBonus(\''+m.id+'\')">Bonus</button><button class="btn sm danger" onclick="fireStaff(\'manager\',\''+m.id+'\')">Fire</button></div>';
+        } else actions='<button class="btn sm" onclick="hireManager(\''+m.id+'\')" '+(state.cash<m.cost?'disabled':'')+'>Hire '+money(m.cost)+'</button>';
+        return '<div class="card"><div class="card-info"><h3>'+m.name+(onName?' ★':'')+'</h3><div class="card-meta">×'+((hired?(m.baseMult+(state.managerBoost[m.id]||0)):m.baseMult).toFixed(2))+' · '+m.specialty+' · '+m.desc+'</div></div>'+actions+'</div>';
+      }).join('');
+      document.getElementById('securityList').innerHTML=SECURITY.map(function(s){
+        var hired=!!state.hiredSecurity[s.id]; var here=state.activeSecurity[state.currentDistrict]===s.id;
+        var assigned=findStaffAssignment('security',s.id);
+        var actions='';
+        if(hired){
+          actions='<div style="display:flex;gap:0.2rem;flex-wrap:wrap;justify-content:flex-end">';
+          if(here) actions+='<span class="chip ok">Here</span><button class="btn sm secondary" onclick="unassignSecurity(\''+s.id+'\')">Unassign</button>';
+          else if(assigned) actions+='<span class="chip muted">Busy</span><button class="btn sm secondary" onclick="assignSecurity(\''+s.id+'\')">Move</button>';
+          else actions+='<button class="btn sm secondary" onclick="assignSecurity(\''+s.id+'\')">Assign</button>';
+          actions+='<button class="btn sm danger" onclick="fireStaff(\'security\',\''+s.id+'\')">Fire</button></div>';
+        } else actions='<button class="btn sm" onclick="hireSecurity(\''+s.id+'\')" '+(state.cash<s.cost?'disabled':'')+'>Hire '+money(s.cost)+'</button>';
+        return '<div class="card"><div class="card-info"><h3>'+s.name+(here?' ★':'')+'</h3><div class="card-meta">'+s.desc+'</div></div>'+actions+'</div>';
+      }).join('');
+      document.getElementById('legalList').innerHTML=LEGAL.map(function(l){
+        var hired=!!state.hiredLegal[l.id]; var active=state.activeLegal===l.id;
+        return '<div class="card"><div class="card-info"><h3>'+l.name+(active?' ★':'')+'</h3><div class="card-meta">'+l.desc+'</div></div>'+
+          (hired?(active?'<span class="chip ok">Active</span>':'<button class="btn sm secondary" onclick="assignLegal(\''+l.id+'\')">Assign</button>')+
+            ' <button class="btn sm danger" onclick="fireStaff(\'legal\',\''+l.id+'\')">Fire</button>':
+            '<button class="btn sm" onclick="hireLegal(\''+l.id+'\')" '+(state.cash<l.cost?'disabled':'')+'>Hire '+money(l.cost)+'</button>')+'</div>';
+      }).join('');
+      var heirHtml = '';
+      if ((state.age||28) < 45) heirHtml = '<p style="color:var(--muted);font-size:0.82rem">Available from age 45. You are '+state.age+'.</p>';
+      else {
+        heirHtml = HEIRS.map(function(h){
+          var sel = state.heirId===h.id;
+          return '<div class="card"><div class="card-info"><h3>'+h.name+(sel?' ★':'')+'</h3><div class="card-meta">'+h.trait+' · '+h.desc+'</div></div>'+
+            (sel?'<span class="chip ok">Heir</span>':'<button class="btn sm secondary" onclick="setHeir(\''+h.id+'\')">Name heir</button>')+'</div>';
+        }).join('');
+      }
+      document.getElementById('heirPanel').innerHTML = heirHtml;
+    }
+    function updateCollectionUI() {
+      var status=document.getElementById('collectionStatus'), timer=document.getElementById('timerDisplay');
+      var fill=document.getElementById('progressFill'), startBtn=document.getElementById('startCollectionBtn');
+      if (!state.collection) {
+        status.textContent=state.autoCollect?'Auto-Run armed':'Ready for next work week';
+        timer.textContent='--:--'; fill.style.width='0%';
+        if (startBtn) startBtn.disabled=!!state.autoCollect;
+        return;
+      }
+      var remaining=Math.max(0, state.collection.endsAt-Date.now());
+      var progress=1-(remaining/state.collection.duration);
+      if (remaining<=0) {
+        status.textContent='Settling week…'; timer.textContent='00:00'; fill.style.width='100%';
+        if (startBtn) startBtn.disabled=true;
+        // Always complete when the timer ends (manual or auto)
+        if (!state._finishingWeek) {
+          state._finishingWeek = true;
+          setTimeout(function(){ state._finishingWeek=false; finishCollection(!!state.autoCollect); }, 50);
+        }
+      } else {
+        var secs=Math.ceil(remaining/1000);
+        status.textContent=state.autoCollect?'Auto-Run…':'Work week in progress…';
+        timer.textContent=String(Math.floor(secs/60)).padStart(2,'0')+':'+String(secs%60).padStart(2,'0');
+        fill.style.width=(progress*100)+'%';
+        if (startBtn) startBtn.disabled=true;
+      }
+    }
+    function updateUI() {
+      document.getElementById('cashDisplay').textContent=money(state.cash);
+      document.getElementById('incomeDisplay').textContent=money(calcIncome());
+      document.getElementById('ageDisplay').textContent=(state.age||28)+' · '+(state.year||2026);
+      document.getElementById('heatDisplay').textContent=(state.heat||0)+'%';
+      document.getElementById('cleanDisplay').textContent=money(state.cleanEquity||0);
+      document.getElementById('autoToggle').classList.toggle('on', !!state.autoCollect);
+      var aw = document.getElementById('autoWarn');
+      if (aw) {
+        var low = state.cash < Math.max(10000, calcIncome());
+        aw.style.display = low ? 'block' : 'none';
+        if (state.cash <= 0) aw.textContent = 'No operating cash — Auto-Run paused';
+        else if (low) aw.textContent = 'Low operating cash — watch wages and events';
+      }
+      document.getElementById('cashInv').textContent=money(state.cash);
+      document.getElementById('indexHold').textContent=money(state.indexFund||0);
+      document.getElementById('globalHold').textContent=money(state.globalFund||0);
+      document.getElementById('btcLine').textContent=(state.btc||0).toFixed(4)+' BTC · price '+money(state.btcPrice||42000)+' · value '+money(Math.floor((state.btc||0)*(state.btcPrice||42000)));
+      document.getElementById('cleanLine').textContent=money(state.cleanEquity||0);
+      renderDistricts(); renderProperties(); renderFirms(); renderStaff(); renderLog(); updateCollectionUI();
+    }
+    function tick() {
+      if (state.upgrading && Date.now()>=state.upgrading.endsAt) {
+        var u=state.upgrading;
+        var success=Math.random()*100<u.success;
+        var p=allProperties().find(function(x){return x.id===u.propId;});
+        if (success) {
+          state.owned[u.propId].rank=u.to;
+          if (state.hiredAdvisors[u.advisorId]) state.hiredAdvisors[u.advisorId].xp=(state.hiredAdvisors[u.advisorId].xp||0)+500;
+          log(p.name+' → Rank '+u.to, 'good'); toast(p.name+' → '+u.to);
+          checkDomination(p.district);
+        } else { log('Upgrade failed on '+p.name, 'bad'); toast('Upgrade failed'); }
+        state.upgrading=null; updateUI(); saveGame(true);
+      }
+      updateCollectionUI();
+    }
+
+    function saveGame(silent) {
+      try { localStorage.setItem(SAVE_KEY, JSON.stringify(state)); if(!silent) toast('Saved'); } catch(e){ toast('Save failed'); }
+    }
+    function loadGame() {
+      var raw=localStorage.getItem(SAVE_KEY); if(!raw){toast('No save');return;}
+      try {
+        state=JSON.parse(raw);
+        if(!state.managerBoost) state.managerBoost={};
+         if(!state.hiredExecutives) state.hiredExecutives={};
+         if(!state.activeExecutives) state.activeExecutives={};
+         Object.keys(state.owned||{}).forEach(function(id){
+          if(!state.owned[id].hasOwnProperty('executiveId')) state.owned[id].executiveId=null;
+          if(!state.owned[id].hasOwnProperty('managerId')) state.owned[id].managerId=null;
+        });
+        if(!state.rivalOwned) state.rivalOwned={};
+        if(!state.achievements) state.achievements={};
+        if(!state.firmsOwned) state.firmsOwned={};
+        if(state.collection&&Date.now()>state.collection.endsAt+90000) state.collection=null;
+        if(state.upgrading&&Date.now()>state.upgrading.endsAt+90000) state.upgrading=null;
+        pendingEvent=null; pendingDecay=null;
+        log('Loaded'); toast('Loaded'); updateUI();
+      } catch(e){ toast('Load failed'); }
+    }
+    function exportSave() {
+      var a=document.createElement('a');
+      a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
+      a.download='whorton-empire-save.json'; a.click(); toast('Exported');
+    }
+    function importSave(ev) {
+      var f=ev.target.files[0]; if(!f) return;
+      var r=new FileReader();
+      r.onload=function(){ try{ state=JSON.parse(r.result); if(!state.hiredExecutives)state.hiredExecutives={}; if(!state.activeExecutives)state.activeExecutives={}; Object.keys(state.owned||{}).forEach(function(id){if(!state.owned[id].hasOwnProperty('executiveId'))state.owned[id].executiveId=null;}); pendingEvent=null; pendingDecay=null; saveGame(true); toast('Imported'); updateUI(); if(state.autoCollect && !state.collection) scheduleAutoRun(100); }catch(e){toast('Bad file');} };
+      r.readAsText(f); ev.target.value='';
+    }
+    function retireEmpire() {
+      var nw = calcNetWorth();
+      var msg = 'Retire and convert progress to Legacy?\n\nNet worth ~ '+money(nw)+'\nClean equity '+money(state.cleanEquity||0)+'\nAge '+state.age+'\n\nYou will restart with permanent bonuses based on this run.';
+      if (!confirm(msg)) return;
+      if (!confirm('Confirm retirement. Empire dissolves. Legacy is kept.')) return;
+      var leg = state.legacy || {};
+      leg.points = (leg.points||0) + Math.floor(nw/100000) + Math.floor((state.cleanEquity||0)/50000) + Object.keys(state.firmsOwned||{}).length*50;
+      leg.runs = (leg.runs||0)+1;
+      if (Object.keys(state.dominated).length>=3) leg.fastStart = true;
+      if ((state.cleanEquity||0)>=5000000) leg.stipendBonus = (leg.stipendBonus||0)+200;
+      saveLegacy(leg);
+      localStorage.removeItem(SAVE_KEY);
+      state = defaultState();
+      if (leg.stipendBonus) state.basicIncome = 800 + leg.stipendBonus;
+      log('Retired. Legacy points: '+(leg.points||0)+'. New run begins.');
+      toast('Legacy saved · fresh empire');
+      updateUI();
+    }
+
+    function initParticles() {
+      var canvas=document.getElementById('particleCanvas'); if(!canvas) return;
+      var ctx=canvas.getContext('2d'), particles=[], w, h;
+      function resize(){ w=canvas.width=canvas.offsetWidth; h=canvas.height=canvas.offsetHeight; }
+      resize(); window.addEventListener('resize', resize);
+      for(var i=0;i<45;i++) particles.push({x:Math.random()*w,y:Math.random()*h,r:Math.random()*2+0.4,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,a:Math.random()*0.4+0.12});
+      function draw(){
+        ctx.clearRect(0,0,w,h);
+        var g=ctx.createRadialGradient(w/2,h/2,0,w/2,h/2,Math.max(w,h)*0.4);
+        g.addColorStop(0,'rgba(16,185,129,0.07)'); g.addColorStop(1,'rgba(0,0,0,0)');
+        ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+        particles.forEach(function(p){
+          p.x+=p.vx; p.y+=p.vy; if(p.x<0||p.x>w)p.vx*=-1; if(p.y<0||p.y>h)p.vy*=-1;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle='rgba(16,185,129,'+p.a+')'; ctx.fill();
+        });
+        requestAnimationFrame(draw);
+      }
+      draw();
+    }
+
+    setInterval(tick, 250);
+    initParticles();
+    if (localStorage.getItem(SAVE_KEY)) loadGame();
+    else {
+      var leg = loadLegacy();
+      if (leg.stipendBonus) state.basicIncome = 800 + leg.stipendBonus;
+      log('Whorton Empire. Spitalfields awaits.');
+      if (leg.points) log('Legacy points carried: '+leg.points);
+      updateUI();
+    }
+  </script>
+</body>
+</html>
